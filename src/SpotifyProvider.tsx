@@ -14,6 +14,7 @@ interface SpotifyProviderProps {}
 
 interface SpotifyProviderState {
   user: AudioNestUser | null,
+  isLoggedIn: boolean;
   token: string,
   playlists: Array<SpotifyAPI.Playlist>
 }
@@ -23,6 +24,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     super(props);
     this.state = {
       user: null,
+      isLoggedIn: false,
       token: '',
       playlists: [],
     }
@@ -39,17 +41,17 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       spotifyApi.getMe()
       .then(async function(response: { body: any }) {
         console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body } }); 
+        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
       }, function(err: any) {
         throw new Error(err);
       })
     } catch (error) {
-      console.error('Something went wrong', error)
+      console.error('ERROR: Could not login user.', error)
     }
   };
 
   getUserPlaylists = async () => {
-    if (!this.state.user) {
+    if (!this.state.isLoggedIn) {
       await this.login()
     }
     try {
@@ -57,10 +59,12 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       await spotifyApi.getUserPlaylists(this.state.user.id)
         .then(function(data: { body: any }) {
           console.log('Retrieved playlists', data.body);
-          this.setState({ playlists: {...data.body } })
+          console.log('Retrieved playlists', data.body.items);
+          this.setState({ playlists: { ...data.body.items } });
+          console.log('this.state', this.state);
         })
     } catch (err: any) {
-      console.log('Something went wrong!', err);
+      console.log('ERROR: Could not retrieve user\'s playlists.', err);
     }
   }
 
@@ -68,9 +72,11 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     return (
       <SpotifyContext.Provider
         value={{
-          state: this.state,
+          user: this.state.user,
+          isLoggedIn: this.state.isLoggedIn,
           login: this.login,
           getUserPlaylists: this.getUserPlaylists,
+          playlists: this.state.playlists,
         }}
       >
         <div>{this.props.children}</div>

@@ -1,23 +1,20 @@
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
+import PlaylistList from '../../src/Playlist/List'
 import SpotifyContext from '../../src/SpotifyContext'
 
 export default function Dashboard() {
-  // const router = useRouter()
-  // useEffect(() => {
-  //   router.push('/dashboard', undefined, { shallow: true })
-  // })
   return (
     <SpotifyContext.Consumer>
-      {({ login, getUserPlaylists }) => (
-        <div>
-        <button onClick={login}>
-          Login
-        </button>
-        <button onClick={getUserPlaylists}>
-          Get My Playlists!
-        </button>
-        
+      {({ login, isLoggedIn, user }) => (
+      <div>
+        {isLoggedIn
+          ? <p>Welcome, {user.display_name.split(' ')[0]}!</p>
+          : (
+          <button onClick={login}>
+            Login
+          </button>)
+        }
+        <PlaylistList />
       </div>
       )}
     </SpotifyContext.Consumer>
