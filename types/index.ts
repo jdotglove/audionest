@@ -36,6 +36,34 @@ export module SpotifyAPI {
     type: string;
     uri: string;  
   }
+  
+  type Image = {
+    height: number;
+    url: string;
+    width: number;
+  }
+
+  export type Playlist = {
+    collaborative: boolean;
+    description: string;
+    external_urls?: {
+      spotify: string;
+    }
+    href: string;
+    id: string;
+    images: Image[];
+    name: string;
+    owner: User;
+    primary_color: string | null;
+    public: boolean;
+    snapshot_id: string;
+    tracks: {
+      href: string;
+      total: number;
+    }
+    type: string;
+    uri: string;
+  }
 }
 
 export type AudioNestUser = SpotifyAPI.User & {}

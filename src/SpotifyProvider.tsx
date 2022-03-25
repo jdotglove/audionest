@@ -1,4 +1,5 @@
-import React, { useEffect, useState, createContext } from 'react'
+import React from 'react'
+import { AudioNestUser, SpotifyAPI } from '../types';
 import SpotifyContext from './SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -9,20 +10,28 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL
 });
 
-class SpotifyProvider extends React.Component {
+interface SpotifyProviderProps {}
+
+interface SpotifyProviderState {
+  user: AudioNestUser | null,
+  token: string,
+  playlists: Array<SpotifyAPI.Playlist>
+}
+
+class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProviderState> {
   constructor(props) {
     super(props);
     this.state = {
-      user: '',
+      user: null,
       token: '',
       playlists: [],
     }
   }
   
-  login = async e => {
+  login = async () => {
     const tokenMetadata = window.location.hash?.replace('#access_token=', '')
     const token = tokenMetadata.split('&')[0]
-    // router.push('/dashboard', undefined, { shallow: true })
+    
     this.setState({ token }); 
     spotifyApi.setAccessToken(`${token}`);
     // Get the authenticated user
@@ -34,26 +43,26 @@ class SpotifyProvider extends React.Component {
       }, function(err: any) {
         throw new Error(err);
       })
-      // .finally(async function() {
-      //   // Get a user's playlists
-      //   await spotifyApi.getUserPlaylists(this.state.user.id)
-      //   .then(function(data: { body: any }) {
-      //     console.log('Retrieved playlists', data.body);
-      //     dispatch({ type: 'SET_USER_PLAYLISTS', 
-      //     payload: { 
-      //       playlists: { 
-      //         ...data.body 
-      //       } 
-      //     } 
-      //   })
-      //   },function(err: any) {
-      //     console.log('Something went wrong!', err);
-      //   });
-      // })
     } catch (error) {
       console.error('Something went wrong', error)
     }
   };
+
+  getUserPlaylists = async () => {
+    if (!this.state.user) {
+      await this.login()
+    }
+    try {
+      // Get a user's playlists
+      await spotifyApi.getUserPlaylists(this.state.user.id)
+        .then(function(data: { body: any }) {
+          console.log('Retrieved playlists', data.body);
+          this.setState({ playlists: {...data.body } })
+        })
+    } catch (err: any) {
+      console.log('Something went wrong!', err);
+    }
+  }
 
   render() {
     return (
@@ -61,6 +70,7 @@ class SpotifyProvider extends React.Component {
         value={{
           state: this.state,
           login: this.login,
+          getUserPlaylists: this.getUserPlaylists,
         }}
       >
         <div>{this.props.children}</div>
