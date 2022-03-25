@@ -58,10 +58,8 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       // Get a user's playlists
       await spotifyApi.getUserPlaylists(this.state.user.id)
         .then(function(data: { body: any }) {
-          console.log('Retrieved playlists', data.body);
           console.log('Retrieved playlists', data.body.items);
-          this.setState({ playlists: { ...data.body.items } });
-          console.log('this.state', this.state);
+          this.setState({ playlists: data.body.items });
         })
     } catch (err: any) {
       console.log('ERROR: Could not retrieve user\'s playlists.', err);
