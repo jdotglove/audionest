@@ -16,8 +16,8 @@ export default function Home() {
           The nest you never want to leave...
         </p>
         <SpotifyAuth
-          redirectUri='http://localhost:3000/dashboard'
-          clientID='ec0a0d1d51294ca1bb8cd91874e18cce'
+          redirectUri={ process.env.NEXT_PUBLIC_REDIRECT_URL }
+          clientID={ process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID }
           scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
         />
       </main>

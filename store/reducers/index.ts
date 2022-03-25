@@ -12,9 +12,23 @@ const tokenReducer = (state = '', { type, payload }) => {
       return state
   }
 }
+
+// USER REDUCER
+const userReducer = (state = {}, { type, payload }) => {
+  switch (type) {
+    case types.SET_CURRENT_USER:
+      return payload.user
+    case types.SET_USER_PLAYLISTS:
+      return payload.playlists
+    default:
+      return state
+  }
+}
+
 // COMBINED REDUCERS
 const reducers = {
-  token: tokenReducer
+  token: tokenReducer,
+  user: userReducer
 }
 
 export default combineReducers(reducers)
