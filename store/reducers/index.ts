@@ -1,25 +1,13 @@
 import { combineReducers } from 'redux'
-import * as types from '../../types'
+import { SET_TOKEN, RESET_TOKEN } from '../actions'
 
 // TOKEN REDUCER
-const tokenReducer = (state = '', { type, payload }) => {
-  switch (type) {
-    case types.SET_TOKEN:
+const tokenReducer = (state = '', { action, payload }) => {
+  switch (action) {
+    case SET_TOKEN:
       return payload.token
-    case types.RESET_TOKEN:
+    case RESET_TOKEN:
       return ''
-    default:
-      return state
-  }
-}
-
-// USER REDUCER
-const userReducer = (state = {}, { type, payload }) => {
-  switch (type) {
-    case types.SET_CURRENT_USER:
-      return payload.user
-    case types.SET_USER_PLAYLISTS:
-      return payload.playlists
     default:
       return state
   }
@@ -28,7 +16,6 @@ const userReducer = (state = {}, { type, payload }) => {
 // COMBINED REDUCERS
 const reducers = {
   token: tokenReducer,
-  user: userReducer
 }
 
 export default combineReducers(reducers)

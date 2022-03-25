@@ -1,5 +1,5 @@
 import React from 'react'
-import SpotifyContext from '../../src/SpotifyContext'
+import SpotifyContext from '../../contexts/SpotifyContext'
 
 export default function PlaylistList() {
   return (

@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/SpotifyContext.js"
+    "src/contexts/SpotifyContext.js",
+    "src/contexts/GlobalState.js"
   ],
   "exclude": [
     "node_modules"

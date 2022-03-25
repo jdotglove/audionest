@@ -1,6 +1,7 @@
-import React from 'react'
-import { AudioNestUser, SpotifyAPI } from '../types';
-import SpotifyContext from './SpotifyContext';
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { AudioNestUser, SpotifyAPI } from '../../types';
+import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
@@ -30,11 +31,22 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     }
   }
   
+  componentDidMount() {
+    console.log('Component Mounting', this.state)
+  }
+  componentDidUpdate() {
+    console.log('Component Updating', this.state)
+  }
+
+  componentWillUnmount() {
+    console.log('Component About to Unmount', this.state)
+  }
+
   login = async () => {
     const tokenMetadata = window.location.hash?.replace('#access_token=', '')
     const token = tokenMetadata.split('&')[0]
     
-    this.setState({ token }); 
+    this.setState({ token })
     spotifyApi.setAccessToken(`${token}`);
     // Get the authenticated user
     try {
@@ -75,6 +87,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
           login: this.login,
           getUserPlaylists: this.getUserPlaylists,
           playlists: this.state.playlists,
+          token: this.state.token
         }}
       >
         <div>{this.props.children}</div>
