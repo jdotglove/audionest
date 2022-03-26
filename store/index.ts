@@ -2,9 +2,7 @@ import { useMemo } from 'react'
 import { createStore, applyMiddleware, AnyAction, EmptyObject, Store } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
-import { SpotifyAPI } from '../types'
 import reducers from './reducers'
-import { useAudioNestDispatch } from './hook'
 
 let store: Store<EmptyObject & AudioNestRootState, AnyAction> & { 
   dispatch: unknown

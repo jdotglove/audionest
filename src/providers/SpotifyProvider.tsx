@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
 import { AudioNestUser, SpotifyAPI } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
@@ -32,28 +31,35 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   }
   
   componentDidMount() {
-    console.log('Component Mounting', this.state)
+    const persistedToken = window.localStorage.getItem('token')
+    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
+    const token = persistedToken ? persistedToken : tokenMetadata.split('&')[0]
+    console.log('Component Mounting')
+    this.setState({ ...this.state, token })
+    spotifyApi.setAccessToken(`${token}`);
+    if (persistedToken) this.login()
+    
   }
   componentDidUpdate() {
-    console.log('Component Updating', this.state)
+    console.log('Component Updating')
   }
 
   componentWillUnmount() {
-    console.log('Component About to Unmount', this.state)
+    console.log('Component About to Unmount')
+  }
+
+  setState(state: SpotifyProviderState) {
+    window.localStorage.setItem('token', state.token);
+    super.setState(state);
   }
 
   login = async () => {
-    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
-    const token = tokenMetadata.split('&')[0]
-    
-    this.setState({ token })
-    spotifyApi.setAccessToken(`${token}`);
     // Get the authenticated user
     try {
       spotifyApi.getMe()
       .then(async function(response: { body: any }) {
         console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
+        this.setState({ user: { ...response.body }, isLoggedIn: true, token: this.state.token }); 
       }, function(err: any) {
         throw new Error(err);
       })
@@ -87,7 +93,6 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
           login: this.login,
           getUserPlaylists: this.getUserPlaylists,
           playlists: this.state.playlists,
-          token: this.state.token
         }}
       >
         <div>{this.props.children}</div>
