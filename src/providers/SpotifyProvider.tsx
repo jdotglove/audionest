@@ -32,12 +32,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   
   componentDidMount() {
     const persistedToken = window.localStorage.getItem('token')
-    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
-    const token = persistedToken ? persistedToken : tokenMetadata.split('&')[0]
-    console.log('Component Mounting')
-    this.setState({ ...this.state, token })
-    spotifyApi.setAccessToken(`${token}`);
-    if (persistedToken) this.login()
+    if (persistedToken !== 'undefined') this.login()
     
   }
   componentDidUpdate() {
@@ -45,15 +40,21 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   }
 
   componentWillUnmount() {
-    console.log('Component About to Unmount')
+    console.log('Component About to Unmount');
   }
 
   setState(state: SpotifyProviderState) {
     window.localStorage.setItem('token', state.token);
-    super.setState(state);
+    super.setState(state)
   }
 
   login = async () => {
+    const persistedToken = window.localStorage.getItem('token')
+    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
+    const token = persistedToken !== 'undefined' ? persistedToken : tokenMetadata.split('&')[0]
+    console.log('Component Mounting')
+    this.setState({ ...this.state, token })
+    if (token) spotifyApi.setAccessToken(`${token}`)
     // Get the authenticated user
     try {
       spotifyApi.getMe()

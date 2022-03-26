@@ -2,11 +2,9 @@ import { combineReducers } from 'redux'
 import { SET_TOKEN, RESET_TOKEN } from '../actions'
 
 // TOKEN REDUCER
-const tokenReducer = (state = '', { type, payload }) => {
-  console.log(type, payload)
+const tokenReducer = ({ type, payload }, state = '') => {
   switch (type) {
     case SET_TOKEN:
-      console.log('here')
       return payload
     case RESET_TOKEN:
       return ''

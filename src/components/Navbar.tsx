@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Container, Nav, Navbar, Image } from 'react-bootstrap'
 import SpotifyContext from '../contexts/SpotifyContext'
 
@@ -23,7 +22,7 @@ export default function AudioNestNavbar() {
                     src={user.images[0].url}
                     height={30}
                     width={30}
-                    roundedCircle={true}
+                    roundedCircle
                     className="mx-2"
                   />)}
               </Nav>

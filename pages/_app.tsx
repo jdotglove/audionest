@@ -1,18 +1,16 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
 
-import React from 'react'
 import { Provider } from 'react-redux'
-import { useStore } from '../store'
 import SpotifyProvider from '../src/providers/SpotifyProvider'
+import { useStore } from '../store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-export default function AudioNestApp({ Component, pageProps }: AppProps) {
+export default function AudioNestApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState)
   return (
     <Provider store={ store }>
         <SpotifyProvider>
-          <Component {...pageProps} />
+          <Component props={ pageProps } />
         </SpotifyProvider>
     </Provider>
   )
