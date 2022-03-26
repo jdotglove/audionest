@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Container, Nav, Navbar, Image } from 'react-bootstrap'
-import SpotifyContext from '../SpotifyContext'
+import SpotifyContext from '../contexts/SpotifyContext'
 
 export default function AudioNestNavbar() {
   return (
