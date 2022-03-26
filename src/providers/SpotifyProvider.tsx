@@ -1,5 +1,5 @@
 import React from 'react'
-import { AudioNestUser, SpotifyAPI } from '../../types';
+import { AudioNestUser, SpotifyAPI, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -9,15 +9,6 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL
 });
-
-interface SpotifyProviderProps {}
-
-interface SpotifyProviderState {
-  user: AudioNestUser | null,
-  isLoggedIn: boolean;
-  token: string,
-  playlists: Array<SpotifyAPI.Playlist>
-}
 
 class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProviderState> {
   constructor(props) {
@@ -55,6 +46,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     console.log('Component Mounting')
     this.setState({ ...this.state, token })
     if (token) spotifyApi.setAccessToken(`${token}`)
+    console.log('Refresh Token', spotifyApi.getRefreshToken())
     // Get the authenticated user
     try {
       spotifyApi.getMe()
@@ -62,7 +54,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
         console.log('Some information about the authenticated user', response.body);
         this.setState({ user: { ...response.body }, isLoggedIn: true, token: this.state.token }); 
       }, function(err: any) {
-        throw new Error(err);
+        console.error(err);
       })
     } catch (error) {
       console.error('ERROR: Could not login user.', error)

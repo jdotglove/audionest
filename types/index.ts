@@ -1,3 +1,12 @@
+export interface SpotifyProviderProps {}
+
+export interface SpotifyProviderState {
+  user: AudioNestUser | null,
+  isLoggedIn: boolean;
+  token: string,
+  playlists: Array<SpotifyAPI.Playlist>
+}
+
 // SPOTIFY USER TYPE START
 export module SpotifyAPI {
   export type User = {
