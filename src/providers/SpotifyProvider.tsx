@@ -45,8 +45,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     const token = persistedToken !== 'undefined' ? persistedToken : tokenMetadata.split('&')[0]
     console.log('Component Mounting')
     this.setState({ ...this.state, token })
-    if (token) spotifyApi.setAccessToken(`${token}`)
-    console.log('Refresh Token', spotifyApi.getRefreshToken())
+    if (token) spotifyApi.setAccessToken(token)
     // Get the authenticated user
     try {
       spotifyApi.getMe()
