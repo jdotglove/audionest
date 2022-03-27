@@ -11,7 +11,8 @@ export default function PlaylistList() {
         <div>
         {(playlists.length)
           ? (
-            <div>
+            <div className="d-grid m-3 gap-2" style={{maxWidth: "300px"}}>
+              <h3>Let's see what we're working with...</h3>
               {playlists.map((playlist: SpotifyAPI.Playlist) =>{
                 return <PlaylistDisplay playlist={playlist} key={playlist.id} />
               })}
