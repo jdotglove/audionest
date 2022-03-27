@@ -42,11 +42,12 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   login = async () => {
     const persistedToken = window.localStorage.getItem('token')
     const tokenMetadata = window.location.hash?.replace('#access_token=', '')
-    const token = persistedToken !== 'undefined' ? persistedToken : tokenMetadata.split('&')[0]
+    const token = persistedToken || tokenMetadata.split('&')[0]
     console.log('Component Mounting')
     this.setState({ ...this.state, token })
-    if (token) spotifyApi.setAccessToken(`${token}`)
-    console.log('Refresh Token', spotifyApi.getRefreshToken())
+    if (token) {
+      spotifyApi.setAccessToken(token)
+    }
     // Get the authenticated user
     try {
       spotifyApi.getMe()
@@ -54,7 +55,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
         console.log('Some information about the authenticated user', response.body);
         this.setState({ user: { ...response.body }, isLoggedIn: true, token: this.state.token }); 
       }, function(err: any) {
-        console.error(err);
+        console.error('ERROR: Could not pull your spotify user.', err);
       })
     } catch (error) {
       console.error('ERROR: Could not login user.', error)
