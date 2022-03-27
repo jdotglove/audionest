@@ -4,6 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import reducers from './reducers'
 
+
+export type AudioNestRootState = {
+  token: string,
+}
+
 let store: Store<AudioNestRootState, AnyAction> & {
   dispatch: unknown
 }
@@ -14,10 +19,6 @@ function initStore(initialState: { token?: any }) {
     initialState,
     composeWithDevTools(applyMiddleware(thunkMiddleware))
   )
-}
-
-export type AudioNestRootState = {
-  token: string,
 }
 
 export const initialState = {
