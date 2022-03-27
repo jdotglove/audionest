@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import reducers from './reducers'
 
-let store: Store<EmptyObject & AudioNestRootState, AnyAction> & { 
+let store: Store<AudioNestRootState, AnyAction> & {
   dispatch: unknown
 }
 
