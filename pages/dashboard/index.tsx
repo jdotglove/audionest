@@ -1,5 +1,5 @@
-import AudioNestNavbar from '../../src/components/Navbar'
-import PlaylistList from '../../src/components/Playlist/List'
+import AudioNestNavbar from '../../src/components/Navbar';
+import PlaylistList from '../../src/components/Playlist/List';
 
 export default function Dashboard() {
   return (
@@ -7,5 +7,5 @@ export default function Dashboard() {
       <AudioNestNavbar />
       <PlaylistList />
     </>
-  )  
+  );
 }

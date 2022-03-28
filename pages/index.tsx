@@ -19,6 +19,8 @@ export default function Home() {
           redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL}
           clientID={process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID}
           scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
+          noLogo
+          onAccessToken={(token: string) => window.localStorage.setItem('token', token)}
         />
       </main>
     </div>

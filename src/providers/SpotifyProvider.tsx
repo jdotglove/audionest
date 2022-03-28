@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { AudioNestUser, SpotifyAPI, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
@@ -7,7 +7,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
-  redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL
+  redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/dashboard`,
 });
 
 class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProviderState> {
@@ -18,16 +18,17 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       isLoggedIn: false,
       token: '',
       playlists: [],
-    }
+    };
   }
   
   componentDidMount() {
-    const persistedToken = window.localStorage.getItem('token')
-    if (persistedToken !== 'undefined') this.login()
+    const persistedToken = window.localStorage.getItem('token');
+    if (persistedToken !== 'undefined') this.login();
     
   }
+
   componentDidUpdate() {
-    console.log('Component Updating')
+    console.log('Component Updating');
   }
 
   componentWillUnmount() {
@@ -35,24 +36,24 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   }
 
   login = async () => {
-    const persistedToken = window.localStorage.getItem('token')
-    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
-    const token = persistedToken || tokenMetadata.split('&')[0]
-    if (!persistedToken) window.localStorage.setItem('token', token)
-    console.log('Component Mounting')
-    this.setState({ ...this.state })
-    if (token) spotifyApi.setAccessToken(token)
+    const persistedToken = window.localStorage.getItem('token');
+    const tokenMetadata = window.location.hash?.replace('#access_token=', '');
+    const token = persistedToken || tokenMetadata.split('&')[0];
+    if (!persistedToken) window.localStorage.setItem('token', token);
+    console.log('Component Mounting');
+    this.setState({ ...this.state });
+    if (token) spotifyApi.setAccessToken(token);
     // Get the authenticated user
     try {
       spotifyApi.getMe()
-      .then(async function(response: { body: any }) {
-        console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
-      }, function(err: any) {
-        console.error('ERROR: Could not pull your spotify user.', err);
-      })
+        .then(async function (response: { body: any }) {
+          console.log('Some information about the authenticated user', response.body);
+          this.setState({ user: { ...response.body }, isLoggedIn: true }); 
+        }, function (err: any) {
+          console.error('ERROR: Could not pull your spotify user.', err);
+        });
     } catch (error) {
-      console.error('ERROR: Could not login user.', error)
+      console.error('ERROR: Could not login user.', error);
     }
   };
 
@@ -60,14 +61,14 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     try {
       // Get a user's playlists
       await spotifyApi.getUserPlaylists(this.state.user.id)
-        .then(function(data: { body: any }) {
+        .then(function (data: { body: any }) {
           console.log('Retrieved playlists', data.body.items);
           this.setState({ playlists: data.body.items });
-        })
+        });
     } catch (err: any) {
       console.log('ERROR: Could not retrieve user\'s playlists.', err);
     }
-  }
+  };
 
   render() {
     return (
