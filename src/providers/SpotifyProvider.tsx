@@ -24,7 +24,6 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   componentDidMount() {
     const persistedToken = window.localStorage.getItem('token');
     if (persistedToken !== 'undefined') this.login();
-    
   }
 
   componentDidUpdate() {
