@@ -1,6 +1,6 @@
 import React from 'react'
-import { AudioNestUser, SpotifyAPI } from '../types';
-import SpotifyContext from './SpotifyContext';
+import { AudioNestUser, SpotifyAPI, SpotifyProviderProps, SpotifyProviderState } from '../../types';
+import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
@@ -9,15 +9,6 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL
 });
-
-interface SpotifyProviderProps {}
-
-interface SpotifyProviderState {
-  user: AudioNestUser | null,
-  isLoggedIn: boolean;
-  token: string,
-  playlists: Array<SpotifyAPI.Playlist>
-}
 
 class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProviderState> {
   constructor(props) {
@@ -30,20 +21,41 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     }
   }
   
-  login = async () => {
-    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
-    const token = tokenMetadata.split('&')[0]
+  componentDidMount() {
+    const persistedToken = window.localStorage.getItem('token')
+    if (persistedToken !== 'undefined') this.login()
     
-    this.setState({ token }); 
-    spotifyApi.setAccessToken(`${token}`);
+  }
+  componentDidUpdate() {
+    console.log('Component Updating')
+  }
+
+  componentWillUnmount() {
+    console.log('Component About to Unmount');
+  }
+
+  setState(state: SpotifyProviderState) {
+    window.localStorage.setItem('token', state.token);
+    super.setState(state)
+  }
+
+  login = async () => {
+    const persistedToken = window.localStorage.getItem('token')
+    const tokenMetadata = window.location.hash?.replace('#access_token=', '')
+    const token = persistedToken || tokenMetadata.split('&')[0]
+    console.log('Component Mounting')
+    this.setState({ ...this.state, token })
+    if (token) {
+      spotifyApi.setAccessToken(token)
+    }
     // Get the authenticated user
     try {
       spotifyApi.getMe()
       .then(async function(response: { body: any }) {
         console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
+        this.setState({ user: { ...response.body }, isLoggedIn: true, token: this.state.token }); 
       }, function(err: any) {
-        throw new Error(err);
+        console.error('ERROR: Could not pull your spotify user.', err);
       })
     } catch (error) {
       console.error('ERROR: Could not login user.', error)

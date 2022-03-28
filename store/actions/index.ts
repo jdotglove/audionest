@@ -1,12 +1,9 @@
-import * as types from '../../types'
+// TOKEN TYPES
+export const RESET_TOKEN = 'RESET_TOKEN'
+export const SET_TOKEN = 'SET_TOKEN'
+
 
 // SET TOKEN
-export const setToken = () => ({ type: types.SET_TOKEN })
+export const setToken = () => ({ type: SET_TOKEN })
 // RESET TOKEN
-export const resetToken = () => ({ type: types.RESET_TOKEN })
-
-// SET USER
-export const setCurrentUser = () => ({ type: types.SET_CURRENT_USER })
-
-// SET USER PLAYLISTS
-export const setUserPlaylists = () => ({ type: types.SET_USER_PLAYLISTS })
+export const resetToken = () => ({ type: RESET_TOKEN })
