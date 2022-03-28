@@ -1,8 +1,8 @@
-import React from 'react'
-import { Button } from 'react-bootstrap'
-import SpotifyContext from '../../SpotifyContext'
-import { SpotifyAPI } from '../../../types'
-import PlaylistDisplay from './Display'
+import React from 'react';
+import { Button } from 'react-bootstrap';
+import { SpotifyAPI } from '../../../types';
+import SpotifyContext from '../../contexts/SpotifyContext';
+import PlaylistDisplay from './Display';
 
 export default function PlaylistList() {
   return (
@@ -27,5 +27,5 @@ export default function PlaylistList() {
         </div>
       )}
     </SpotifyContext.Consumer>
-  )  
+  );
 }

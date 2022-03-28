@@ -3,7 +3,7 @@ import React from 'react'
 import { SpotifyAPI } from '../../../types'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-export default function PlaylistDisplay(props: {playlist: SpotifyAPI.Playlist }) {
+export default function PlaylistDisplay(props: { playlist: SpotifyAPI.Playlist }) {
   return (
     <Button 
       color="secondary"

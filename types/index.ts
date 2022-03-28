@@ -1,12 +1,11 @@
-// TOKEN TYPES
-export const RESET_TOKEN = 'RESET_TOKEN'
-export const SET_TOKEN = 'SET_TOKEN'
+export interface SpotifyProviderProps {}
 
-// USER TYPES
-export const SET_CURRENT_USER = 'SET_CURRENT_USER'
-
-// PLAYLIST TYPES
-export const SET_USER_PLAYLISTS = 'SET_USER_PLAYLISTS'
+export interface SpotifyProviderState {
+  user: AudioNestUser | null,
+  isLoggedIn: boolean;
+  token: string,
+  playlists: Array<SpotifyAPI.Playlist>
+}
 
 // SPOTIFY USER TYPE START
 export module SpotifyAPI {

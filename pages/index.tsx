@@ -1,7 +1,7 @@
-import React from 'react'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-const { SpotifyAuth, Scopes } = require('react-spotify-auth')
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+
+const { SpotifyAuth, Scopes } = require('react-spotify-auth');
 
 export default function Home() {
   return (
@@ -16,11 +16,11 @@ export default function Home() {
           The nest you never want to leave...
         </p>
         <SpotifyAuth
-          redirectUri={ process.env.NEXT_PUBLIC_REDIRECT_URL }
-          clientID={ process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID }
+          redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL}
+          clientID={process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID}
           scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
         />
       </main>
     </div>
-  )
+  );
 }

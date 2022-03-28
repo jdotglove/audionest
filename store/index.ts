@@ -2,15 +2,16 @@ import { useMemo } from 'react'
 import { createStore, applyMiddleware, AnyAction, EmptyObject, Store } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
-import { SpotifyAPI } from '../types'
 import reducers from './reducers'
 
-let store: Store<EmptyObject & { 
-  token: any; 
-  user: any }, 
-  AnyAction> & { 
-    dispatch: unknown 
-  }
+
+export type AudioNestRootState = {
+  token: string,
+}
+
+let store: Store<AudioNestRootState, AnyAction> & {
+  dispatch: unknown
+}
 
 function initStore(initialState: { token?: any }) {
   return createStore(
@@ -20,9 +21,8 @@ function initStore(initialState: { token?: any }) {
   )
 }
 
-export type AudioNestRootState = {
-  token: string,
-  user: SpotifyAPI.User
+export const initialState = {
+  token: ''
 }
 
 export type AudioNestDispatch = typeof store.dispatch
@@ -44,7 +44,7 @@ export const initializeStore = (preloadedState: any) => {
   // For SSG and SSR always create a new store
   if (typeof window === 'undefined') return _store
   // Create the store once in the client
-  if (!store) store = _store
+  if (!store) store = _store as typeof store
 
   return _store
 }
