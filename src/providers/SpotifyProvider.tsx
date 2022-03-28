@@ -34,26 +34,20 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     console.log('Component About to Unmount');
   }
 
-  setState(state: SpotifyProviderState) {
-    window.localStorage.setItem('token', state.token);
-    super.setState(state)
-  }
-
   login = async () => {
     const persistedToken = window.localStorage.getItem('token')
     const tokenMetadata = window.location.hash?.replace('#access_token=', '')
     const token = persistedToken || tokenMetadata.split('&')[0]
+    if (!persistedToken) window.localStorage.setItem('token', token)
     console.log('Component Mounting')
-    this.setState({ ...this.state, token })
-    if (token) {
-      spotifyApi.setAccessToken(token)
-    }
+    this.setState({ ...this.state })
+    if (token) spotifyApi.setAccessToken(token)
     // Get the authenticated user
     try {
       spotifyApi.getMe()
       .then(async function(response: { body: any }) {
         console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body }, isLoggedIn: true, token: this.state.token }); 
+        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
       }, function(err: any) {
         console.error('ERROR: Could not pull your spotify user.', err);
       })
@@ -63,9 +57,6 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   };
 
   getUserPlaylists = async () => {
-    if (!this.state.isLoggedIn) {
-      await this.login()
-    }
     try {
       // Get a user's playlists
       await spotifyApi.getUserPlaylists(this.state.user.id)
