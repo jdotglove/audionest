@@ -1,7 +1,10 @@
 {
-  "name": "dotcom",
+  "name": "audionest",
   "version": "0.1.0",
   "private": true,
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
