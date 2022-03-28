@@ -78,7 +78,6 @@ module.exports = {
         "**/__tests__/**/*.[jt]s?(x)",
         "**/?(*.)+(spec|test).[jt]s?(x)"
       ],
-      "plugins": ["testing-library"],
       "extends": ["plugin:testing-library/react"]
     }
   ],
