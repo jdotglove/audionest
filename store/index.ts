@@ -44,7 +44,7 @@ export const initializeStore = (preloadedState: any) => {
   // For SSG and SSR always create a new store
   if (typeof window === 'undefined') return _store
   // Create the store once in the client
-  if (!store) store = _store
+  if (!store) store = _store as typeof store
 
   return _store
 }
