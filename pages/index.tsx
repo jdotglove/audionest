@@ -16,7 +16,7 @@ export default function Home() {
           The nest you never want to leave...
         </p>
         <SpotifyAuth
-          redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL}
+          redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/dashboard`}
           clientID={process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID}
           scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
           noLogo
