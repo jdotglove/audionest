@@ -6,7 +6,6 @@ module.exports = {
     node: true,
   },
   extends: ['eslint:recommended', 'next'],
-  parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
   },
