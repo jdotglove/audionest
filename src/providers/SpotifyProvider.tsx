@@ -1,10 +1,10 @@
 import React from 'react'
-import { AudioNestUser, SpotifyAPI, SpotifyProviderProps, SpotifyProviderState } from '../../types';
+import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
-const spotifyApi = new SpotifyWebApi({
+export const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL
@@ -47,7 +47,8 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       spotifyApi.getMe()
       .then(async function(response: { body: any }) {
         console.log('Some information about the authenticated user', response.body);
-        this.setState({ user: { ...response.body }, isLoggedIn: true }); 
+        this.setState({ user: { ...response.body }, isLoggedIn: true });
+        this.getUserPlaylists()
       }, function(err: any) {
         console.error('ERROR: Could not pull your spotify user.', err);
       })
