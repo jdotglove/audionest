@@ -1,24 +1,24 @@
-import { combineReducers } from 'redux'
-import { SET_TOKEN, RESET_TOKEN } from '../actions'
+import { combineReducers } from 'redux';
+import { SET_TOKEN, RESET_TOKEN } from '../actions';
 
 // TOKEN REDUCER
 const tokenReducer = (action: { type: string; payload: string }, state = '') => {
-  if(action) {
+  if (action) {
     switch (action.type) {
       case SET_TOKEN:
-        return action.payload
+        return action.payload;
       case RESET_TOKEN:
-        return ''
+        return '';
       default:
-        return state
+        return state;
     }
   }
-  return null
-}
+  return null;
+};
 
 // COMBINED REDUCERS
 const reducers = {
   token: tokenReducer,
-}
+};
 
-export default combineReducers(reducers)
+export default combineReducers(reducers);

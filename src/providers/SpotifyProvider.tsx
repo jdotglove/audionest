@@ -1,5 +1,8 @@
 import React from 'react';
-import { AudioNestUser, SpotifyAPI, SpotifyProviderProps, SpotifyProviderState } from '../../types';
+import {
+  SpotifyProviderProps,
+  SpotifyProviderState,
+} from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -7,10 +10,15 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
-  redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/dashboard`,
+  redirectUri:
+    process.env.NEXT_PUBLIC_REDIRECT_URL ||
+    `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/dashboard`,
 });
 
-class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProviderState> {
+class SpotifyProvider extends React.Component<
+SpotifyProviderProps,
+SpotifyProviderState
+> {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +26,11 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
       isLoggedIn: false,
       token: '',
       playlists: [],
+      recommendations: null,
+      genreSeeds: null,
     };
   }
-  
+
   componentDidMount() {
     const persistedToken = window.localStorage.getItem('token');
     if (persistedToken !== 'undefined') this.login();
@@ -28,6 +38,7 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
 
   componentDidUpdate() {
     console.log('Component Updating');
+    console.log(this.state);
   }
 
   componentWillUnmount() {
@@ -41,16 +52,15 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
     if (!persistedToken) window.localStorage.setItem('token', token);
     console.log('Component Mounting');
     this.setState({ ...this.state });
-    if (token) spotifyApi.setAccessToken(token);
+    if (token) await spotifyApi.setAccessToken(token);
     // Get the authenticated user
     try {
-      spotifyApi.getMe()
-        .then(async function (response: { body: any }) {
-          console.log('Some information about the authenticated user', response.body);
-          this.setState({ user: { ...response.body }, isLoggedIn: true }); 
-        }, function (err: any) {
-          console.error('ERROR: Could not pull your spotify user.', err);
-        });
+      const response = await spotifyApi.getMe();
+      console.log(
+        'Some information about the authenticated user: ',
+        response.body,
+      );
+      this.setState({ user: { ...response.body }, isLoggedIn: true });
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
     }
@@ -59,14 +69,29 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
-      await spotifyApi.getUserPlaylists(this.state.user.id)
-        .then(function (data: { body: any }) {
-          console.log('Retrieved playlists', data.body.items);
-          this.setState({ playlists: data.body.items });
-        });
-    } catch (err: any) {
-      console.log('ERROR: Could not retrieve user\'s playlists.', err);
+      const response = await spotifyApi.getUserPlaylists(this.state.user.id);
+      console.log('Retrieved playlists', response.body.items);
+      this.setState({ playlists: response.body.items });
+    } catch (err) {
+      console.log("ERROR: Could not retrieve user's playlists.", err);
     }
+  };
+
+  getSeedRecommendations = async () => {
+    // Get Recommendations Based on Seeds
+    const response = await spotifyApi.getRecommendations({
+      min_energy: 0.4,
+      min_popularity: 50,
+    });
+    console.log('Some information on Seed Recommendations: ', response.body);
+    this.setState({ recommendations: response.body });
+  };
+
+  getAvailableGenreSeeds = async () => {
+    // Get available genre seeds
+    const response = await spotifyApi.getAvailableGenreSeeds();
+    console.log(response.body);
+    this.setState({ genreSeeds: response.body });
   };
 
   render() {
@@ -78,6 +103,9 @@ class SpotifyProvider extends React.Component<SpotifyProviderProps, SpotifyProvi
           login: this.login,
           getUserPlaylists: this.getUserPlaylists,
           playlists: this.state.playlists,
+          getSeedRecommendations: this.getSeedRecommendations,
+          getAvailableGenreSeeds: this.getAvailableGenreSeeds,
+          recommendations: this.state.recommendations,
         }}
       >
         <div>{this.props.children}</div>
