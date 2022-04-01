@@ -11,8 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "test": "jest --watchAll",
-    "test:ci": "jest --ci"
+    "test": "react-scripts test --watchAll=false",
+    "test:ci": "react-scripts test --watchAll=false --ci"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",
