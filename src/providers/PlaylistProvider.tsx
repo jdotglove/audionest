@@ -8,7 +8,7 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      tracks: [],
     }
   }
   
@@ -16,11 +16,10 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
     console.log('here!', id)
     try {
       // Get a user's playlists
-      await spotifyApi.getPlaylistTracks(id)
-        .then(function(data: { body: any }) {
-          console.log('Retrieved playlists (in PlaylistProvider', data.body.items);
-          this.setState({ playlists: data.body.items });
-        })
+      const data = await spotifyApi.getPlaylistTracks(id)
+      console.log('Retrieved playlists (in PlaylistProvider', data.body.items);
+      this.setState({ tracks: data.body.items });
+      return data.body.items
     } catch (err: any) {
       console.log('ERROR: Could not retrieve user\'s playlists.', err);
     }

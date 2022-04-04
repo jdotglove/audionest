@@ -8,7 +8,7 @@ export interface SpotifyProviderState {
 }
 
 export type PlaylistProviderState = {
-  data: any;
+  tracks: any;
 }
 
 // SPOTIFY USER TYPE START
