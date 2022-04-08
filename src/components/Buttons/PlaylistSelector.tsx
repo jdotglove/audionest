@@ -1,8 +1,8 @@
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Button } from '@mui/material';
-import React from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlaylistContext from '../../contexts/PlaylistContext';
-import SpotifyContext from '../../contexts/SpotifyContext';
 import { SpotifyAPI } from '../../../types';
 
 export default function PlaylistSelector({
@@ -12,6 +12,13 @@ export default function PlaylistSelector({
   setSelectedPlaylist: Function;
   playlist: SpotifyAPI.Playlist;
 }) {
+  const router = useRouter();
+  useEffect(() => {
+    if (router.asPath !== '/dashboard') {
+      router.replace('/dashboard', undefined, { shallow: true });
+    }
+  }, [router]);
+  
   return (
     <PlaylistContext.Consumer>
       {({ getPlaylistTracks }) => (

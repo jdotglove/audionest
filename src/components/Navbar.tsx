@@ -7,7 +7,7 @@ export default function AudioNestNavbar() {
       {({ isLoggedIn, login, user }) => (
         <Navbar bg="light">
           <Container fluid>
-            <Navbar.Brand>AudioNest</Navbar.Brand>
+            <Navbar.Brand href="/" >AudioNest</Navbar.Brand>
             {isLoggedIn ? (
               <Nav className="align-items-center">
                 <Navbar.Text>
