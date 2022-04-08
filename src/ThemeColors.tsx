@@ -15,13 +15,11 @@ const mainTheme = createTheme({
 });
 
 class ThemeColors extends React.Component {
-  render () {
+  render() {
     return (
-      <ThemeProvider theme={mainTheme}>
-        {this.props.children}
-      </ThemeProvider>
-    )
+      <ThemeProvider theme={mainTheme}>{this.props.children}</ThemeProvider>
+    );
   }
 }
 
-export default ThemeColors
+export default ThemeColors;

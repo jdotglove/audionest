@@ -9,21 +9,16 @@ export default function PlaylistList() {
     <SpotifyContext.Consumer>
       {({ getUserPlaylists, playlists }) => (
         <div>
-        {(playlists.length)
-          ? (
-            <div className="d-grid m-3 gap-2" style={{maxWidth: "300px"}}>
-              <h3>Let's see what we're working with...</h3>
-              {playlists.map((playlist: SpotifyAPI.Playlist) =>{
-                return <PlaylistDisplay playlist={playlist} key={playlist.id} />
-              })}
+          {playlists.length ? (
+            <div className="d-grid m-3 gap-2" style={{ maxWidth: '300px' }}>
+              <h3>Let&#39;s see what we&#39;re working with...</h3>
+              {playlists.map((playlist: SpotifyAPI.Playlist) => (
+                <PlaylistDisplay playlist={playlist} key={playlist.id} />
+              ))}
             </div>
-          )
-          : (
-            <Button onClick={getUserPlaylists}>
-              Get My Playlists!
-            </Button>
-          )
-        }
+          ) : (
+            <Button onClick={getUserPlaylists}>Get My Playlists!</Button>
+          )}
         </div>
       )}
     </SpotifyContext.Consumer>
