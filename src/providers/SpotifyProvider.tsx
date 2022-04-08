@@ -1,13 +1,10 @@
 import React from 'react';
-import {
-  SpotifyProviderProps,
-  SpotifyProviderState,
-} from '../../types';
+import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
-const spotifyApi = new SpotifyWebApi({
+export const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri:
@@ -61,6 +58,7 @@ SpotifyProviderState
         response.body,
       );
       this.setState({ user: { ...response.body }, isLoggedIn: true });
+      this.getUserPlaylists();
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
     }
