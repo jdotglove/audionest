@@ -7,5 +7,6 @@ $body-color: $secondary;
 
 $min-contrast-ratio: 2;
 
+$enable-flex: false !default;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";

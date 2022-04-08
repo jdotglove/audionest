@@ -23,7 +23,7 @@ SpotifyProviderState
       isLoggedIn: false,
       token: '',
       playlists: [],
-      recommendations: null,
+      currentSelectedPlaylist: null,
       genreSeeds: null,
     };
   }
@@ -82,7 +82,6 @@ SpotifyProviderState
       min_popularity: 50,
     });
     console.log('Some information on Seed Recommendations: ', response.body);
-    this.setState({ recommendations: response.body });
   };
 
   getAvailableGenreSeeds = async () => {
@@ -90,6 +89,11 @@ SpotifyProviderState
     const response = await spotifyApi.getAvailableGenreSeeds();
     console.log(response.body);
     this.setState({ genreSeeds: response.body });
+  };
+
+  setSelectedPlaylist = async (playlistData: any) => {
+    console.log('Setting selected playlist: ', playlistData);
+    this.setState({ currentSelectedPlaylist: playlistData });
   };
 
   render() {
@@ -103,7 +107,8 @@ SpotifyProviderState
           playlists: this.state.playlists,
           getSeedRecommendations: this.getSeedRecommendations,
           getAvailableGenreSeeds: this.getAvailableGenreSeeds,
-          recommendations: this.state.recommendations,
+          setSelectedPlaylist: this.setSelectedPlaylist,
+          currentSelectedPlaylist: this.state.currentSelectedPlaylist,
         }}
       >
         <div>{this.props.children}</div>

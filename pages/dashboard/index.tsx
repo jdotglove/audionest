@@ -1,7 +1,8 @@
 import { Row, Col } from 'react-bootstrap';
 import AudioNestNavbar from '../../src/components/Navbar';
-import PlaylistList from '../../src/components/Playlist/List';
-import RecommendationsSection from '../../src/components/Recommendations/Section';
+import PlaylistDisplay from '../../src/components/Playlist/Display';
+import PlaylistStatistics from '../../src/components/Containers/PlaylistStatistics';
+import styles from '../../styles/Home.module.css';
 
 export default function Dashboard() {
   return (
@@ -11,12 +12,12 @@ export default function Dashboard() {
           <AudioNestNavbar />
         </Col>
       </Row>
-      <Row>
+      <Row className={styles.playlistRow}>
         <Col>
-          <PlaylistList />
+          <PlaylistDisplay />
         </Col>
         <Col>
-          <RecommendationsSection />
+          <PlaylistStatistics />
         </Col>
       </Row>
     </>

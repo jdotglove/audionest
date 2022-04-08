@@ -4,7 +4,7 @@ export interface SpotifyProviderState {
   user: AudioNestUser | null;
   isLoggedIn: boolean;
   token: string;
-  recommendations: any;
+  currentSelectedPlaylist: Array<any> | null;
   genreSeeds: any;
   playlists: Array<SpotifyAPI.Playlist>;
 }
@@ -62,10 +62,7 @@ export module SpotifyAPI {
     primary_color: string | null;
     public: boolean;
     snapshot_id: string;
-    tracks: {
-      href: string;
-      total: number;
-    }
+    tracks: any // TODO: Come back and clean up this type
     type: string;
     uri: string;
   };
@@ -104,7 +101,7 @@ export module SpotifyAPI {
   };
   export type Track = {
     album: Album;
-    artists: Artist;
+    artists: Artist[];
     available_markets: string[];
     disc_number: number;
     duration_ms: number;
@@ -119,6 +116,7 @@ export module SpotifyAPI {
     id: string;
     is_local: boolean;
     name: string;
+    // The value will be between 0 and 100, with 100 being the most popular.
     popularity: number;
     preview_url: string | null;
     track_number: number;
@@ -136,6 +134,17 @@ export module SpotifyAPI {
   export type SeedRecommendation = {
     seeds: SeedResponse[];
     tracks: Track[];
+  };
+
+  export type PlaylistTrackDetails = {
+    added_at: string;
+    added_by: Partial<User>;
+    is_local: boolean;
+    primary_color: any;
+    track: Track;
+    video_thumbnail: {
+      url: string | null;
+    };
   };
 
 }
