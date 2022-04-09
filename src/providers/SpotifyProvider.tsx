@@ -34,12 +34,12 @@ SpotifyProviderState
   }
 
   componentDidUpdate() {
-    console.log('Component Updating');
+    console.log('Spotify Provider Updating');
     console.log(this.state);
   }
 
   componentWillUnmount() {
-    console.log('Component About to Unmount');
+    console.log('Spotify Provider About to Unmount');
   }
 
   login = async () => {
@@ -47,7 +47,7 @@ SpotifyProviderState
     const tokenMetadata = window.location.hash?.replace('#access_token=', '');
     const token = persistedToken || tokenMetadata.split('&')[0];
     if (!persistedToken) window.localStorage.setItem('token', token);
-    console.log('Component Mounting');
+    console.log('Spotify Provider Mounting');
     this.setState({ ...this.state });
     if (token) await spotifyApi.setAccessToken(token);
     // Get the authenticated user

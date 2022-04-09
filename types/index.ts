@@ -4,7 +4,11 @@ export interface SpotifyProviderState {
   user: AudioNestUser | null;
   isLoggedIn: boolean;
   token: string;
-  currentSelectedPlaylist: Array<any> | null;
+  currentSelectedPlaylist: {
+    id: string;
+    name: string;
+    tracks: Array<SpotifyAPI.PlaylistTrackDetails> | null;
+  }
   genreSeeds: any;
   playlists: Array<SpotifyAPI.Playlist>;
 }

@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Button } from 'react-bootstrap';
 import PlaylistContext from '../../contexts/PlaylistContext';
 import { SpotifyAPI } from '../../../types';
 
 export default function PlaylistSelector({
   setSelectedPlaylist,
   playlist,
+  isActive,
+  setRadioValue,
 }: {
   setSelectedPlaylist: Function;
   playlist: SpotifyAPI.Playlist;
+  isActive: boolean;
+  value: number;
+  setRadioValue: Function
 }) {
   const router = useRouter();
   useEffect(() => {
@@ -23,17 +27,21 @@ export default function PlaylistSelector({
     <PlaylistContext.Consumer>
       {({ getPlaylistTracks }) => (
         <Button
-          color="secondary"
-          variant="outlined"
+          variant={isActive ? 'info' : 'outline-info'}
           style={{
             justifyContent: 'space-between',
             textTransform: 'none',
             borderRadius: '25px',
           }}
-          endIcon={<ArrowForwardIosIcon sx={{ fontSize: '12px !important' }} />}
-          onClick={async () => {
-            await setSelectedPlaylist(await getPlaylistTracks(playlist.id));
+          onClick={async (e: BaseSyntheticEvent) => {
+            await setSelectedPlaylist({
+              id: playlist.id,
+              name: playlist.name,
+              tracks: await getPlaylistTracks(playlist.id),
+            });
+            setRadioValue(e.target.value);
           }}
+          active={isActive}
         >
           {playlist ? playlist.name : ''}
         </Button>

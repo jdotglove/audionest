@@ -9,20 +9,21 @@ export default function PlaylistStatistics() {
     <SpotifyContext.Consumer>
       {({ currentSelectedPlaylist }) => (
         <div>
-          {currentSelectedPlaylist && currentSelectedPlaylist.length && (
+          {currentSelectedPlaylist && currentSelectedPlaylist.tracks.length && (
             <Tab.Container>
               <Row className="d-flex">
                 <Col>
                   <h3>Selected Playlist Details:</h3>
+                  
                   <Card style={{ width: '18rem' }}>
                     <Card.Header
                       className={styles.playlistTrackContainerHeader}
                     >
-                      Playlist Tracks
+                      <h5> { currentSelectedPlaylist.name } </h5>
                     </Card.Header>
                     <Card.Body>
                       <ListGroup>
-                        {currentSelectedPlaylist.map(
+                        {currentSelectedPlaylist.tracks.map(
                           (
                             playlistTrackDetails: SpotifyAPI.PlaylistTrackDetails,
                           ) => {
@@ -45,7 +46,7 @@ export default function PlaylistStatistics() {
                 <Col>
                   <h3> Popularity: </h3>
                   <Tab.Content>
-                    {currentSelectedPlaylist.map(
+                    {currentSelectedPlaylist.tracks.map(
                       (
                         playlistTrackDetails: SpotifyAPI.PlaylistTrackDetails,
                       ) => {
