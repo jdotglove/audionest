@@ -6,8 +6,9 @@
     ".next/cache"
   ],
   "scripts": {
+    "version-control:node": "test $(node -v) = $(cat .nvmrc) || exit 1",
     "version-control:npm": "[[ ! $(npm config get npm-version) < \"7\" ]] || exit 1",
-    "version-control": "(npm run version-control:npm) && exit 0",
+    "version-control": "(npm run version-control:node && npm run version-control:npm) && exit 0",
     "predev": "npm run version-control",
     "dev": "next dev",
     "build": "next build",
