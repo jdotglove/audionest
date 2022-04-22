@@ -68,13 +68,12 @@ export default function PlaylistStatistics() {
                             key={playlistTrackDetails.track.id}
                             eventKey={`${playlistTrackDetails.track.id}`}
                           >
-                            {JSON.stringify(
-                              currentTrackStats,
-                              null,
-                              4,
-                            ) /* <TrackStatistics
-                              trackStats={currentTrackStats}
-                            /> */}
+                            <TrackStatistics
+                              trackStats={{
+                                ...currentTrackStats,
+                                popularity: playlistTrackDetails.track.popularity,
+                              }}
+                            />
                           </Tab.Pane>
                         );
                       },

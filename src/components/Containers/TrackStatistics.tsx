@@ -1,24 +1,16 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import TrackContext from '../../contexts/TrackContext';
 
 export default function TrackStatistics({
-  track,
+  trackStats,
 }: {
-  track: SpotifyApi.TrackObjectFull;
+  trackStats: SpotifyApi.AudioFeaturesObject & { popularity: string | number };
 }) {
   return (
-    <div>
-      <TrackContext.Consumer>
-        {({ getTrackAudioFeatures }) => (
-          <Container>
-              {
-                <div>{JSON.stringify(getTrackAudioFeatures(track.id), null, 4)}</div>
-                //const trackAudioAnalysis = await getTrackAudioAnalysis(track.id);
-              }
-          </Container>
-        )}
-      </TrackContext.Consumer>
-    </div>
+    <Container>
+      {
+        <div>{JSON.stringify(trackStats, null, 4)}</div>
+      }
+    </Container>
   );
 }
