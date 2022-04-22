@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import PlaylistContext from '../../contexts/PlaylistContext';
-import { SpotifyAPI } from '../../../types';
 
 export default function PlaylistSelector({
   setSelectedPlaylist,
   playlist,
 }: {
   setSelectedPlaylist: Function;
-  playlist: SpotifyAPI.Playlist;
+  playlist: SpotifyApi.PlaylistObjectSimplified;
 }) {
   const router = useRouter();
   useEffect(() => {

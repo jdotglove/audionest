@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
-import { Container, Col, Row, Tab } from 'react-bootstrap';
-import { SpotifyAPI } from '../../../types';
+import React from 'react';
+import { Container } from 'react-bootstrap';
 import TrackContext from '../../contexts/TrackContext';
-import styles from '../../../styles/StatisticsSection.module.css';
 
-export default function TrackStatistics(track: SpotifyAPI) {
-  const [trackStats, updateTrackStats] = useState();
+export default function TrackStatistics({
+  track,
+}: {
+  track: SpotifyApi.TrackObjectFull;
+}) {
   return (
-    <TrackContext.Consumer>
-      {({ getTrackAudioFeatures, getTrackAudioAnalysis }) => (
-        <Container>
-          
-        </Container>
-      )}
-    </TrackContext.Consumer>
+    <div>
+      <TrackContext.Consumer>
+        {({ getTrackAudioFeatures }) => (
+          <Container>
+              {
+                <div>{JSON.stringify(getTrackAudioFeatures(track.id), null, 4)}</div>
+                //const trackAudioAnalysis = await getTrackAudioAnalysis(track.id);
+              }
+          </Container>
+        )}
+      </TrackContext.Consumer>
+    </div>
   );
 }

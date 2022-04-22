@@ -4,7 +4,7 @@ import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
-export const spotifyApi = new SpotifyWebApi({
+export const spotifyWebApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri:
@@ -49,10 +49,10 @@ SpotifyProviderState
     if (!persistedToken) window.localStorage.setItem('token', token);
     console.log('Spotify Provider Mounting');
     this.setState({ ...this.state });
-    if (token) await spotifyApi.setAccessToken(token);
+    if (token) await spotifyWebApi.setAccessToken(token);
     // Get the authenticated user
     try {
-      const response = await spotifyApi.getMe();
+      const response = await spotifyWebApi.getMe();
       console.log(
         'Some information about the authenticated user: ',
         response.body,
@@ -67,7 +67,7 @@ SpotifyProviderState
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
-      const response = await spotifyApi.getUserPlaylists(this.state.user.id);
+      const response = await spotifyWebApi.getUserPlaylists(this.state.user.id);
       console.log('Retrieved playlists', response.body.items);
       this.setState({ playlists: response.body.items });
     } catch (err) {
@@ -77,7 +77,7 @@ SpotifyProviderState
 
   getSeedRecommendations = async () => {
     // Get Recommendations Based on Seeds
-    const response = await spotifyApi.getRecommendations({
+    const response = await spotifyWebApi.getRecommendations({
       min_energy: 0.4,
       min_popularity: 50,
     });
@@ -86,7 +86,7 @@ SpotifyProviderState
 
   getAvailableGenreSeeds = async () => {
     // Get available genre seeds
-    const response = await spotifyApi.getAvailableGenreSeeds();
+    const response = await spotifyWebApi.getAvailableGenreSeeds();
     console.log(response.body);
     this.setState({ genreSeeds: response.body });
   };

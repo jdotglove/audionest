@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlaylistProviderState, SpotifyProviderProps } from '../../types';
 import PlaylistContext from '../contexts/PlaylistContext';
-import { spotifyApi } from './SpotifyProvider';
+import { spotifyWebApi } from './SpotifyProvider';
 
 
 class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistProviderState> {
@@ -16,7 +16,7 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
     console.log('here!', id);
     try {
       // Get a user's playlists
-      const data = await spotifyApi.getPlaylistTracks(id);
+      const data = await spotifyWebApi.getPlaylistTracks(id);
       console.log('Retrieved playlists (in PlaylistProvider', data.body.items);
       this.setState({ tracks: data.body.items });
       return data.body.items;
