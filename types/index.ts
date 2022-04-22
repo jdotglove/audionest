@@ -17,6 +17,10 @@ export type PlaylistProviderState = {
   tracks: any;
 };
 
+export type TrackProviderState = {
+  tracks: any;
+};
+
 // SPOTIFY USER TYPE START
 export module SpotifyAPI {
   export type User = {

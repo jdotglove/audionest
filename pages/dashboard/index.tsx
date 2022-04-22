@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import AudioNestNavbar from '../../src/components/Navbar';
 import PlaylistDisplay from '../../src/components/Playlist/Display';
-import PlaylistStatistics from '../../src/components/Containers/PlaylistStatistics';
+import PlaylistDetails from '../../src/components/Containers/PlaylistDetails';
 import styles from '../../styles/Home.module.css';
 
 export default function Dashboard() {
@@ -17,7 +17,7 @@ export default function Dashboard() {
           <PlaylistDisplay />
         </Col>
         <Col>
-          <PlaylistStatistics />
+          <PlaylistDetails />
         </Col>
       </Row>
     </>

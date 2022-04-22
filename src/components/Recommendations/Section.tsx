@@ -1,11 +1,12 @@
 import { Button } from 'react-bootstrap';
 import SpotifyContext from '../../contexts/SpotifyContext';
+import { Container } from 'react-bootstrap';
 
 export default function RecommendationsSections() {
   return (
     <SpotifyContext.Consumer>
       {({ getSeedRecommendations, recommendations }) => (
-        <div>
+        <Container>
           {recommendations ? (
             <div>{recommendations}</div>
           ) : (
@@ -13,7 +14,7 @@ export default function RecommendationsSections() {
               Get Seeds Recommendations!
             </Button>
           )}
-        </div>
+        </Container>
       )}
     </SpotifyContext.Consumer>
   );

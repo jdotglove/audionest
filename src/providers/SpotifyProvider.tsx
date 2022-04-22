@@ -109,6 +109,7 @@ SpotifyProviderState
           getAvailableGenreSeeds: this.getAvailableGenreSeeds,
           setSelectedPlaylist: this.setSelectedPlaylist,
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
+          recommendations: null,
         }}
       >
         <div>{this.props.children}</div>

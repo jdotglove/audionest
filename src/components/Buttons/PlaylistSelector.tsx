@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import PlaylistContext from '../../contexts/PlaylistContext';
@@ -7,14 +7,9 @@ import { SpotifyAPI } from '../../../types';
 export default function PlaylistSelector({
   setSelectedPlaylist,
   playlist,
-  isActive,
-  setRadioValue,
 }: {
   setSelectedPlaylist: Function;
   playlist: SpotifyAPI.Playlist;
-  isActive: boolean;
-  value: number;
-  setRadioValue: Function
 }) {
   const router = useRouter();
   useEffect(() => {
@@ -27,21 +22,19 @@ export default function PlaylistSelector({
     <PlaylistContext.Consumer>
       {({ getPlaylistTracks }) => (
         <Button
-          variant={isActive ? 'info' : 'outline-info'}
+          variant='outline-info'
           style={{
             justifyContent: 'space-between',
             textTransform: 'none',
             borderRadius: '25px',
           }}
-          onClick={async (e: BaseSyntheticEvent) => {
+          onClick={async () => {
             await setSelectedPlaylist({
               id: playlist.id,
               name: playlist.name,
               tracks: await getPlaylistTracks(playlist.id),
             });
-            setRadioValue(e.target.value);
           }}
-          active={isActive}
         >
           {playlist ? playlist.name : ''}
         </Button>

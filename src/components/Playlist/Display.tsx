@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SpotifyAPI } from '../../../types';
 import SpotifyContext from '../../contexts/SpotifyContext';
 import PlaylistSelector from '../Buttons/PlaylistSelector';
+import { Container } from 'react-bootstrap';
 
 export default function PlaylistDisplay() {
-  const [radioValue, setRadioValue] = useState();
   return (
     <SpotifyContext.Consumer>
       {({ playlists, setSelectedPlaylist }) => (
-        <div>
+        <Container>
           {playlists.length && (
-            <div className="d-grid m-3 gap-2" style={{ maxWidth: '300px' }}>
+            <div className='d-grid m-3 gap-2' style={{ maxWidth: '300px' }}>
               <h3>Let&#39;s see what we&#39;re working with...</h3>
               {playlists.map((playlist: SpotifyAPI.Playlist, idx: number) => {
                 return (
@@ -18,14 +18,12 @@ export default function PlaylistDisplay() {
                     playlist={playlist}
                     key={idx}
                     setSelectedPlaylist={setSelectedPlaylist}
-                    isActive={radioValue === idx}
-                    setRadioValue={setRadioValue}
                   />
                 );
               })}
             </div>
           )}
-        </div>
+        </Container>
       )}
     </SpotifyContext.Consumer>
   );

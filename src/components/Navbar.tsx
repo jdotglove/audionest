@@ -5,11 +5,11 @@ export default function AudioNestNavbar() {
   return (
     <SpotifyContext.Consumer>
       {({ isLoggedIn, login, user }) => (
-        <Navbar bg="light">
+        <Navbar bg='light'>
           <Container fluid>
-            <Navbar.Brand href="/" >AudioNest</Navbar.Brand>
+            <Navbar.Brand href='/' >AudioNest</Navbar.Brand>
             {isLoggedIn ? (
-              <Nav className="align-items-center">
+              <Nav className='align-items-center'>
                 <Navbar.Text>
                   Welcome, {user.display_name.split(' ')[0]}!
                 </Navbar.Text>
@@ -19,8 +19,8 @@ export default function AudioNestNavbar() {
                     height={30}
                     width={30}
                     roundedCircle
-                    className="mx-2"
-                    alt="Profile Picture"
+                    className='mx-2'
+                    alt='Profile Picture'
                   />
                 )}
               </Nav>
