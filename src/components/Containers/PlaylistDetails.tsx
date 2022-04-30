@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { Container, Card, Col, ListGroup, Row, Tab } from 'react-bootstrap';
+import React from 'react';
+import { Container, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import SpotifyContext from '../../contexts/SpotifyContext';
-import TrackContext from '../../contexts/TrackContext';
 import styles from '../../../styles/StatisticsSection.module.css';
-import TrackStatistics from './TrackStatistics';
+import TrackSelector from '../Buttons/TrackSelector';
 
-export default function PlaylistStatistics() {
-  const [currentTrackStats, setTrackStats] = useState(null);
+export default function PlaylistDetails() {
   return (
     <SpotifyContext.Consumer>
-      {({ currentSelectedPlaylist }) => (
+      {({ currentSelectedPlaylist, setSelectedTracks }) => (
         <Container>
           {currentSelectedPlaylist && currentSelectedPlaylist.tracks.length && (
             <Row>
@@ -20,39 +18,19 @@ export default function PlaylistStatistics() {
                     <h5> {currentSelectedPlaylist.name} </h5>
                   </Card.Header>
                   <Card.Body>
-                    <TrackContext.Consumer>
-                      {({ getTrackAudioFeatures }) => (
-                        <ListGroup className={styles.playlistTrackGroup}>
+                  {/* <p>{ JSON.stringify(currentSelectedPlaylist.tracks[0].track, null, 4) }</p> */}
+                        <ListGroup>
                           {currentSelectedPlaylist.tracks.map(
                             (
-                              playlistTrackDetails: SpotifyApi.PlaylistTrackObject,
-                            ) => {
-                              return (
-                                <ListGroup.Item
-                                  action
-                                  variant="dark"
-                                  key={playlistTrackDetails.track.id}
-                                  eventKey={`${playlistTrackDetails.track.id}`}
-                                  onClick={async () => {
-                                    setTrackStats({
-                                      ...(await getTrackAudioFeatures(
-                                        playlistTrackDetails.track.id,
-                                      )),
-                                    });
-                                  }}
-                                >
-                                  {playlistTrackDetails.track.name}
-                                </ListGroup.Item>
-                              );
-                            },
+                              { track },
+                            ) => (
+                              <TrackSelector key={track.id} track={track} setSelectedTracks={setSelectedTracks} />
+                            ),
                           )}
                         </ListGroup>
-                      )}
-                    </TrackContext.Consumer>
                   </Card.Body>
                 </Card>
               </Col>
-              
             </Row>
           )}
         </Container>

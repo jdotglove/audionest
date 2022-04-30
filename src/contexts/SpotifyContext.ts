@@ -9,7 +9,9 @@ const SpotifyContext = createContext({
   getSeedRecommendations: undefined,
   getAvailableGenreSeeds: undefined,
   setSelectedPlaylist: undefined,
+  setSelectedTracks: undefined,
   currentSelectedPlaylist: undefined,
+  currentSelectedTracks: undefined,
   recommendations: undefined,
 });
 

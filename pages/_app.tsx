@@ -6,7 +6,7 @@ import { useStore } from '../store';
 import ThemeColors from '../src/ThemeColors';
 import '../styles/scss/index.scss';
 import PlaylistProvider from '../src/providers/PlaylistProvider';
-import TrackProvider from '../src/providers/TrackProvider';
+import ChartProvider from '../src/providers/ChartProvider';
 
 export default function AudioNestApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
@@ -14,11 +14,11 @@ export default function AudioNestApp({ Component, pageProps }) {
     <Provider store={ store }>
       <SpotifyProvider>
         <PlaylistProvider>
-          <TrackProvider>
+          <ChartProvider>
             <ThemeColors>
               <Component props={ pageProps } />
             </ThemeColors>
-          </TrackProvider>
+          </ChartProvider>
         </PlaylistProvider>
       </SpotifyProvider>
     </Provider>

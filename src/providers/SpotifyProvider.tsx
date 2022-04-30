@@ -1,5 +1,5 @@
 import React from 'react';
-import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
+import { SelectedTrackRecord, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -24,6 +24,7 @@ SpotifyProviderState
       token: '',
       playlists: [],
       currentSelectedPlaylist: null,
+      currentSelectedTracks: [],
       genreSeeds: null,
     };
   }
@@ -96,6 +97,10 @@ SpotifyProviderState
     this.setState({ currentSelectedPlaylist: playlistData });
   };
 
+  setSelectedTracks = async (trackRecord: SelectedTrackRecord) => {
+    this.setState({ currentSelectedTracks: this.state.currentSelectedTracks.concat(trackRecord) });
+  };
+
   render() {
     return (
       <SpotifyContext.Provider
@@ -108,7 +113,9 @@ SpotifyProviderState
           getSeedRecommendations: this.getSeedRecommendations,
           getAvailableGenreSeeds: this.getAvailableGenreSeeds,
           setSelectedPlaylist: this.setSelectedPlaylist,
+          setSelectedTracks: this.setSelectedTracks,
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
+          currentSelectedTracks: this.state.currentSelectedTracks,
           recommendations: null,
         }}
       >
