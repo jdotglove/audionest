@@ -8,7 +8,7 @@ export default function Home() {
     <div className={styles.container}>
       <Head>
         <title>AudioNest</title>
-        <meta name="description" content="The nest you never want to leave" />
+        <meta name='description' content='The nest you never want to leave' />
       </Head>
       <main className={styles.main}>
         <h1> Welcome to AudioNest </h1>

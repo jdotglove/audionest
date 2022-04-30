@@ -1,23 +1,29 @@
-import { Button } from '@mui/material';
 import React from 'react';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { SpotifyAPI } from '../../../types';
+import SpotifyContext from '../../contexts/SpotifyContext';
+import PlaylistSelector from '../Buttons/PlaylistSelector';
+import { Container } from 'react-bootstrap';
 
-export default function PlaylistDisplay(props: {
-  playlist: SpotifyAPI.Playlist;
-}) {
+export default function PlaylistDisplay() {
   return (
-    <Button
-      color="secondary"
-      variant="outlined"
-      style={{
-        justifyContent: 'space-between',
-        textTransform: 'none',
-        borderRadius: '25px',
-      }}
-      endIcon={<ArrowForwardIosIcon sx={{ fontSize: '12px !important' }} />}
-    >
-      {props.playlist.name}
-    </Button>
+    <SpotifyContext.Consumer>
+      {({ playlists, setSelectedPlaylist }) => (
+        <Container>
+          {playlists.length && (
+            <div className='d-grid m-3 gap-2' style={{ maxWidth: '300px' }}>
+              <h3>Let&#39;s see what we&#39;re working with...</h3>
+              {playlists.map((playlist: SpotifyApi.PlaylistObjectSimplified, idx: number) => {
+                return (
+                  <PlaylistSelector
+                    playlist={playlist}
+                    key={idx}
+                    setSelectedPlaylist={setSelectedPlaylist}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </Container>
+      )}
+    </SpotifyContext.Consumer>
   );
 }

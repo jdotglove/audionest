@@ -1,13 +1,10 @@
 import React from 'react';
-import {
-  SpotifyProviderProps,
-  SpotifyProviderState,
-} from '../../types';
+import { SelectedTrackRecord, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
-const spotifyApi = new SpotifyWebApi({
+export const spotifyWebApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri:
@@ -26,7 +23,8 @@ SpotifyProviderState
       isLoggedIn: false,
       token: '',
       playlists: [],
-      recommendations: null,
+      currentSelectedPlaylist: null,
+      currentSelectedTracks: [],
       genreSeeds: null,
     };
   }
@@ -37,12 +35,12 @@ SpotifyProviderState
   }
 
   componentDidUpdate() {
-    console.log('Component Updating');
+    console.log('Spotify Provider Updating');
     console.log(this.state);
   }
 
   componentWillUnmount() {
-    console.log('Component About to Unmount');
+    console.log('Spotify Provider About to Unmount');
   }
 
   login = async () => {
@@ -50,17 +48,18 @@ SpotifyProviderState
     const tokenMetadata = window.location.hash?.replace('#access_token=', '');
     const token = persistedToken || tokenMetadata.split('&')[0];
     if (!persistedToken) window.localStorage.setItem('token', token);
-    console.log('Component Mounting');
+    console.log('Spotify Provider Mounting');
     this.setState({ ...this.state });
-    if (token) await spotifyApi.setAccessToken(token);
+    if (token) await spotifyWebApi.setAccessToken(token);
     // Get the authenticated user
     try {
-      const response = await spotifyApi.getMe();
+      const response = await spotifyWebApi.getMe();
       console.log(
         'Some information about the authenticated user: ',
         response.body,
       );
       this.setState({ user: { ...response.body }, isLoggedIn: true });
+      this.getUserPlaylists();
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
     }
@@ -69,7 +68,7 @@ SpotifyProviderState
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
-      const response = await spotifyApi.getUserPlaylists(this.state.user.id);
+      const response = await spotifyWebApi.getUserPlaylists(this.state.user.id);
       console.log('Retrieved playlists', response.body.items);
       this.setState({ playlists: response.body.items });
     } catch (err) {
@@ -79,19 +78,27 @@ SpotifyProviderState
 
   getSeedRecommendations = async () => {
     // Get Recommendations Based on Seeds
-    const response = await spotifyApi.getRecommendations({
+    const response = await spotifyWebApi.getRecommendations({
       min_energy: 0.4,
       min_popularity: 50,
     });
     console.log('Some information on Seed Recommendations: ', response.body);
-    this.setState({ recommendations: response.body });
   };
 
   getAvailableGenreSeeds = async () => {
     // Get available genre seeds
-    const response = await spotifyApi.getAvailableGenreSeeds();
+    const response = await spotifyWebApi.getAvailableGenreSeeds();
     console.log(response.body);
     this.setState({ genreSeeds: response.body });
+  };
+
+  setSelectedPlaylist = async (playlistData: any) => {
+    console.log('Setting selected playlist: ', playlistData);
+    this.setState({ currentSelectedPlaylist: playlistData });
+  };
+
+  setSelectedTracks = async (trackRecord: SelectedTrackRecord) => {
+    this.setState({ currentSelectedTracks: this.state.currentSelectedTracks.concat(trackRecord) });
   };
 
   render() {
@@ -105,7 +112,11 @@ SpotifyProviderState
           playlists: this.state.playlists,
           getSeedRecommendations: this.getSeedRecommendations,
           getAvailableGenreSeeds: this.getAvailableGenreSeeds,
-          recommendations: this.state.recommendations,
+          setSelectedPlaylist: this.setSelectedPlaylist,
+          setSelectedTracks: this.setSelectedTracks,
+          currentSelectedPlaylist: this.state.currentSelectedPlaylist,
+          currentSelectedTracks: this.state.currentSelectedTracks,
+          recommendations: null,
         }}
       >
         <div>{this.props.children}</div>

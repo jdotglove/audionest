@@ -2,6 +2,14 @@
   margin: 0;
 }
 
+#dotCom-app .row {
+  flex-wrap: none;
+}
+
+.playlistRow .row{
+  flex-wrap: none;
+}
+
 /* .container {
   padding: 0 2rem;
 }
