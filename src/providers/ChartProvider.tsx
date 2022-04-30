@@ -54,10 +54,9 @@ ChartProviderState
     labels: Object.keys(tracksData[0]),
     datasets: tracksData.map((trackData) => (
       {
-        label: '# of Votes',
         data: Object.values(trackData).map((datum: number) => datum * 100),
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(13, 202, 240, 0.2)',
+        borderColor: '#0dcaf0',
         borderWidth: 2,
       }
     )),
