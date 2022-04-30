@@ -27,7 +27,15 @@ export default function TrackStatistics() {
         {({ chartData }) => (
           chartData ? (
           <ListGroup>
-            <Radar data={chartData} options={ { scales: { r: { min: 0, max: 100 } } }} />
+            <Radar data={chartData} options={ 
+              { 
+                scales: { r: { min: 0, max: 100 } },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              }} />
           </ListGroup>) : (<p>
             Select a track to see analysis
           </p>)
