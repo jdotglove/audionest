@@ -34,31 +34,17 @@ SpotifyProviderState
     if (persistedToken !== 'undefined') this.login();
   }
 
-  componentDidUpdate() {
-    console.log('Spotify Provider Updating');
-    console.log(this.state);
-  }
-
-  componentWillUnmount() {
-    console.log('Spotify Provider About to Unmount');
-  }
-
   login = async () => {
     const persistedToken = window.localStorage.getItem('token');
     const tokenMetadata = window.location.hash?.replace('#access_token=', '');
     const token = persistedToken || tokenMetadata.split('&')[0];
     if (!persistedToken) window.localStorage.setItem('token', token);
-    console.log('Spotify Provider Mounting');
     this.setState({ ...this.state });
     if (token) await spotifyWebApi.setAccessToken(token);
     // Get the authenticated user
     try {
-      const response = await spotifyWebApi.getMe();
-      console.log(
-        'Some information about the authenticated user: ',
-        response.body,
-      );
-      this.setState({ user: { ...response.body }, isLoggedIn: true });
+      const { body } = await spotifyWebApi.getMe();
+      this.setState({ user: { ...body }, isLoggedIn: true });
       this.getUserPlaylists();
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
@@ -68,11 +54,10 @@ SpotifyProviderState
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
-      const response = await spotifyWebApi.getUserPlaylists(this.state.user.id);
-      console.log('Retrieved playlists', response.body.items);
-      this.setState({ playlists: response.body.items });
+      const { body: { items: playlists}} = await spotifyWebApi.getUserPlaylists(this.state.user.id);
+      this.setState({ playlists });
     } catch (err) {
-      console.log("ERROR: Could not retrieve user's playlists.", err);
+      console.error("ERROR: Could not retrieve user's playlists.", err);
     }
   };
 
@@ -82,18 +67,15 @@ SpotifyProviderState
       min_energy: 0.4,
       min_popularity: 50,
     });
-    console.log('Some information on Seed Recommendations: ', response.body);
   };
 
   getAvailableGenreSeeds = async () => {
     // Get available genre seeds
-    const response = await spotifyWebApi.getAvailableGenreSeeds();
-    console.log(response.body);
-    this.setState({ genreSeeds: response.body });
+    const { body: genreSeeds } = await spotifyWebApi.getAvailableGenreSeeds();
+    this.setState({ genreSeeds });
   };
 
   setSelectedPlaylist = async (playlistData: any) => {
-    console.log('Setting selected playlist: ', playlistData);
     this.setState({ currentSelectedPlaylist: playlistData });
   };
 

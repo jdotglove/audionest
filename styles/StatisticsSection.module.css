@@ -1,9 +1,9 @@
-.playlistTrackContainerHeader {
+.playlist-track-container-header {
   color: black;
 }
 
-.playlistTrackGroup{
-  max-height: 800px;
+.playlist-track-group{
+  max-height: 80vh;
   margin-bottom: 10px;
   overflow:scroll;
   -webkit-overflow-scrolling: touch;

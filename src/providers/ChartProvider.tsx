@@ -6,6 +6,7 @@ import {
 } from '../../types';
 import ChartContext from '../contexts/ChartContext';
 import { spotifyWebApi } from './SpotifyProvider';
+import { TrackStatisticsCache } from '../cache';
 
 class ChartProvider extends React.Component<
 SpotifyProviderProps,
@@ -19,18 +20,16 @@ ChartProviderState
   }
 
   getTrackAudioFeatures = async (id: string) => {
-    console.log('here');
+    if (TrackStatisticsCache.get(id) !== -1) {
+      return TrackStatisticsCache.get(id)
+    }
     try {
       // Get a track's audio features
-      const data = await spotifyWebApi.getAudioFeaturesForTrack(id);
-      console.log(
-        'Retrieved Audio Features in TrackProvider',
-        JSON.stringify(data.body, null, 4),
-      );
-      //this.setState({ trackAudioFeatures: data.body.items });
-      return data.body;
+      const { body: data } = await spotifyWebApi.getAudioFeaturesForTrack(id);
+      TrackStatisticsCache.put(id, data)
+      return data;
     } catch (err) {
-      console.log("ERROR: Could not retrieve user's playlists.", err);
+      console.error("ERROR: Could not retrieve user's playlists.", err);
     }
   };
 
@@ -67,16 +66,16 @@ ChartProviderState
       // Get a track's audio analysis
       const data = await Promise.all(
         trackRecords.map((trackRecord) => {
-          return spotifyWebApi.getAudioFeaturesForTrack(trackRecord.id);
+          return this.getTrackAudioFeatures(trackRecord.id);
         }),
       );
       this.setState({
         chartData: this.formatAsChartData(data.map((item) =>
-          this.cleanTrackFeaturesData(item.body),
+          this.cleanTrackFeaturesData(item),
         ),
         ) });
     } catch (err) {
-      console.log('ERROR: Could not set chart data.', err);
+      console.error('ERROR: Could not set chart data.', err);
     }
   };
 

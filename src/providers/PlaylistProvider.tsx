@@ -1,8 +1,8 @@
 import React from 'react';
 import { PlaylistProviderState, SpotifyProviderProps } from '../../types';
+import { PlaylistDataCache } from '../cache';
 import PlaylistContext from '../contexts/PlaylistContext';
 import { spotifyWebApi } from './SpotifyProvider';
-
 
 class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistProviderState> {
   constructor(props) {
@@ -13,15 +13,17 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
   }
   
   getPlaylistTracks = async (id: string) => {
-    console.log('here!', id);
+    if (PlaylistDataCache.get(id) !== -1) {
+      return PlaylistDataCache.get(id)
+    }
     try {
       // Get a user's playlists
-      const data = await spotifyWebApi.getPlaylistTracks(id);
-      console.log('Retrieved playlists (in PlaylistProvider', data.body.items);
-      this.setState({ tracks: data.body.items });
-      return data.body.items;
+      const { body: { items } } = await spotifyWebApi.getPlaylistTracks(id);
+      PlaylistDataCache.put(id, items)
+      this.setState({ tracks: items });
+      return items;
     } catch (err: any) {
-      console.log('ERROR: Could not retrieve user\'s playlists.', err);
+      console.error('ERROR: Could not retrieve user\'s playlists.', err);
     }
   };
 
