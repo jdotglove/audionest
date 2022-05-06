@@ -14,12 +14,12 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
   
   getPlaylistTracks = async (id: string) => {
     if (PlaylistDataCache.get(id) !== -1) {
-      return PlaylistDataCache.get(id)
+      return PlaylistDataCache.get(id);
     }
     try {
       // Get a user's playlists
       const { body: { items } } = await spotifyWebApi.getPlaylistTracks(id);
-      PlaylistDataCache.put(id, items)
+      PlaylistDataCache.put(id, items);
       this.setState({ tracks: items });
       return items;
     } catch (err: any) {

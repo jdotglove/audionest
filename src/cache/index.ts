@@ -1,4 +1,4 @@
-import { SelectedTrackRecord } from "../../types";
+import { SelectedTrackRecord } from '../../types';
 
 class LRULinkedListItem<K, V> {
   prev: LRULinkedListItem<K, V> | null;
@@ -29,6 +29,7 @@ class LRUCache<K, V> {
     this.head.next = this.tail;
     this.tail.prev = this.head;
   }
+  
   get(key: K) {
     if (this.map.has(key)) {
       // remove elem from current position
@@ -45,7 +46,7 @@ class LRUCache<K, V> {
     } else {
       return -1; // element does not exist
     }
-  };
+  }
 
   put(key: K, value: V) {
     if (this.get(key) !== -1) {
@@ -60,7 +61,7 @@ class LRUCache<K, V> {
         this.head.next.prev = this.head;
       }
 
-      const newNode = new LRULinkedListItem<K, V>(key, value)
+      const newNode = new LRULinkedListItem<K, V>(key, value);
 
       // when adding a new node, we need to update both map and DLL
       this.map.set(key, newNode); // add current node to map
@@ -69,7 +70,7 @@ class LRUCache<K, V> {
       newNode.next = this.tail;
       this.tail.prev = newNode; // update last element
     }
-  };
+  }
 }
 export const TrackStatisticsCache = new LRUCache<string, SpotifyApi.AudioFeaturesObject>(50);
 export const PlaylistDataCache = new LRUCache<string, Array<SelectedTrackRecord>>(20);
