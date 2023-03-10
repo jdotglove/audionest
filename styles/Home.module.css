@@ -6,8 +6,15 @@
   flex-wrap: none;
 }
 
-.playlistRow .row{
+.playlist-row .row{
   flex-wrap: none;
+}
+
+.playlist-group{
+  max-height: 80vh;
+  margin-bottom: 10px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* .container {

@@ -26,3 +26,7 @@ export type PlaylistProviderState = {
 export type ChartProviderState = {
   chartData: any;
 };
+
+export type RecommendationProviderState = {
+  recommendations: any;
+};

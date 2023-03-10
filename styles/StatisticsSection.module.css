@@ -2,7 +2,7 @@
   color: black;
 }
 
-.playlist-track-group{
+.playlist-track-group {
   max-height: 80vh;
   margin-bottom: 10px;
   overflow:scroll;
