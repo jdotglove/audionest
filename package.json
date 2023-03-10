@@ -6,10 +6,6 @@
     ".next/cache"
   ],
   "scripts": {
-    "version-control:node": "test $(node -v) = $(cat .nvmrc) || exit 1",
-    "version-control:npm": "[[ ! $(npm config get npm-version) < \"7\" ]] || exit 1",
-    "version-control": "(npm run version-control:node && npm run version-control:npm) && exit 0",
-    "predev": "npm run version-control",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -30,7 +26,7 @@
     "chart.js": "^3.7.1",
     "eslint-config-react-app": "^6.0.0",
     "js-cookie": "^3.0.1",
-    "next": "^12.1.0",
+    "next": "^12.3.4",
     "react": "17.0.2",
     "react-bootstrap": "^2.2.2",
     "react-chartjs-2": "^4.1.0",
@@ -48,7 +44,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
     "@next/eslint-plugin-next": "^12.1.1",
-    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.4",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.39",

@@ -54,7 +54,7 @@ SpotifyProviderState
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
-      const { body: { items: playlists}} = await spotifyWebApi.getUserPlaylists(this.state.user.id);
+      const { body: { items: playlists } } = await spotifyWebApi.getUserPlaylists(this.state.user.id);
       this.setState({ playlists });
     } catch (err) {
       console.error("ERROR: Could not retrieve user's playlists.", err);
@@ -63,10 +63,10 @@ SpotifyProviderState
 
   getSeedRecommendations = async () => {
     // Get Recommendations Based on Seeds
-    const response = await spotifyWebApi.getRecommendations({
-      min_energy: 0.4,
-      min_popularity: 50,
-    });
+    // const response = await spotifyWebApi.getRecommendations({
+    //   min_energy: 0.4,
+    //   min_popularity: 50,
+    // });
   };
 
   getAvailableGenreSeeds = async () => {

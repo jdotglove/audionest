@@ -7,17 +7,20 @@ import ThemeColors from '../src/ThemeColors';
 import '../styles/scss/index.scss';
 import PlaylistProvider from '../src/providers/PlaylistProvider';
 import ChartProvider from '../src/providers/ChartProvider';
+import RecommendationProvider from '../src/providers/RecommendationProvider';
 
 export default function AudioNestApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
   return (
-    <Provider store={ store }>
+    <Provider store={store}>
       <SpotifyProvider>
         <PlaylistProvider>
           <ChartProvider>
-            <ThemeColors>
-              <Component props={ pageProps } />
-            </ThemeColors>
+            <RecommendationProvider>
+              <ThemeColors>
+                <Component props={pageProps} />
+              </ThemeColors>
+            </RecommendationProvider>
           </ChartProvider>
         </PlaylistProvider>
       </SpotifyProvider>
