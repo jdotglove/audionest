@@ -2,20 +2,19 @@ import { Row } from 'react-bootstrap';
 
 import styles from '../styles/Home.module.css';
 import Navbar from '../src/components/Navbar';
-export default function Home() {
+export default function AboutUs() {
   return (
     <div className={styles.container}>
       <Row>
         <Navbar />
       </Row>
       <span>
-        <title>CoffeeApp</title>
-        <meta name='description' content='For all your coffee needs' />
+        <title>This is about us</title>
+        <meta name='description' content='about us' />
       </span>
       <main className={styles.main}>
-        <h1> Welcome to Coffee App </h1>
         <p className={styles.description}>
-          For all your coffee needs
+          This is our story and we hope you enjoy hearing about it
         </p>
       </main>
     </div>
