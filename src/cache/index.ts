@@ -72,5 +72,5 @@ class LRUCache<K, V> {
     }
   }
 }
-export const TrackStatisticsCache = new LRUCache<string, SpotifyApi.AudioFeaturesObject>(50);
-export const PlaylistDataCache = new LRUCache<string, Array<SelectedTrackRecord>>(20);
+// export const TrackStatisticsCache = new LRUCache<string, SpotifyApi.AudioFeaturesObject>(50);
+// export const PlaylistDataCache = new LRUCache<string, Array<SelectedTrackRecord>>(20);
