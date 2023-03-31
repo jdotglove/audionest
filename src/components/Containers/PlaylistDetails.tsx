@@ -3,6 +3,7 @@ import { Container, Card, Col, ListGroup, Row, Button } from 'react-bootstrap';
 import SpotifyContext from '../../contexts/SpotifyContext';
 import styles from '../../../styles/StatisticsSection.module.css';
 import TrackSelector from '../Buttons/TrackSelector';
+import ChartContext from '../../contexts/ChartContext';
 
 export default function PlaylistDetails() {
   return (
@@ -18,7 +19,21 @@ export default function PlaylistDetails() {
                     className={styles['playlist-track-container-header']}
                   >
                     <h5> {currentSelectedPlaylist.name} </h5>
-                    <Button>Show Full Playlist Breakdown</Button>
+                    <ChartContext.Consumer>
+                      {({ setChartData }) => (
+                        <Button
+                          onClick={async () => {
+                            const trackObjArray = currentSelectedPlaylist.tracks.map(
+                              ({ track: { id, name } }) => ({ id, name }),
+                            );
+                            setSelectedTracks(trackObjArray);
+                            await setChartData(trackObjArray);
+                          }}
+                        >
+                          Show Full Playlist Breakdown
+                        </Button>
+                      )}
+                    </ChartContext.Consumer>
                   </Card.Header>
                   <Card.Body>
                     <ListGroup className={styles['playlist-track-group']}>

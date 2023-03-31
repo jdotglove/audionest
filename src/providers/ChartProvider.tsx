@@ -21,15 +21,15 @@ ChartProviderState
 
   getTrackAudioFeatures = async (id: string) => {
     if (TrackStatisticsCache.get(id) !== -1) {
-      return TrackStatisticsCache.get(id)
+      return TrackStatisticsCache.get(id);
     }
     try {
       // Get a track's audio features
       const { body: data } = await spotifyWebApi.getAudioFeaturesForTrack(id);
-      TrackStatisticsCache.put(id, data)
+      TrackStatisticsCache.put(id, data);
       return data;
     } catch (err) {
-      console.error("ERROR: Could not retrieve user's playlists.", err);
+      console.error('ERROR: Could not retrieve audio features.', err);
     }
   };
 
@@ -65,15 +65,27 @@ ChartProviderState
     try {
       // Get a track's audio analysis
       const data = await Promise.all(
-        trackRecords.map((trackRecord) => {
-          return this.getTrackAudioFeatures(trackRecord.id);
+        trackRecords.map(async (trackRecord) => {
+          return this.cleanTrackFeaturesData(
+            await this.getTrackAudioFeatures(trackRecord.id),
+          );
         }),
       );
+      const averages = data.reduce((acc, datum) => {
+        Object.keys(datum).forEach((key) => {
+          acc[key] += datum[key] / data.length;
+        });
+        return acc;
+      }, {
+        danceability: 0,
+        energy: 0,
+        speechiness: 0,
+        acousticness: 0,
+        liveness: 0,
+        valence: 0,
+      });
       this.setState({
-        chartData: this.formatAsChartData(data.map((item) =>
-          this.cleanTrackFeaturesData(item),
-        ),
-        ) });
+        chartData: this.formatAsChartData([averages]) });
     } catch (err) {
       console.error('ERROR: Could not set chart data.', err);
     }
