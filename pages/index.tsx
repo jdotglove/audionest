@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-
-const { SpotifyAuth, Scopes } = require('react-spotify-auth');
+import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 
 export default function Home() {
   return (
