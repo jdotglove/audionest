@@ -8,8 +8,7 @@ export const spotifyWebApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
   clientSecret: process.env.AUDIONEST_SECRET_ID,
   redirectUri:
-    process.env.NEXT_PUBLIC_REDIRECT_URL ||
-    `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/dashboard`,
+    process.env.NEXT_PUBLIC_REDIRECT_URL,
 });
 
 class SpotifyProvider extends React.Component<
