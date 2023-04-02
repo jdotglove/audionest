@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <AudionestNavbar />
-      <Container fluid>
+      <Container>
         <main className={styles.main}>
           <h1>Contact Information</h1>
         </main>

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <AudionestNavbar />
-      <Container fluid>
+      <Container>
       <main className={styles.main}>
         <h1>About Me</h1>
       </main>
@@ -24,6 +24,14 @@ export default function Home() {
             I am also very into music and freestyle dance, I mainly look to find new artists while also keeping a pulse on
             current popular music and new trends. Recently I have also picked up boxing and attending hip hop choreography
             classes in my free time along with playing soccer around the New York City in order to stay active.
+          </p>
+          <p>
+            <strong>Verb Website: </strong>
+            <li>Helped build out original architecture for static building</li>
+            <li>Built out the GTM tag integration and website triggers</li>
+            <li>Involved in QA whenever we are prepping for a new release</li>
+            <li></li> 
+            <iframe src='https://www.verbenergy.co/' width={1000} height={500}/>
           </p>
         </div>
       </Container>

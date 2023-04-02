@@ -1,11 +1,11 @@
 import { Container } from 'react-bootstrap';
 import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 
-import AudionestNavbar from '../../src/components/Navbars/AudionestNavbar';
-import styles from '../../styles/Home.module.css';
+import AudionestNavbar from '../src/components/Navbars/AudionestNavbar';
+import styles from '../styles/Home.module.css';
 
 
-export default function Home() {
+export default function Dashboard() {
   return (
     <div className={styles.container}>
       <AudionestNavbar />
