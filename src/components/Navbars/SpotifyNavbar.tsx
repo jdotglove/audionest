@@ -1,7 +1,7 @@
 import { Button, Container, Nav, Navbar, Image } from 'react-bootstrap';
-import SpotifyContext from '../contexts/SpotifyContext';
+import SpotifyContext from '../../contexts/SpotifyContext';
 
-export default function AudioNestNavbar() {
+export default function SpotifyNavbar() {
   return (
     <SpotifyContext.Consumer>
       {({ isLoggedIn, login, user }) => (

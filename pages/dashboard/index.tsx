@@ -1,30 +1,30 @@
-import { Row, Col } from 'react-bootstrap';
-import AudioNestNavbar from '../../src/components/Navbar';
-import PlaylistDisplay from '../../src/components/Playlist/Display';
-import PlaylistDetails from '../../src/components/Containers/PlaylistDetails';
-import TrackStatistics from '../../src/components/Containers/TrackStatistics';
+import { Container } from 'react-bootstrap';
+import { SpotifyAuth, Scopes } from 'react-spotify-auth';
+
+import AudionestNavbar from '../../src/components/Navbars/AudionestNavbar';
 import styles from '../../styles/Home.module.css';
 
-export default function Dashboard() {
-  // const [currentSelectedTrack, setSelectedTrack ] = useState();
+
+export default function Home() {
   return (
-    <>
-      <Row>
-        <Col>
-          <AudioNestNavbar />
-        </Col>
-      </Row>
-      <Row className={styles.playlistRow}>
-        <Col>
-          <PlaylistDisplay />
-        </Col>
-        <Col>
-          <PlaylistDetails />
-        </Col>
-        <Col>
-        <TrackStatistics />
-        </Col>
-      </Row>
-    </>
+    <div className={styles.container}>
+      <AudionestNavbar />
+        <Container>
+          <div>
+            <h1>Spotify Integration</h1>
+          </div>
+          <div>
+            <SpotifyAuth
+              redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL}
+              clientID={process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID}
+              scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
+              noLogo
+              onAccessToken={(token: string) =>
+                window.localStorage.setItem('token', token)
+              }
+            />
+          </div>
+      </Container>
+    </div>
   );
 }
