@@ -1,12 +1,12 @@
 import { Row, Col } from 'react-bootstrap';
 
-import SpotifyNavbar from '../src/components/Navbars/SpotifyNavbar';
-import PlaylistDisplay from '../src/components/Playlist/Display';
-import PlaylistDetails from '../src/components/Containers/PlaylistDetails';
-import TrackStatistics from '../src/components/Containers/TrackStatistics';
-import styles from '../styles/Home.module.css';
+import SpotifyNavbar from '../../src/components/Navbars/SpotifyNavbar';
+import PlaylistDisplay from '../../src/components/Playlist/Display';
+import PlaylistDetails from '../../src/components/Containers/PlaylistDetails';
+import TrackStatistics from '../../src/components/Containers/TrackStatistics';
+import styles from '../../styles/Home.module.css';
 
-export default function SpotifyIntegration() {
+export default function SpotifyDashboard() {
   // const [currentSelectedTrack, setSelectedTrack ] = useState();
   return (
     <>

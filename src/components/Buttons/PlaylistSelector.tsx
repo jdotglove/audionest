@@ -12,8 +12,8 @@ export default function PlaylistSelector({
 }) {
   const router = useRouter();
   useEffect(() => {
-    if (router.asPath !== '/dashboard') {
-      router.replace('/dashboard', undefined, { shallow: true });
+    if (router.asPath !== '/dashboards/spotify') {
+      router.replace('/dashboards/spotify', undefined, { shallow: true });
     }
   }, [router]);
   

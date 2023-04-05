@@ -5,7 +5,7 @@ import AudionestNavbar from '../src/components/Navbars/AudionestNavbar';
 import styles from '../styles/Home.module.css';
 
 
-export default function Dashboard() {
+export default function IntegrationHub() {
   return (
     <div className={styles.container}>
       <AudionestNavbar />
