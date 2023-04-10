@@ -1,26 +1,39 @@
-import { Container } from 'react-bootstrap';
+import {
+  Col,
+  Container,
+  Row,
+} from 'react-bootstrap';
 
-import styles from '../styles/Home.module.css';
-import AudionestNavbar from '../src/components/Navbars/AudionestNavbar';
+import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
 
-export default function Home() {
+export default function Contact() {
   return (
-    <div className={styles.container}>
-      <AudionestNavbar />
+    <div>
+      <AudioNestNavbar />
       <Container>
-        <main className={styles.main}>
-          <h1>Contact Information</h1>
-        </main>
-        <div>
-          <p>
-            <strong>Email: </strong>
-            glover.jarod@gmail.com
-          </p>
-          <p>
-            <strong>Phone Number: </strong>
-            (336) 823-5386
-          </p>
-        </div>
+        <Row>
+          <Col>
+            <main>
+              <h1>Contact Information</h1>
+            </main>
+          </Col>
+        </Row>
+        <Row>
+          <Col style={{ fontSize: 'x-large' }}>
+            <div>
+              <strong>Email: </strong>
+              <a href="mailto:glover.jarod@gmail.com">glover.jarod@gmail.com</a>
+            </div>
+            <div>
+              <strong>Phone Number: </strong>
+              <a href="tel:+13368235386">(336) 823-5386</a>
+            </div>
+            <div>
+              <a href="https://www.linkedin.com/in/jarod-glover-47b944129/">LinkedIn</a>
+            </div>
+          </Col>
+        </Row>
+        <em>Contact Submission Form Coming Soon!</em>
       </Container>
     </div>
   );

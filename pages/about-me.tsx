@@ -1,39 +1,41 @@
-import styles from '../styles/Home.module.css';
-import AudionestNavbar from '../src/components/Navbars/AudionestNavbar';
-import { Container } from 'react-bootstrap';
+import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import { Container, Row, Col } from 'react-bootstrap';
+import textStyles from '../styles/Text.module.css';
 
-export default function Home() {
+export default function AboutMe() {
   return (
-    <div className={styles.container}>
-      <AudionestNavbar />
+    <div>
+      <AudioNestNavbar />
       <Container>
-      <main className={styles.main}>
-        <h1>About Me</h1>
-      </main>
-        <div>
-          <p>
-            I graduated from Tufts University where I played soccer and majored in Computer Science and have been with Verb
-            since January 2020. Originally I started out of the Customer Experience team which gave me a first hand look at
-            what goes into managing relationships with customers as well as getting used to what might be needed for agents
-            on a CRM. I have developed as a Full Stack Engineer with a proclivity for Backend Engineering working
-            mainly with Node.js, Vue, and GraphQL. I have also done some side project working using React, Django and WebRTC,
-            looking to try and experiment with different music and audio technologies.
-          </p>
-          <p>
-            Outside of tech, I am also a huge soccer fan (more specifically Liverpool) but also enjoy watching most sports.
-            I am also very into music and freestyle dance, I mainly look to find new artists while also keeping a pulse on
-            current popular music and new trends. Recently I have also picked up boxing and attending hip hop choreography
-            classes in my free time along with playing soccer around the New York City in order to stay active.
-          </p>
-          <p>
-            <strong>Verb Website: </strong>
-            <li>Helped build out original architecture for static building</li>
-            <li>Built out the GTM tag integration and website triggers</li>
-            <li>Involved in QA whenever we are prepping for a new release</li>
-            <li></li> 
-            <iframe src='https://www.verbenergy.co/' width={1000} height={500}/>
-          </p>
-        </div>
+        <Row>
+          <Col>
+            <h1 className={textStyles.medium}>About Me</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={textStyles.medium}>
+            <p>
+              I graduated from Tufts University where I played soccer and majored in Computer Science and have been with Verb
+              since January 2020. I really enjoyed the opportunity to take class such as AI where I first saw how code could be written
+              to learn from previous interations and GUI (Graphical User Interface) Object-Oriented Programming where I built a
+              suggestion app that would suggest either a playlist, restaurant or Nature spot based on an initial survey and a facial
+              analysis that could detect the displayed emotion.
+            </p>
+            <p>  
+              After graduating I worked a Tech consulting position before joining the Customer Experience team at Verb Energy. 
+              This position allowed me to have a first hand look at what goes into managing relationships with customers
+              as well as getting used to what might be needed for agents on a CRM. Eventually, I migrated over to the Engineering team
+              where I have developed as a Full Stack Engineer with a proclivity for Backend Engineering working mainly with Node.js, Vue,
+              and GraphQL. I have also done some side project working using React, Django and WebRTC, looking to try and experiment with different
+              music and audio technologies.
+            </p>
+            <p>
+              Outside of tech, I am also a huge soccer fan (more specifically Liverpool) but also enjoy watching most sports.
+              I am also very into music, boxing, and freestyle dance. In my free time I can be found, boxing, dancing, playing soccer around New York City,
+              or playing chess.
+            </p>
+          </Col>
+        </Row>
       </Container>
     </div>
   );

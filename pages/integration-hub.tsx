@@ -1,17 +1,17 @@
 import { Container } from 'react-bootstrap';
 import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 
-import AudionestNavbar from '../src/components/Navbars/AudionestNavbar';
-import styles from '../styles/Home.module.css';
+import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import styles from '../styles/IntegrationHub.module.css';
 
 
 export default function IntegrationHub() {
   return (
     <div className={styles.container}>
-      <AudionestNavbar />
+      <AudioNestNavbar />
         <Container>
           <div>
-            <h1>Spotify Integration</h1>
+            <h1><span style={{ color: '#98611F' }}>Spotify</span> Integration</h1>
           </div>
           <div>
             <SpotifyAuth
