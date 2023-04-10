@@ -1,4 +1,4 @@
-import { Fraunces } from '@next/font/google';
+import { Fraunces } from 'next/font/google';
 import * as React from 'react';
 // If loading a variable font, you don't need to specify the font weight
 const fraunces = Fraunces({
