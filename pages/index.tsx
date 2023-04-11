@@ -32,7 +32,7 @@ export default function Home() {
             fontSize: 'xx-large',
             fontWeight: 500,
           }}>
-            The nest you never want to leave<span style={{ color: '#98611F' }}>...</span>
+            The nest you never want to leave...
           </p>
         </main>
         <div style={{
@@ -53,13 +53,13 @@ export default function Home() {
               stroke="#98611F"
               strokeWidth="4"
               d="M165 60 L55 240 L275 240 Z"/>
-            <path
+            {/* <path
               className="welcome-svg-path-circle"
               stroke="#98611F"
               strokeWidth="5"
               fill="#1A1717"
               d="M 100 350 q 150 -300 300 0"
-            />
+            /> */}
           </svg>
         </div>
       </Container>
