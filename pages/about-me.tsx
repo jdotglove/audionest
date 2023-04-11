@@ -1,5 +1,9 @@
-import MainNavbar from '../src/components/Navbars/MainNavbar';
 import { Container, Row, Col } from 'react-bootstrap';
+import Image from 'next/image';
+
+import jarodGloverPic from '../public/jarodgloverpic.png';
+
+import MainNavbar from '../src/components/Navbars/MainNavbar';
 import textStyles from '../styles/Text.module.css';
 
 export default function AboutMe() {
@@ -7,9 +11,16 @@ export default function AboutMe() {
     <div>
       <MainNavbar />
       <Container>
-        <Row>
+        <Row className="pt-3">
           <Col>
             <h1 className={textStyles.medium}>About Me</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p>
+              Hello my name is Jarod Glover, welcome!
+            </p>
           </Col>
         </Row>
         <Row>
@@ -34,6 +45,16 @@ export default function AboutMe() {
               I am also very into music, boxing, and freestyle dance. In my free time I can be found, boxing, dancing, playing soccer around New York City,
               or playing chess.
             </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Image
+              src={jarodGloverPic}
+              alt="jarod glover pic"
+              width={365}
+              height={400}
+            />
           </Col>
         </Row>
       </Container>

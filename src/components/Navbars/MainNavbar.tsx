@@ -3,10 +3,10 @@ import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import FontProvider from '../../providers/FontProvider';
 
 export default function MainNavbar() {
-  const [show, setShow] = useState(false);
+  const [show, setShowOffCanvas] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleCloseOffCanvas = () => setShowOffCanvas(false);
+  const handleShowOffCanvas = () => setShowOffCanvas(true);
   return (
     <div>
       <Navbar className="d-none d-lg-block" style={{
@@ -20,7 +20,7 @@ export default function MainNavbar() {
             <Nav.Link href="/integration-hub">Integration Hub</Nav.Link>
             <Nav.Link href="/resume">Résumé</Nav.Link>
             <Nav.Link href="/about-me">About Me</Nav.Link>
-            <Nav.Link href="/contact">Contact</Nav.Link>
+            <Nav.Link href="/contact">Contact/Links</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -29,9 +29,9 @@ export default function MainNavbar() {
       }} variant="light">
         <Container fluid>
           <Navbar.Brand href="/">AudioNest</Navbar.Brand>
-          <Navbar.Toggle className="d-block" onClick={handleShow} />
+          <Navbar.Toggle className="d-block" onClick={handleShowOffCanvas} />
           <Offcanvas
-            show={show} onHide={handleClose}
+            show={show} onHide={handleCloseOffCanvas}
             placement="end"
             style={{
               backgroundColor: '#98611F',
@@ -39,7 +39,7 @@ export default function MainNavbar() {
           >
             <FontProvider>
               <Offcanvas.Header  closeButton>
-                <Offcanvas.Title id="audionestSideNavbarLabel">
+                <Offcanvas.Title>
                   <Navbar.Brand className="text-black"
                     href="/"
                   >AudioNest</Navbar.Brand>
@@ -50,7 +50,7 @@ export default function MainNavbar() {
                   <Nav.Link className="text-black" href="/integration-hub">Integration Hub</Nav.Link>
                   <Nav.Link className="text-black" href="/resume">Résumé</Nav.Link>
                   <Nav.Link className="text-black" href="/about-me">About Me</Nav.Link>
-                  <Nav.Link className="text-black" href="/contact">Contact</Nav.Link>
+                  <Nav.Link className="text-black" href="/contact">Contact/Links</Nav.Link>
                 </Nav>
               </Offcanvas.Body>
             </FontProvider>

@@ -11,7 +11,7 @@ export default function Contact() {
     <div>
       <MainNavbar />
       <Container>
-        <Row>
+        <Row className="pt-3">
           <Col>
             <main>
               <h1>Contact Information</h1>
@@ -19,21 +19,32 @@ export default function Contact() {
           </Col>
         </Row>
         <Row>
-          <Col style={{ fontSize: 'x-large' }}>
+          <Col style={{ fontSize: 'large' }}>
             <div>
               <strong>Email: </strong>
-              <a href="mailto:glover.jarod@gmail.com">glover.jarod@gmail.com</a>
+              <ul>
+                <a href="mailto:glover.jarod@gmail.com">glover.jarod@gmail.com</a>
+              </ul>
             </div>
             <div>
-              <strong>Phone Number: </strong>
-              <a href="tel:+13368235386">(336) 823-5386</a>
-            </div>
-            <div>
-              <a href="https://www.linkedin.com/in/jarod-glover-47b944129/">LinkedIn</a>
+              <strong>Links: </strong>
+              <ul>
+                <a href="https://www.linkedin.com/in/jarod-glover-47b944129/">LinkedIn</a>
+              </ul>
+              <ul>
+                <a href="https://github.com/jdotglove">Github</a>
+              </ul>
+              <ul>
+                <a href="https://leetcode.com/jdotglove/">LeetCode</a>
+              </ul>
             </div>
           </Col>
         </Row>
-        <em>Contact Submission Form Coming Soon!</em>
+        <Row className="pt-3">
+          <Col>
+            <em>Contact Submission Form Coming Soon!</em>
+          </Col>
+        </Row>
       </Container>
     </div>
   );
