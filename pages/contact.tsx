@@ -4,12 +4,12 @@ import {
   Row,
 } from 'react-bootstrap';
 
-import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
+import MainNavbar from '../src/components/Navbars/MainNavbar';
 
 export default function Contact() {
   return (
     <div>
-      <AudioNestNavbar />
+      <MainNavbar />
       <Container>
         <Row>
           <Col>

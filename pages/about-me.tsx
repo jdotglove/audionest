@@ -1,11 +1,11 @@
-import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
+import MainNavbar from '../src/components/Navbars/MainNavbar';
 import { Container, Row, Col } from 'react-bootstrap';
 import textStyles from '../styles/Text.module.css';
 
 export default function AboutMe() {
   return (
     <div>
-      <AudioNestNavbar />
+      <MainNavbar />
       <Container>
         <Row>
           <Col>

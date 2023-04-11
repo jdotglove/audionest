@@ -1,7 +1,7 @@
 import { Container } from 'react-bootstrap';
 import anime from 'animejs';
 
-import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
+import MainNavbar from '../src/components/Navbars/MainNavbar';
 import { useEffect } from 'react';
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div>
-      <AudioNestNavbar />
+      <MainNavbar />
       <Container>
         <main>
           <h1 style={{
