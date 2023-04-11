@@ -1,7 +1,7 @@
 import { Container } from 'react-bootstrap';
 import anime from 'animejs';
 
-import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
 import { useEffect } from 'react';
 
 export default function Home() {

@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import FontProvider from '../../providers/FontProvider';
 
-export default function AudioNestNavbar() {
+export default function MainNavbar() {
   return (
     <div>
       <Navbar className="d-none d-lg-block" style={{

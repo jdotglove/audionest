@@ -1,4 +1,4 @@
-import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
 import { Container, Row, Col } from 'react-bootstrap';
 import textStyles from '../styles/Text.module.css';
 

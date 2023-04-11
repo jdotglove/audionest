@@ -1,7 +1,7 @@
 import { Container } from 'react-bootstrap';
 import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 
-import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
 import styles from '../styles/IntegrationHub.module.css';
 
 

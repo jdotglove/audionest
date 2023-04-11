@@ -4,7 +4,7 @@ import {
   Row,
 } from 'react-bootstrap';
 
-import AudioNestNavbar from '../src/components/Navbars/AudioNestNavbar';
+import AudioNestNavbar from '../src/components/Navbars/MainNavbar';
 
 export default function Contact() {
   return (
