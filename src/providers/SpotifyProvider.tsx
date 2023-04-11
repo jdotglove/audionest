@@ -1,7 +1,6 @@
 import React from 'react';
 import { SelectedTrackRecord, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
-
 const SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
 export const spotifyWebApi = new SpotifyWebApi({
@@ -36,10 +35,14 @@ SpotifyProviderState
   login = async () => {
     const persistedToken = window.localStorage.getItem('token');
     const tokenMetadata = window.location.hash?.replace('#access_token=', '');
-    const token = persistedToken || tokenMetadata.split('&')[0];
+    console.log('Token Metadata: ', tokenMetadata);
+    console.log('Persisted Token: ', persistedToken);
+    const token = persistedToken === tokenMetadata.split('&')[0]
+      ? persistedToken : tokenMetadata.split('&')[0];
     if (!persistedToken) window.localStorage.setItem('token', token);
     this.setState({ ...this.state });
-    if (token) await spotifyWebApi.setAccessToken(token);
+    console.log('Attempting to Login With Token: ', persistedToken);
+    if (token) spotifyWebApi.setAccessToken(token);
     // Get the authenticated user
     try {
       const { body } = await spotifyWebApi.getMe();
