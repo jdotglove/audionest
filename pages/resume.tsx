@@ -9,7 +9,7 @@ export default function Resume() {
       <Container>
         <Row>
           <Col>
-            <h1 className={textStyles.Xl}>Work Showcase</h1>
+            <h1 className={textStyles.Xl}>Résumé</h1>
           </Col>
         </Row>
         <div className={textStyles.textSmall}>
