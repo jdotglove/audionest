@@ -20,8 +20,9 @@ ChartProviderState
   }
 
   getTrackAudioFeatures = async (id: string) => {
-    if (TrackStatisticsCache.get(id) !== -1) {
-      return TrackStatisticsCache.get(id);
+    const cacheValue = TrackStatisticsCache.get(id);
+    if (cacheValue !== -1) {
+      return cacheValue;
     }
     try {
       // Get a track's audio features

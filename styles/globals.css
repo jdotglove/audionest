@@ -1,16 +1,53 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+.verb-iframe {
+  width: 100%;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.welcome-svg-path-triangle {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 1000;
+  animation: dash 5s linear alternate infinite;
 }
 
-* {
-  box-sizing: border-box;
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media only screen and (min-width: 350px) { 
+  .verb-iframe {
+    height: 320px;
+  }
+  .navbar-desktop {
+    display: none;
+  }
+}
+@media only screen and (min-width: 768px) { 
+  .verb-iframe {
+    height: 500px;
+  }
+  .navbar-desktop {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 992px) { 
+  .verb-iframe {
+    height: 650px;
+  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .verb-iframe {
+    height: 750px;
+    width: 80%;
+  }
+
+  .verb-iframe-row {
+    text-align: center;
+  }
 }
