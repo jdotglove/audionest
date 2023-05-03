@@ -5,7 +5,7 @@ import PlaylistContext from '../contexts/PlaylistContext';
 import { spotifyWebApi } from './SpotifyProvider';
 
 class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistProviderState> {
-  constructor(props) {
+  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
       tracks: [],

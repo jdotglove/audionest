@@ -12,7 +12,7 @@ class ChartProvider extends React.Component<
 SpotifyProviderProps,
 ChartProviderState
 > {
-  constructor(props) {
+  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
       chartData: null,

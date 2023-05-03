@@ -5,18 +5,19 @@ export interface SpotifyProviderProps { }
 export type SelectedTrackRecord = Pick<SpotifyApi.TrackObjectFull, 'id'> & Pick<SpotifyApi.TrackObjectFull, 'name'>;
 
 export interface SpotifyProviderState {
-  user: AudioNestUser | null;
-  isLoggedIn: boolean;
-  token: string;
+  authenticateSpotifyUser: Function;
   currentSelectedPlaylist: {
     id: string;
     name: string;
     tracks: Array<SpotifyApi.PlaylistObjectSimplified> | null;
-  }
-  //currentSelectedTracks: Array<{ id: SpotifyApi.TrackObjectFull['id'], name: SpotifyApi.TrackObjectFull['name'] }>;
-  currentSelectedTracks: Array<SelectedTrackRecord>
+  };
+  currentSelectedTracks: Array<SelectedTrackRecord>;
   genreSeeds: any;
+  isLoggedIn: boolean;
   playlists: Array<SpotifyApi.PlaylistObjectSimplified>;
+  user: AudioNestUser | null;
+  token: any;
+  topTracks: Array<TrackObjectFull>;
 }
 
 export type PlaylistProviderState = {

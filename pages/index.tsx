@@ -31,12 +31,12 @@ export default function Home() {
         }}>
           <Col>
             <p>
-              The <span style={{ color: '#98611F' }}>aim</span> of this project is to <span style={{ color: '#98611F' }}>explore</span> different
-              types of audio integrations as well as <span style={{ color: '#98611F' }}>music and audio</span> in general. I look to house any in features or
-              findings in a central place <span style={{ color: '#98611F' }}>for anyone</span> who might find it useful or interesting.
+              The aim of this project is to explore different
+              types of audio integrations as well as music and audio in general. I look to house any in features or
+              findings in a central place for anyone who might find it useful or interesting.
             </p>
             <p>
-              Hope you <span style={{ color: '#98611F' }}>enjoy</span> your stay!
+              Hope you enjoy your stay!
             </p>
           </Col>
         </Row>

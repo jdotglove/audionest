@@ -1,13 +1,13 @@
 import { Row, Col, Container } from 'react-bootstrap';
 import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 
-import SpotifyContext from '../../src/contexts/SpotifyContext';
-import SpotifyNavbar from '../../src/components/Navbars/SpotifyNavbar';
-import PlaylistDisplay from '../../src/components/Playlist/Display';
-import PlaylistDetails from '../../src/components/Containers/PlaylistDetails';
-import TrackStatistics from '../../src/components/Containers/TrackStatistics';
+import SpotifyContext from '../../../src/contexts/SpotifyContext';
+import SpotifyNavbar from '../../../src/components/Navbars/SpotifyNavbar';
+import PlaylistDisplay from '../../../src/components/Playlist/Display';
+import PlaylistDetails from '../../../src/components/Containers/PlaylistDetails';
+import TrackStatistics from '../../../src/components/Containers/TrackStatistics';
 
-export default function SpotifyDashboard() {
+export default function SpotifyPlaylistAnalysis() {
   // const [currentSelectedTrack, setSelectedTrack ] = useState();
   return (
     <>

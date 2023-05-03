@@ -1,30 +1,38 @@
-import { Container } from 'react-bootstrap';
-import { SpotifyAuth, Scopes } from 'react-spotify-auth';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 
+import SpotifyContext from '../src/contexts/SpotifyContext';
 import MainNavbar from '../src/components/Navbars/MainNavbar';
 import styles from '../styles/IntegrationHub.module.css';
 
 
 export default function IntegrationHub() {
+
   return (
     <div className={styles.container}>
       <MainNavbar />
+      <SpotifyContext.Consumer>
+      {({ isLoggedIn, authenticateSpotifyUser }) => (
+        !isLoggedIn ? (
         <Container>
           <div>
             <h1><span style={{ color: '#98611F' }}>Spotify</span> Integration</h1>
           </div>
           <div>
-            <SpotifyAuth
-              redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL}
-              clientID={process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID}
-              scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
-              noLogo
-              onAccessToken={(token: string) =>
-                window.localStorage.setItem('token', token)
-              }
-            />
+            <Button onClick={async () => {
+              authenticateSpotifyUser();
+            }}>Login</Button>
           </div>
-      </Container>
+        </Container>
+        )  : (
+          <Container>
+            <Row>
+              <Col className="pa-0" style={{ display: 'flex',  justifyContent:'center', alignItems:'center', height: '15vh' }}>
+                <h1> Successfully Logged In </h1>
+              </Col>
+            </Row>
+          </Container>
+        ))}
+      </SpotifyContext.Consumer>
     </div>
   );
 }

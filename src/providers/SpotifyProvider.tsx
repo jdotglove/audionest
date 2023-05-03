@@ -1,7 +1,10 @@
 import React from 'react';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+import { getURLHash } from '../utils/spotify';
 import { SelectedTrackRecord, SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
-const SpotifyWebApi = require('spotify-web-api-node');
+import { authenticateSpotify } from '../middleware/spotify';
 // credentials are optional
 export const spotifyWebApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_AUDIONEST_CLIENT_ID,
@@ -14,51 +17,84 @@ class SpotifyProvider extends React.Component<
 SpotifyProviderProps,
 SpotifyProviderState
 > {
-  constructor(props) {
+  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
-      user: null,
-      isLoggedIn: false,
-      token: '',
-      playlists: [],
+      authenticateSpotifyUser: null,
       currentSelectedPlaylist: null,
       currentSelectedTracks: [],
       genreSeeds: null,
+      isLoggedIn: false,
+      playlists: [],
+      user: null,
+      token: '',
+      topTracks: [],
     };
   }
 
-  componentDidMount() {
-    const persistedToken = window.localStorage.getItem('token');
-    if (persistedToken !== 'undefined') this.login();
+  async componentDidMount() {
+    console.log('Mounted!');
+    // @ts-ignore
+    const accessToken = (await getURLHash()).access_token;
+    console.log('Get URL Hash: ', accessToken);
+
+    // if (accessToken) {
+    //   if (!this.props.noCookie) {
+    //     document.cookie = `spotifyAuthToken=${accessToken}; max-age=${60 * 60};`;
+    //   }
+    //   if (this.props.localStorage) {
+    //     window.localStorage.setItem('spotifyAuthToken', accessToken);
+    //   }
+    //   window.opener?.postMessage({ type: 'react-spotify-auth', accessToken }, '*');
+    //   this.props.onAccessToken(accessToken);
+    // }
   }
 
   login = async () => {
+    const accessToken = window.location.hash?.replace('#access_token=', '');
     const persistedToken = window.localStorage.getItem('token');
-    const tokenMetadata = window.location.hash?.replace('#access_token=', '');
-    console.log('Token Metadata: ', tokenMetadata);
+    console.log(window.location);
+    console.log('AccessToken: ', accessToken);
     console.log('Persisted Token: ', persistedToken);
-    const token = persistedToken === tokenMetadata.split('&')[0]
-      ? persistedToken : tokenMetadata.split('&')[0];
-    if (!persistedToken) window.localStorage.setItem('token', token);
-    this.setState({ ...this.state });
-    console.log('Attempting to Login With Token: ', persistedToken);
-    if (token) spotifyWebApi.setAccessToken(token);
+    let token = !accessToken || (persistedToken === accessToken.split('&')[0])
+      ? persistedToken : accessToken.split('&')[0];
+    console.log('Token: ', token);
+    window.localStorage.setItem('token', token);
+    // // TODO: Check this logic
+    // this.setState({ ...this.state });
+    // if (token) {
+    //   window.localStorage.setItem('token', token);
+    // }
     // Get the authenticated user
     try {
-      const { body } = await spotifyWebApi.getMe();
-      this.setState({ user: { ...body }, isLoggedIn: true });
-      this.getUserPlaylists();
+      // TODO: test if setting token in state can also persist authentication if needed
+      // const { body } = await spotifyWebApi.getMe();
+      // this.setState({ user: { ...body }, isLoggedIn: true });
+      // this.getUserPlaylists();
+      // this.getUserTopTracks();
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
     }
   };
+
+  // getUserTopTracks = async () => {
+  //   try {
+  //     // Get a user's top tracks
+  //     await spotifyWebApi.getMe();
+  //     const data = await spotifyWebApi.getMyTopArtists();
+  //     // console.log('Top Tracks: ', data);
+  //     //this.setState({ topTracks });
+  //   } catch (err) {
+  //     console.error("ERROR: Could not retrieve user's playlists.", err);
+  //   }
+  // };
 
   getUserPlaylists = async () => {
     try {
       // Get a user's playlists
       const {
         body: { items: playlists },
-      } = await spotifyWebApi.getUserPlaylists(this.state.user.id);
+      } = await spotifyWebApi.getUserPlaylists(this.state.user?.id);
       this.setState({ playlists });
     } catch (err) {
       console.error("ERROR: Could not retrieve user's playlists.", err);
@@ -95,22 +131,29 @@ SpotifyProviderState
     });
   };
 
+  authenticateSpotifyUser = async () => {
+    const token = await authenticateSpotify() ;
+    this.setState({
+      token: token,
+    });
+  };
   render() {
     return (
       <SpotifyContext.Provider
         value={{
-          user: this.state.user,
-          isLoggedIn: this.state.isLoggedIn,
-          login: this.login,
-          getUserPlaylists: this.getUserPlaylists,
-          playlists: this.state.playlists,
-          getSeedRecommendations: this.getSeedRecommendations,
-          getAvailableGenreSeeds: this.getAvailableGenreSeeds,
-          setSelectedPlaylist: this.setSelectedPlaylist,
-          setSelectedTracks: this.setSelectedTracks,
+          authenticateSpotifyUser: this.authenticateSpotifyUser,
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
           currentSelectedTracks: this.state.currentSelectedTracks,
+          getAvailableGenreSeeds: this.getAvailableGenreSeeds,
+          getSeedRecommendations: this.getSeedRecommendations,
+          isLoggedIn: this.state.isLoggedIn,
+          login: this.login,
+          playlists: this.state.playlists,
           recommendations: null,
+          setSelectedPlaylist: this.setSelectedPlaylist,
+          setSelectedTracks: this.setSelectedTracks,
+          //topTracks: this.state.topTracks,
+          user: this.state.user,
         }}
       >
         <div>{this.props.children}</div>
