@@ -1,7 +1,7 @@
 import { Button, Container, Row, Col } from 'react-bootstrap';
 
-import SpotifyContext from '../client/src/contexts/SpotifyContext';
-import MainNavbar from '../client/src/components/Navbars/MainNavbar';
+import SpotifyContext from '../src/contexts/SpotifyContext';
+import MainNavbar from '../src/components/Navbars/MainNavbar';
 import styles from '../styles/IntegrationHub.module.css';
 
 
