@@ -40,11 +40,11 @@ export default function Contact() {
             </div>
           </Col>
         </Row>
-        <Row className="pt-3">
+        {/* <Row className="pt-3">
           <Col>
             <em>Contact Submission Form Coming Soon!</em>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </div>
   );

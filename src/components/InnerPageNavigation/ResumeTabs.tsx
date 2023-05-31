@@ -69,7 +69,7 @@ function ResumeTabs() {
                 Helped integrate with the CMS (Content Management Services)
                 Contentful
                 <ul>
-                  <li style={{ color: '#98611F' }}>
+                  <li>
                     Allowed us to build out the site in a more modularized and
                     reusable manner
                   </li>
@@ -87,15 +87,14 @@ function ResumeTabs() {
               fontWeight: 500,
             }}
           >
-            Current live work website{' '}
-            <span style={{ color: '#98611F' }}>(Stop by for some energy!!)</span>:
+            Current live work website{' '}:
             <iframe className="verb-iframe" src="https://www.verbenergy.co/" />
           </Col>
         </Row>
       </Tab>
-      <Tab tabClassName="text-white" eventKey="projects" title="Projects">
+      {/* <Tab tabClassName="text-white" eventKey="projects" title="Projects">
         More content coming soon...
-      </Tab>
+      </Tab> */}
     </Tabs>
   );
 }
