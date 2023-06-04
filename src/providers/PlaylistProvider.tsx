@@ -16,7 +16,7 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
   getPlaylistTracks = async (playlistId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token', accessToken);
+      console.log('Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistId}/tracks`,
         method: 'post',
@@ -30,7 +30,7 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
       });
       this.setState({ tracks: [...(response.data || [])] });
     } catch (err: any) {
-      console.error('ERROR: Could not retrieve user\'s playlists.', err);
+      console.error('ERROR: Could not retrieve playlist\'s tracks.', err);
     }
   };
 

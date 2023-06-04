@@ -142,7 +142,7 @@ SpotifyProviderState
     });
   };
 
-  authenticateSpotifyUser = async () => {
+  authenticateSpotifyUser = async (newUser: boolean) => {
     const token = await authenticateSpotify() ;
     this.setState({
       token: token,

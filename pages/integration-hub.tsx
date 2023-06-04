@@ -14,14 +14,23 @@ export default function IntegrationHub() {
       {({ isLoggedIn, authenticateSpotifyUser }) => (
         !isLoggedIn ? (
         <Container>
-          <div>
-            <h1><span style={{ color: '#98611F' }}>Spotify</span> Integration</h1>
-          </div>
-          <div>
-            <Button onClick={async () => {
-              authenticateSpotifyUser();
-            }}>Login</Button>
-          </div>
+          <Row className="py-2">
+            <Col>
+              <h1><span style={{ color: '#98611F' }}>Spotify</span> Integration</h1>
+            </Col>
+          </Row>
+          <Row className="py-2" md={3}>
+            <Col>
+              <div className="d-grid gap-2">
+                <Button size="lg" onClick={async () => {
+                  authenticateSpotifyUser();
+                }}>Login</Button>
+                <Button size="lg" onClick={async () => {
+                  authenticateSpotifyUser(true);
+                }}>Create Account</Button>
+              </div>
+            </Col>
+          </Row>
         </Container>
         )  : (
           <Container>
