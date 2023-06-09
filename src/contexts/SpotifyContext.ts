@@ -12,8 +12,8 @@ const SpotifyContext = createContext({
   playlists: undefined,
   setSelectedPlaylist: undefined,
   setSelectedTracks: undefined,
-  topArtists: undefined as Audionest.Artist[],
-  topTracks: undefined as Audionest.Track[],
+  topArtists: undefined as Audionest.Artist['_id'][],
+  topTracks: undefined as Audionest.Track['_id'][],
   user: undefined as Audionest.User,
 });
 

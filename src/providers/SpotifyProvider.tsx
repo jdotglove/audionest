@@ -30,7 +30,10 @@ SpotifyProviderState
 
   async componentDidMount() {
     // @ts-ignore
-    const accessToken = (await getURLHash()).access_token;
+    let accessToken = (await getURLHash()).access_token;
+    if (!accessToken) {
+      accessToken = SpotifyTokenCache.get('token');
+    }
     console.log('Get URL Hash: ', accessToken);
     if (accessToken && !this.state.isLoggedIn) {
       await this.login(accessToken);
@@ -41,7 +44,7 @@ SpotifyProviderState
   login = async (accessToken: string) => {
     SpotifyTokenCache.set('token', accessToken);
     try {
-      const fetchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/login`;
+      const fetchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/login?token=${accessToken}`;
       const response = await axios({
         url: fetchUrl,
         method: 'post',
@@ -50,55 +53,62 @@ SpotifyProviderState
           'Content-Type': 'application/json',
         },
         data: JSON.stringify({
-          spotifyToken: accessToken,
+          username: '',
+          password: '',
         }),
       });
-      this.getUserTopArtists(response.data._id);
-      this.getUserTopTracks(response.data._id);
-      this.getUserPlaylists(response.data._id);
+      this.loadUserTopArtists(response.data._id);
+      this.loadUserTopTracks(response.data._id);
+      this.loadUserPlaylists(response.data._id);
       this.setState({ user: { ...response.data }, isLoggedIn: true, token: accessToken});
     } catch (error) {
       console.error('ERROR: Could not login user.', error);
     }
   };
 
-  getUserTopArtists = async (userId: string) => {
+  loadUserTopArtists = async (userId: string) => {
     try {
+      const accessToken = SpotifyTokenCache.get('token');
+      console.log('Access Token: ', accessToken);
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-artists`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-artists?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
       });
-      this.setState({ topArtists: [ ...(response?.data || []) ] });
+      this.setState({ topArtists: [ ...(response?.data.map((artist: Audionest.Artist) => artist._id) || [])] });
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
   };
 
-  getUserTopTracks = async (userId: string) => {
+  loadUserTopTracks = async (userId: string) => {
     try {
+      const accessToken = SpotifyTokenCache.get('token');
+      console.log('Access Token: ', accessToken);
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-tracks`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-tracks?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
       });
-      this.setState({ topTracks: [...(response?.data || [])] });
+      this.setState({ topTracks: [...(response?.data.map((track: Audionest.Track) => track._id) || [])] });
       console.log('Top Tracks: ', this.state.topTracks);
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
   };
 
-  getUserPlaylists = async (userId: string) => {
+  loadUserPlaylists = async (userId: string) => {
     try {
+      const accessToken = SpotifyTokenCache.get('token');
+      console.log('Access Token: ', accessToken);
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlists`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlists?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
@@ -134,11 +144,20 @@ SpotifyProviderState
     this.setState({ currentSelectedPlaylist: playlistData });
   };
 
-  setSelectedTracks = async (trackRecord: SelectedTrackRecord) => {
+  setSelectedTracks = async (trackIdArray: Audionest.Track['_id'][]) => {
+    const accessToken = SpotifyTokenCache.get('token');
+    console.log('Access Token: ', accessToken);
+    const response = await axios({
+      url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
+      method: 'get',
+      headers: {
+        authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('Selected Tracks Response: ', JSON.stringify(response));
     this.setState({
-      currentSelectedTracks: this.state.currentSelectedTracks.concat(
-        trackRecord,
-      ),
+      currentSelectedTracks: response.data
     });
   };
 
