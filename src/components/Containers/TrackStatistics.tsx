@@ -18,29 +18,34 @@ ChartJS.register(
   LineElement,
   Filler,
   Tooltip,
-  Legend,
+  Legend
 );
-export default function TrackStatistics() {
-  return (
-    <Container>
-      <ChartContext.Consumer>
-        {({ chartData }) => (
-          chartData ? (
-          <ListGroup>
-            <Radar data={chartData} options={ 
-              { 
-                scales: { r: { min: 0, max: 100 } },
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              }} />
-          </ListGroup>) : (<p>
-            Select a track to see analysis
-          </p>)
-        )}
-      </ChartContext.Consumer>
-    </Container>
-  );
+export default class TrackStatistics extends React.Component {
+  render() {
+    return (
+      <Container>
+        <ChartContext.Consumer>
+          {({ chartData }) =>
+            chartData ? (
+              <ListGroup>
+                <Radar
+                  data={chartData}
+                  options={{
+                    scales: { r: { min: 0, max: 100 } },
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                  }}
+                />
+              </ListGroup>
+            ) : (
+              <p>Select a track to see analysis</p>
+            )
+          }
+        </ChartContext.Consumer>
+      </Container>
+    );
+  }
 }

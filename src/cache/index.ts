@@ -48,7 +48,7 @@ class LRUCache<K, V> {
     }
   }
 
-  put(key: K, value: V) {
+  set(key: K, value: V) {
     if (this.get(key) !== -1) {
       // if key does not exist, update last element value
       this.tail.prev.value = value;
@@ -74,3 +74,5 @@ class LRUCache<K, V> {
 }
 export const TrackStatisticsCache = new LRUCache<string, SpotifyApi.AudioFeaturesObject>(50);
 export const PlaylistDataCache = new LRUCache<string, Array<SelectedTrackRecord>>(20);
+
+export const SpotifyTokenCache = new LRUCache<string, string>(1);

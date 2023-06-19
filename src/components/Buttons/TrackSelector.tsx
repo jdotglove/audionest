@@ -1,30 +1,35 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import ChartContext from '../../contexts/ChartContext';
+import PlaylistContext from '../../contexts/PlaylistContext';
 
 export default function TrackSelector({
   setSelectedTracks,
   track,
 }: {
   setSelectedTracks: Function;
-  track: SpotifyApi.TrackObjectFull;
+  track: Audionest.Track;
 }) {
   return (
-    <ChartContext.Consumer>
-      {({ setChartData }) => (
-        <ListGroup.Item
-          action
-          variant="dark"
-          key={track.id}
-          eventKey={`${track.id}`}
-          onClick={async () => {
-            setSelectedTracks([{ id: track.id, name: track.name }]);
-            await setChartData([{ id: track.id, name: track.name }]);
-          }}
-        >
-          {track ? track.name : ''}
-        </ListGroup.Item>
+    <PlaylistContext.Consumer>
+      {({ getPlaylistTracks }) => (
+        <ChartContext.Consumer>
+          {({ setChartData }) => (
+            <ListGroup.Item
+              action
+              variant="dark"
+              key={track._id}
+              eventKey={`${track._id}`}
+              onClick={async () => {
+                setSelectedTracks([track._id]);
+                await setChartData([track._id]);
+              }}
+            >
+              {track ? track.name : ''}
+            </ListGroup.Item>
+          )}
+        </ChartContext.Consumer>
       )}
-    </ChartContext.Consumer>
+      </PlaylistContext.Consumer>
   );
 }

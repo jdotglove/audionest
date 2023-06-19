@@ -8,14 +8,9 @@ export default function PlaylistSelector({
   playlist,
 }: {
   setSelectedPlaylist: Function;
-  playlist: SpotifyApi.PlaylistObjectSimplified;
+  playlist: Audionest.Playlist;
 }) {
   const router = useRouter();
-  useEffect(() => {
-    if (router.asPath !== '/dashboards/spotify') {
-      router.replace('/dashboards/spotify', undefined, { shallow: true });
-    }
-  }, [router]);
   
   return (
     <PlaylistContext.Consumer>
@@ -29,9 +24,9 @@ export default function PlaylistSelector({
           }}
           onClick={async () => {
             await setSelectedPlaylist({
-              id: playlist.id,
+              spotifyUri: playlist.spotifyUri,
               name: playlist.name,
-              tracks: await getPlaylistTracks(playlist.id),
+              tracks: await getPlaylistTracks(playlist._id),
             });
           }}
         >

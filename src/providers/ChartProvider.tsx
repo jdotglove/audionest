@@ -5,30 +5,38 @@ import {
   SpotifyProviderProps,
 } from '../../types';
 import ChartContext from '../contexts/ChartContext';
-import { spotifyWebApi } from './SpotifyProvider';
-import { TrackStatisticsCache } from '../cache';
+import { SpotifyTokenCache, TrackStatisticsCache } from '../cache';
+import axios from '../plugins/axios';
 
 class ChartProvider extends React.Component<
 SpotifyProviderProps,
 ChartProviderState
 > {
-  constructor(props) {
+  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
       chartData: null,
     };
   }
 
-  getTrackAudioFeatures = async (id: string) => {
-    const cacheValue = TrackStatisticsCache.get(id);
+  getTrackAudioFeatures = async (trackId: string) => {
+    const cacheValue = TrackStatisticsCache.get(trackId);
     if (cacheValue !== -1) {
       return cacheValue;
     }
     try {
-      // Get a track's audio features
-      const { body: data } = await spotifyWebApi.getAudioFeaturesForTrack(id);
-      TrackStatisticsCache.put(id, data);
-      return data;
+      const accessToken = SpotifyTokenCache.get('token');
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackId}/audio-features?token=${accessToken}`,
+        method: 'get',
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Aduio Features: ', response);
+      TrackStatisticsCache.set(trackId, response.data);
+      return response.data;
     } catch (err) {
       console.error('ERROR: Could not retrieve audio features.', err);
     }
@@ -62,13 +70,14 @@ ChartProviderState
     )),
   });
 
-  setChartData = async (trackRecords: Array<SelectedTrackRecord>) => {
+  setChartData = async (trackIdsArray: Array<Audionest.Track['_id']>) => {
+    console.log('Here Track Data', trackIdsArray);
     try {
       // Get a track's audio analysis
       const data = await Promise.all(
-        trackRecords.map(async (trackRecord) => {
+        trackIdsArray.map(async (trackId) => {
           return this.cleanTrackFeaturesData(
-            await this.getTrackAudioFeatures(trackRecord.id),
+            await this.getTrackAudioFeatures(trackId),
           );
         }),
       );
@@ -96,7 +105,7 @@ ChartProviderState
     return (
       <ChartContext.Provider
         value={{
-          setChartData: (trackRecords: Array<SelectedTrackRecord>) =>
+          setChartData: (trackRecords: Array<string>) =>
             this.setChartData(trackRecords),
           chartData: this.state.chartData,
         }}

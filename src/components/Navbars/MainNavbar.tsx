@@ -17,7 +17,7 @@ export default function MainNavbar() {
             fontSize: 'xx-large',
           }} href="/">AudioNest</Navbar.Brand>
           <Nav className="me-auto">
-            {/* <Nav.Link href="/integration-hub">Integration Hub</Nav.Link> */}
+            <Nav.Link href="/integration-hub">Integration Hub</Nav.Link>
             <Nav.Link href="/resume">Résumé</Nav.Link>
             {/* <Nav.Link href="/about-me">About Me</Nav.Link> */}
             <Nav.Link href="/contact">Contact/Links</Nav.Link>

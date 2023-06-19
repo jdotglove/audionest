@@ -1,55 +1,60 @@
-import { useMemo } from 'react';
-import { createStore, applyMiddleware, AnyAction, EmptyObject, Store } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunkMiddleware from 'redux-thunk';
-import reducers from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
 
+import tokenReducer from './reducers/tokenReducer';
 
-export type AudioNestRootState = {
-  token: string,
-};
+// Automatically adds the thunk middleware and the Redux DevTools extension
+export default configureStore({
+  // Automatically calls `combineReducers`
+  reducer: {
+    token: tokenReducer,
+  },
+});
 
-let store: Store<AudioNestRootState, AnyAction> & {
-  dispatch: unknown
-};
+// export type AudioNestRootState = {
+//   token: string,
+// };
 
-function initStore(initialState: { token?: any }) {
-  return createStore(
-    reducers,
-    initialState,
-    composeWithDevTools(applyMiddleware(thunkMiddleware)),
-  );
-}
+// let store: Store<AudioNestRootState, AnyAction> & {
+//   dispatch: unknown
+// };
 
-export const initialState = {
-  token: '',
-};
+// function initStore(initialState: { token?: any }) {
+//   return createStore(
+//     reducers,
+//     initialState,
+//     composeWithDevTools(applyMiddleware(thunkMiddleware)),
+//   );
+// }
 
-export type AudioNestDispatch = typeof store.dispatch;
+// export const initialState = {
+//   token: '',
+// };
 
-export const initializeStore = (preloadedState: any) => {
-  let _store = store ?? initStore(preloadedState);
+// export type AudioNestDispatch = typeof store.dispatch;
 
-  // After navigating to a page with an initial Redux state, merge that state
-  // with the current state in the store, and create a new store
-  if (preloadedState && store) {
-    _store = initStore({
-      ...store.getState(),
-      ...preloadedState,
-    });
-    // Reset the current store
-    store = undefined;
-  }
+// export const initializeStore = (preloadedState: any) => {
+//   let _store = store ?? initStore(preloadedState);
 
-  // For SSG and SSR always create a new store
-  if (typeof window === 'undefined') return _store;
-  // Create the store once in the client
-  if (!store) store = _store as typeof store;
+//   // After navigating to a page with an initial Redux state, merge that state
+//   // with the current state in the store, and create a new store
+//   if (preloadedState && store) {
+//     _store = initStore({
+//       ...store.getState(),
+//       ...preloadedState,
+//     });
+//     // Reset the current store
+//     store = undefined;
+//   }
 
-  return _store;
-};
+//   // For SSG and SSR always create a new store
+//   if (typeof window === 'undefined') return _store;
+//   // Create the store once in the client
+//   if (!store) store = _store as typeof store;
 
-export function useStore(initialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState]);
-  return store;
-}
+//   return _store;
+// };
+
+// export function useStore(initialState) {
+//   const store = useMemo(() => initializeStore(initialState), [initialState]);
+//   return store;
+// }

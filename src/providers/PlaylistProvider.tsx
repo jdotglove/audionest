@@ -1,29 +1,33 @@
 import React from 'react';
+
+import axios from '../plugins/axios';
 import { PlaylistProviderState, SpotifyProviderProps } from '../../types';
-import { PlaylistDataCache } from '../cache';
-import PlaylistContext from '../contexts/PlaylistContext';
-import { spotifyWebApi } from './SpotifyProvider';
+import { SpotifyTokenCache } from '../cache';
+import PlaylistContext from '../contexts/PlaylistContext'
 
 class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistProviderState> {
-  constructor(props) {
+  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
       tracks: [],
     };
   }
   
-  getPlaylistTracks = async (id: string) => {
-    if (PlaylistDataCache.get(id) !== -1) {
-      return PlaylistDataCache.get(id);
-    }
+  getPlaylistTracks = async (playlistId: string) => {
     try {
-      // Get a user's playlists
-      const { body: { items } } = await spotifyWebApi.getPlaylistTracks(id);
-      PlaylistDataCache.put(id, items);
-      this.setState({ tracks: items });
-      return items;
+      const accessToken = SpotifyTokenCache.get('token');
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistId}/tracks?token=${accessToken}`,
+        method: 'get',
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          'Content-Type': 'application/json',
+        },
+      });
+      this.setState({ tracks: [...(response.data || [])] });
+      return response.data
     } catch (err: any) {
-      console.error('ERROR: Could not retrieve user\'s playlists.', err);
+      console.error('ERROR: Could not retrieve playlist\'s tracks.', err);
     }
   };
 
