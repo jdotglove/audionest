@@ -11,14 +11,6 @@ export default function PlaylistSelector({
   playlist: Audionest.Playlist;
 }) {
   const router = useRouter();
-  useEffect(() => {
-    if (
-      router.asPath !== '/dashboards/spotify'
-      && router.asPath !== '/dashboards/spotify/playlist-analysis'
-    ) {
-      router.replace('/dashboards/spotify');
-    }
-  }, [router]);
   
   return (
     <PlaylistContext.Consumer>

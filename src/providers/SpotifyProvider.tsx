@@ -69,7 +69,7 @@ SpotifyProviderState
   loadUserTopArtists = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token: ', accessToken);
+      console.log('Artists Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-artists?token=${accessToken}`,
         method: 'get',
@@ -87,7 +87,7 @@ SpotifyProviderState
   loadUserTopTracks = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token: ', accessToken);
+      console.log('Tracks Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-tracks?token=${accessToken}`,
         method: 'get',
@@ -106,7 +106,7 @@ SpotifyProviderState
   loadUserPlaylists = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token: ', accessToken);
+      console.log('Playlist Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlists?token=${accessToken}`,
         method: 'get',
@@ -146,7 +146,7 @@ SpotifyProviderState
 
   setSelectedTracks = async (trackIdArray: Audionest.Track['_id'][]) => {
     const accessToken = SpotifyTokenCache.get('token');
-    console.log('Access Token: ', accessToken);
+    console.log('Selected Tracks Access Token: ', accessToken);
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
       method: 'get',

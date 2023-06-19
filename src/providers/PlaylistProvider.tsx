@@ -16,7 +16,6 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
   getPlaylistTracks = async (playlistId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistId}/tracks?token=${accessToken}`,
         method: 'get',

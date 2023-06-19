@@ -26,7 +26,6 @@ ChartProviderState
     }
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackId}/audio-features?token=${accessToken}`,
         method: 'get',

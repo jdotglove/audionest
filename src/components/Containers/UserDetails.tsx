@@ -31,7 +31,7 @@ export default class UserDetails extends React.Component {
                             trackId={trackId}
                           >
                             <TrackContext.Consumer>
-                              {({ name, artists }) => (
+                              {({ name, artists, getTrackArtist }) => (
                                 <div>
                                   {index + 1}. {name} - {artists[0]} <></>
                                   feat. {artists[1]}

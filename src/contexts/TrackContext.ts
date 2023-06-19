@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 const TrackContext = createContext({
+  getTrackArtist: undefined,
   album: undefined,
   artists: [],
   audioFeatures: {
