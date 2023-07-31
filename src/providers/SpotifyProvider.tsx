@@ -187,7 +187,7 @@ SpotifyProviderState
           user: this.state.user,
         }}
       >
-        <div>{this.props.children}</div>
+        <>{this.props.children}</>
       </SpotifyContext.Provider>
     );
   }

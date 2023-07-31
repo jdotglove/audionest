@@ -56,7 +56,7 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
           ...this.state,
         }}
       >
-        <div>{this.props.children}</div>
+        <>{this.props.children}</>
       </ArtistContext.Provider>
     );
   }

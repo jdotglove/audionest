@@ -110,7 +110,7 @@ ChartProviderState
           chartData: this.state.chartData,
         }}
       >
-        <div>{this.props.children}</div>
+        <>{this.props.children}</>
       </ChartContext.Provider>
     );
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Col, Row } from 'react-bootstrap';
+import { Container, Card, Col, Row, SSRProvider } from 'react-bootstrap';
 
 import ArtistProvider from '../../providers/ArtistProvider';
 import ArtistContext from '../../contexts/ArtistContext';
@@ -16,14 +16,15 @@ export default class UserDetails extends React.Component {
       <SpotifyContext.Consumer>
         {({ topTracks, topArtists }) => (
           <Container>
+            <SSRProvider>
             <Row>
               <Col>
                 {topTracks && (
                   <div>
                     <h3>Here are your current top tracks</h3>
-                    <Card style={{ width: '30rem' }}>
+                    <Card style={{ width: "30rem" }}>
                       <Card.Header
-                        className={styles['playlist-track-container-header']}
+                        className={styles["playlist-track-container-header"]}
                       >
                         {topTracks.map((trackId, index) => (
                           <TrackProvider
@@ -33,8 +34,22 @@ export default class UserDetails extends React.Component {
                             <TrackContext.Consumer>
                               {({ name, artists, getTrackArtist }) => (
                                 <div>
-                                  {index + 1}. {name} - {artists[0]} <></>
-                                  feat. {artists[1]}
+
+                                      {index + 1}. {name} - {" "}
+                                      {artists.map((artistId, idx) => (
+                                        <ArtistProvider
+                                          key={`track-artist-${artistId}`}
+                                          artistId={artistId}
+                                        >
+                                          <ArtistContext.Consumer>
+                                            {({ name: artistName }) => (
+                                              <>
+                                                {artistName}{artists.length - 1 > idx ? (<>, </>): (<> </>)} {" "}
+                                              </>
+                                            )}
+                                          </ArtistContext.Consumer>
+                                        </ArtistProvider>
+                                      ))}
                                 </div>
                               )}
                             </TrackContext.Consumer>
@@ -49,9 +64,9 @@ export default class UserDetails extends React.Component {
                 {topArtists.length > 0 && (
                   <div>
                     <h3>Here are your current top artists</h3>
-                    <Card style={{ width: '30rem' }}>
+                    <Card style={{ width: "30rem" }}>
                       <Card.Header
-                        className={styles['playlist-track-container-header']}
+                        className={styles["playlist-track-container-header"]}
                       >
                         {topArtists.map((artistId, index) => (
                           <ArtistProvider
@@ -73,6 +88,7 @@ export default class UserDetails extends React.Component {
                 )}
               </Col>
             </Row>
+            </SSRProvider>
           </Container>
         )}
       </SpotifyContext.Consumer>

@@ -17,8 +17,17 @@ declare module Audionest {
     releaseDatePercision: string;
     spotifyUri: string;
     totalTracks: number;
-
   };
+  export interface Playlist extends DBModel {
+    name: string;
+    owner: User['_id'];
+    spotifyUri: string;
+    tracks: Array<Track['_id']>;
+  };
+  export interface Recommendation extends DBModel {
+    seeds: Array<any>;
+    tracks: Array<Track>;
+  }
   export interface Track extends DBModel {
     album: Album['_id'];
     artists: Array<Artist['_id']>;
@@ -40,6 +49,7 @@ declare module Audionest {
       valence: number;
     };
     explicit: boolean;
+    genre?: string;
     name: string;
     popularity: number;
     spotifyUri: string;
@@ -53,11 +63,5 @@ declare module Audionest {
     spotifyUri: string;
     topArtists: Array<Artist['_id']>;
     topTracks: Array<Track['_id']>;
-  };
-  export interface Playlist extends DBModel {
-    name: string;
-    owner: User['_id'];
-    spotifyUri: string;
-    tracks: Array<Track['_id']>;
   };
 }

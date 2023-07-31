@@ -2,6 +2,10 @@
 
 export interface SpotifyProviderProps { }
 
+export interface PlaylistProviderProps { }
+
+export interface RecommendationProviderProps { }
+
 export interface TrackProviderProps {
   trackId: string;
 }
@@ -31,6 +35,11 @@ export interface SpotifyProviderState {
 
 export type PlaylistProviderState = {
   tracks: any;
+};
+
+export type RecommendationProviderState = {
+  generateRecommendations: () => Audionest.Recommendation;
+  listOfSeedGenres: Array<Audionest.Track['genre']>;
 };
 
 export type TrackProviderState = {

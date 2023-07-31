@@ -5,6 +5,7 @@ import { Row, Col, Container, Tabs, Tab } from 'react-bootstrap';
 
 // import { getURLHash } from '../../../src/utils/spotify';
 // import { setToken } from '../../../store/reducers/tokenReducer';
+import RecommendationGenerator from '../../../src/components/Containers/RecommendationGenerator';
 import PlaylistAnalysis from '../../../src/components/Containers/PlaylistAnalysis';
 import SpotifyContext from '../../../src/contexts/SpotifyContext';
 import SpotifyNavbar from '../../../src/components/Navbars/SpotifyNavbar';
@@ -62,8 +63,8 @@ export default function SpotifyDashboard() {
                   <Tab eventKey="playlist-analysis" title="Playlist Analysis">
                     <PlaylistAnalysis />
                   </Tab>
-                  <Tab eventKey="playlist-generator" title="Playlist Generator" disabled>
-                    <></>
+                  <Tab eventKey="playlist-generator" title="Playlist Generator">
+                    <RecommendationGenerator />
                   </Tab>
                 </Tabs>
               </Row>

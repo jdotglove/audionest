@@ -55,21 +55,20 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
   getTrackArtist = async (artistId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      // console.log('Access Token: ', accessToken);
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${artistId}`,
-        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${artistId}?token=${accessToken}`,
+        method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
-        data: JSON.stringify({
-          spotifyToken: accessToken,
-        }),
       });
-      return (response.data as Audionest.Artist).name;
+      if (!response.data) {
+        return 'No Artist'
+      }
+      return (response.data as Audionest.Artist)?.name;
     } catch (err: any) {
-      console.error('ERROR: Could not retrieve tracks\'s artists.', err);
+      console.error('ERROR: Could not retrieve track\'s artists.', err);
     }
   };
 
@@ -81,7 +80,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
           getTrackArtist: (artistId: string) => this.getTrackArtist(artistId)
         }}
       >
-        <div>{this.props.children}</div>
+        <>{this.props.children}</>
       </TrackContext.Provider>
     );
   }

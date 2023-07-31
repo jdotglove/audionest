@@ -2,6 +2,7 @@ import React from 'react';
 import SpotifyContext from '../../contexts/SpotifyContext';
 import PlaylistSelector from '../Buttons/PlaylistSelector';
 import { Container } from 'react-bootstrap';
+import PlaylistProvider from '../../providers/PlaylistProvider';
 
 export default function PlaylistDisplay() {
   return (
@@ -13,11 +14,13 @@ export default function PlaylistDisplay() {
               <h3>Let&#39;s see what we&#39;re working with...</h3>
               {playlists.map((playlist: Audionest.Playlist, idx: number) => {
                 return (
-                  <PlaylistSelector
-                    playlist={playlist}
-                    key={idx}
-                    setSelectedPlaylist={setSelectedPlaylist}
-                  />
+                  <PlaylistProvider key={idx}>
+                    <PlaylistSelector
+                      playlist={playlist}
+                      
+                      setSelectedPlaylist={setSelectedPlaylist}
+                    />
+                  </PlaylistProvider>
                 );
               })}
             </div>
