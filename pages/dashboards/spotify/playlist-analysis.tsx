@@ -8,11 +8,6 @@ import PlaylistDetails from '../../../src/components/Containers/PlaylistDetails'
 import TrackStatistics from '../../../src/components/Containers/TrackStatistics';
 
 export default function SpotifyPlaylistAnalysis() {
-  // const [currentSelectedTrack, setSelectedTrack ] = useState();
-  useEffect(() => {
-    const spotifyContext = useContext(SpotifyContext);
-    console.log('Spotify Context: ', spotifyContext);
-  })
   return (
     <>
       <Row>

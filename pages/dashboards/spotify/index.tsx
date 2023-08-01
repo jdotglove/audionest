@@ -14,17 +14,6 @@ import UserDetails from '../../../src/components/Containers/UserDetails';
 
 export default function SpotifyDashboard() {
   const [selectedTab, setSelectedTab] = useState('profile')
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   async function handleAccessToken() {
-  //     // @ts-ignore
-  //     const accessToken = (await getURLHash()).access_token;
-  //     dispatch(setToken(accessToken));
-  //   }
-  //   handleAccessToken();
-  // });
-
-  // const [currentSelectedTrack, setSelectedTrack ] = useState();
   return (
     <>
       <Row>

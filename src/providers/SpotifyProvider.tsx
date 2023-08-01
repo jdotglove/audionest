@@ -15,7 +15,6 @@ SpotifyProviderState
   constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
-      authenticateSpotifyUser: null,
       currentSelectedPlaylist: null,
       currentSelectedTracks: [],
       genreSeeds: null,
@@ -78,6 +77,7 @@ SpotifyProviderState
           'Content-Type': 'application/json',
         },
       });
+      //@ts-ignore
       this.setState({ topArtists: [ ...(response?.data.map((artist: Audionest.Artist) => artist._id) || [])] });
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
@@ -122,22 +122,32 @@ SpotifyProviderState
     }
   };
 
-  getSeedRecommendations = async () => {
-    // Get Recommendations Based on Seeds
-    // const response = await spotifyWebApi.getRecommendations({
-    //   min_energy: 0.4,
-    //   min_popularity: 50,
-    // });
-    // console.log(
-    //   'GET SEED RECOMMENDATIONS: ',
-    //   JSON.stringify(response, null, 4),
-    // );
-  };
-
-  getAvailableGenreSeeds = async () => {
-    // Get available genre seeds
-    // const { body: genreSeeds } = await spotifyWebApi.getAvailableGenreSeeds();
-    // this.setState({ genreSeeds });
+  searchItems = async (searchType: string, searchValue: string) => {
+    console.log('Here in Search', searchType, searchValue);
+    try {
+      const accessToken = SpotifyTokenCache.get('token');
+      let searchUrl = '';
+      if (searchType === 'artist') {
+        searchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/search?token=${accessToken}`;
+      } else if (searchType === 'track') {
+        searchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/search?token=${accessToken}`;
+      }
+      const response = await axios({
+        url: searchUrl,
+        method: 'post',
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          type: searchType,
+          query: searchValue,
+        }),
+      });
+      console.log('Search Response: ', response);
+    } catch (err) {
+      console.error('ERROR: could not search spotify item.', err);
+    }
   };
 
   setSelectedPlaylist = async (playlistData: any) => {
@@ -174,8 +184,6 @@ SpotifyProviderState
           authenticateSpotifyUser: this.authenticateSpotifyUser,
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
           currentSelectedTracks: this.state.currentSelectedTracks,
-          getAvailableGenreSeeds: this.getAvailableGenreSeeds,
-          getSeedRecommendations: this.getSeedRecommendations,
           isLoggedIn: this.state.isLoggedIn,
           login: this.login,
           playlists: this.state.playlists,
@@ -185,6 +193,7 @@ SpotifyProviderState
           topArtists: this.state.topArtists,
           topTracks: this.state.topTracks,
           user: this.state.user,
+          searchItems: this.searchItems,
         }}
       >
         <>{this.props.children}</>

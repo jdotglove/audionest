@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, ListGroup } from 'react-bootstrap';
+import React from "react";
+import { Container, ListGroup } from "react-bootstrap";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -8,9 +8,9 @@ import {
   Filler,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Radar } from 'react-chartjs-2';
-import ChartContext from '../../contexts/ChartContext';
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
+import ChartContext from "../../contexts/ChartContext";
 
 ChartJS.register(
   RadialLinearScale,
@@ -20,32 +20,30 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export default class TrackStatistics extends React.Component {
-  render() {
-    return (
-      <Container>
-        <ChartContext.Consumer>
-          {({ chartData }) =>
-            chartData ? (
-              <ListGroup>
-                <Radar
-                  data={chartData}
-                  options={{
-                    scales: { r: { min: 0, max: 100 } },
-                    plugins: {
-                      legend: {
-                        display: false,
-                      },
+export default function TrackStatistics() {
+  return (
+    <Container>
+      <ChartContext.Consumer>
+        {({ chartData }) =>
+          chartData ? (
+            <ListGroup>
+              <Radar
+                data={chartData}
+                options={{
+                  scales: { r: { min: 0, max: 100 } },
+                  plugins: {
+                    legend: {
+                      display: false,
                     },
-                  }}
-                />
-              </ListGroup>
-            ) : (
-              <p>Select a track to see analysis</p>
-            )
-          }
-        </ChartContext.Consumer>
-      </Container>
-    );
-  }
+                  },
+                }}
+              />
+            </ListGroup>
+          ) : (
+            <p>Select a track to see analysis</p>
+          )
+        }
+      </ChartContext.Consumer>
+    </Container>
+  );
 }

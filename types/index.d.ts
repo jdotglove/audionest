@@ -28,6 +28,7 @@ export interface SpotifyProviderState {
   isLoggedIn: boolean;
   playlists: Array<Audionest.Playlist['_id'] | string>;
   user: Audionest.User;
+  searchItems: Function;
   token: any;
   topArtists: Array<Audionest.Artist['_id'] | string>;
   topTracks: Array<Audionest.Track['_id'] | string>;

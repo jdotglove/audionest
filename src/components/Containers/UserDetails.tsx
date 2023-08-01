@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Card, Col, Row, SSRProvider } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { Container, Card, Col, Row, SSRProvider } from "react-bootstrap";
 
-import ArtistProvider from '../../providers/ArtistProvider';
-import ArtistContext from '../../contexts/ArtistContext';
-import TrackProvider from '../../providers/TrackProvider';
-import TrackContext from '../../contexts/TrackContext';
-import SpotifyContext from '../../contexts/SpotifyContext';
-import styles from '../../../styles/StatisticsSection.module.css';
-// import TrackSelector from '../Buttons/TrackSelector';
-// import ChartContext from '../../contexts/ChartContext';
+import ArtistProvider from "../../providers/ArtistProvider";
+import ArtistContext from "../../contexts/ArtistContext";
+import TrackProvider from "../../providers/TrackProvider";
+import TrackContext from "../../contexts/TrackContext";
+import SpotifyContext from "../../contexts/SpotifyContext";
+import styles from "../../../styles/StatisticsSection.module.css";
 
-export default class UserDetails extends React.Component {
-  render() {
-    return (
-      <SpotifyContext.Consumer>
-        {({ topTracks, topArtists }) => (
-          <Container>
-            <SSRProvider>
+export default function UserDetails() {
+  return (
+    <SpotifyContext.Consumer>
+      {({ topTracks, topArtists }) => (
+        <Container>
+          <SSRProvider>
             <Row>
               <Col>
                 {topTracks && (
                   <div>
                     <h3>Here are your current top tracks</h3>
-                    <Card style={{ width: "30rem" }}>
+                    <Card
+                      className="overflow-scroll"
+                      bg="light"
+                      style={{ height: "24rem", width: "32rem" }}
+                    >
                       <Card.Header
                         className={styles["playlist-track-container-header"]}
                       >
                         {topTracks.map((trackId, index) => (
+                          // @ts-ignore
                           <TrackProvider
                             key={`track-${trackId}`}
                             trackId={trackId}
@@ -34,22 +36,27 @@ export default class UserDetails extends React.Component {
                             <TrackContext.Consumer>
                               {({ name, artists, getTrackArtist }) => (
                                 <div>
-
-                                      {index + 1}. {name} - {" "}
-                                      {artists.map((artistId, idx) => (
-                                        <ArtistProvider
-                                          key={`track-artist-${artistId}`}
-                                          artistId={artistId}
-                                        >
-                                          <ArtistContext.Consumer>
-                                            {({ name: artistName }) => (
-                                              <>
-                                                {artistName}{artists.length - 1 > idx ? (<>, </>): (<> </>)} {" "}
-                                              </>
-                                            )}
-                                          </ArtistContext.Consumer>
-                                        </ArtistProvider>
-                                      ))}
+                                  {index + 1}. {name} -{" "}
+                                  {artists.map((artistId, idx) => (
+                                    // @ts-ignore
+                                    <ArtistProvider
+                                      key={`track-artist-${artistId}`}
+                                      artistId={artistId}
+                                    >
+                                      <ArtistContext.Consumer>
+                                        {({ name: artistName }) => (
+                                          <>
+                                            {artistName}
+                                            {artists.length - 1 > idx ? (
+                                              <>, </>
+                                            ) : (
+                                              <> </>
+                                            )}{" "}
+                                          </>
+                                        )}
+                                      </ArtistContext.Consumer>
+                                    </ArtistProvider>
+                                  ))}
                                 </div>
                               )}
                             </TrackContext.Consumer>
@@ -64,11 +71,16 @@ export default class UserDetails extends React.Component {
                 {topArtists.length > 0 && (
                   <div>
                     <h3>Here are your current top artists</h3>
-                    <Card style={{ width: "30rem" }}>
+                    <Card
+                      className="overflow-scroll"
+                      bg="light"
+                      style={{ height: "24rem", width: "32rem" }}
+                    >
                       <Card.Header
                         className={styles["playlist-track-container-header"]}
                       >
                         {topArtists.map((artistId, index) => (
+                          // @ts-ignore
                           <ArtistProvider
                             key={`artist-${artistId}`}
                             artistId={artistId}
@@ -88,10 +100,9 @@ export default class UserDetails extends React.Component {
                 )}
               </Col>
             </Row>
-            </SSRProvider>
-          </Container>
-        )}
-      </SpotifyContext.Consumer>
-    );
-  }
+          </SSRProvider>
+        </Container>
+      )}
+    </SpotifyContext.Consumer>
+  );
 }
