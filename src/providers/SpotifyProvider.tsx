@@ -15,6 +15,7 @@ SpotifyProviderState
   constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
+      artistSearchResults: [],
       currentSelectedPlaylist: null,
       currentSelectedTracks: [],
       genreSeeds: null,
@@ -24,6 +25,7 @@ SpotifyProviderState
       token: '',
       topTracks: [],
       topArtists: [],
+      trackSearchResults: [],
     };
   }
 
@@ -144,6 +146,11 @@ SpotifyProviderState
           query: searchValue,
         }),
       });
+      if (searchType === 'artist') {
+        this.setState({ artistSearchResults: [...response.data]})
+      } else if (searchType === 'track') {
+        this.setState({ trackSearchResults: [...response.data]})
+      }
       console.log('Search Response: ', response);
     } catch (err) {
       console.error('ERROR: could not search spotify item.', err);
@@ -181,6 +188,7 @@ SpotifyProviderState
     return (
       <SpotifyContext.Provider
         value={{
+          artistSearchResults: this.state.artistSearchResults,
           authenticateSpotifyUser: this.authenticateSpotifyUser,
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
           currentSelectedTracks: this.state.currentSelectedTracks,
@@ -188,12 +196,13 @@ SpotifyProviderState
           login: this.login,
           playlists: this.state.playlists,
           recommendations: null,
+          searchItems: this.searchItems,
           setSelectedPlaylist: this.setSelectedPlaylist,
           setSelectedTracks: this.setSelectedTracks,
+          trackSearchResults: this.state.trackSearchResults,
           topArtists: this.state.topArtists,
           topTracks: this.state.topTracks,
           user: this.state.user,
-          searchItems: this.searchItems,
         }}
       >
         <>{this.props.children}</>

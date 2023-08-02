@@ -39,8 +39,12 @@ export type PlaylistProviderState = {
 };
 
 export type RecommendationProviderState = {
+  addSeedArtist: () => void;
   generateRecommendations: () => Audionest.Recommendation;
   listOfSeedGenres: Array<Audionest.Track['genre']>;
+  selectedSeedArtists: Array<string>;
+  selectedSeedGenres: Array<string>;
+  selectedSeedTracks: Array<string>;
 };
 
 export type TrackProviderState = {

@@ -1,6 +1,15 @@
 import React, { Fragment, useRef, useEffect, useContext } from "react";
-import { Container, Form, Button, CardGroup, Row, Card } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  CardGroup,
+  Row,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 
 import SpotifyContext from "../../contexts/SpotifyContext";
 import RecommendationProvider from "../../providers/RecommendationProvider";
@@ -8,19 +17,19 @@ import RecommendationContext from "../../contexts/RecommendationContext";
 
 export default function RecommendationGenerator() {
   const spotifyContext = useContext(SpotifyContext);
-  const searchArtistInput = useRef('');
-  const searchTrackInput = useRef('');
+  const searchArtistInput = useRef(null);
+  const searchTrackInput = useRef(null);
 
   const handleSearchArtists = () => {
     const searchValue = searchArtistInput.current.value;
-    if (searchValue !== '') {
-      spotifyContext.searchItems('artist', searchValue);
+    if (searchValue !== "") {
+      spotifyContext.searchItems("artist", searchValue);
     }
   };
   const handleSearchTracks = () => {
     const searchValue = searchTrackInput.current.value;
-    if (searchValue !== '') {
-      spotifyContext.searchItems('track', searchValue);
+    if (searchValue !== "") {
+      spotifyContext.searchItems("track", searchValue);
     }
   };
 
@@ -91,11 +100,38 @@ export default function RecommendationGenerator() {
                         <Button
                           type="button"
                           className="btn btn-primary mb-3"
-                          // @ts-ignore
                           onClick={handleSearchArtists}
                         >
                           Search
                         </Button>
+                      </div>
+                      <div>
+                        {/* TODO: Come back and fix text sizing syntax */}
+                        <h5>Search Results:</h5>
+                        <SpotifyContext.Consumer>
+                          {({ artistSearchResults }) => (
+                            <ListGroup variant="flush">
+                              {artistSearchResults.map((artist) => (
+                                <RecommendationContext.Consumer
+                                  key={artist.name}
+                                >
+                                  {({ addSeedArtist }) => (
+                                    <div onClick={() => addSeedArtist(artist)}>
+                                      <ListGroup.Item
+                                        action
+                                        variant="light"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        {artist.name}
+                                        <AddIcon />
+                                      </ListGroup.Item>
+                                    </div>
+                                  )}
+                                </RecommendationContext.Consumer>
+                              ))}
+                            </ListGroup>
+                          )}
+                        </SpotifyContext.Consumer>
                       </div>
                     </Form>
                   </Card.Body>
@@ -128,11 +164,38 @@ export default function RecommendationGenerator() {
                         <Button
                           type="button"
                           className="btn btn-primary mb-3"
-                          //@ts-ignore
                           onClick={handleSearchTracks}
                         >
                           Search
                         </Button>
+                      </div>
+                      <div>
+                        <h5>Search Results:</h5>
+                        <SpotifyContext.Consumer>
+                          {({ trackSearchResults }) => (
+                            <ListGroup variant="flush">
+                              {trackSearchResults.map((track) => (
+                                <RecommendationContext.Consumer
+                                  key={track.name}
+                                >
+                                  {({ addSeedTrack }) => (
+                                    <div onClick={() => addSeedTrack(track)}>
+                                      <ListGroup.Item
+                                        action
+                                        variant="light"
+                                        className="d-flex justify-content-between align-items-start"
+                                        key={track.name}
+                                      >
+                                        {track.name} - {track.artists[0].name}
+                                        <AddIcon />
+                                      </ListGroup.Item>
+                                    </div>
+                                  )}
+                                </RecommendationContext.Consumer>
+                              ))}
+                            </ListGroup>
+                          )}
+                        </SpotifyContext.Consumer>
                       </div>
                     </Form>
                   </Card.Body>
