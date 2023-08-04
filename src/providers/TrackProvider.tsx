@@ -80,6 +80,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
           getTrackArtist: (artistId: string) => this.getTrackArtist(artistId)
         }}
       >
+        {/* @ts-ignore */}
         <>{this.props.children}</>
       </TrackContext.Provider>
     );
