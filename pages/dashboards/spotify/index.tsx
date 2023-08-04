@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment } from "react";
 import { Row, Col, Container, Tabs, Tab, Alert } from "react-bootstrap";
 
 import RecommendationDisplay from "../../../src/components/Recommendation/Display";
@@ -52,11 +52,17 @@ export default function SpotifyDashboard() {
                     <RecommendationProvider>
                       <Row>
                         <RecommendationContext.Consumer>
-                          {({ }) => (
+                          {({ selectedSeedArtists, selectedSeedTracks }) => (
                             <Alert key="seed-alert" variant="info">
                               <Alert.Heading as="h5">
                                 Selected Seeds
                               </Alert.Heading>
+                              <div>
+                                Tracks: { selectedSeedTracks.map((trackObj) => (<Fragment>{trackObj.id}</Fragment>))}
+                              </div>
+                              <div>
+                                Artists: { selectedSeedArtists.map((artistObj) => (<Fragment>{artistObj.id}</Fragment>))}
+                              </div>
                               No more than 5 seed items can be selected in
                               combination (ex. 2 artists, and 3 tracks)
                             </Alert>

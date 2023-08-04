@@ -19,13 +19,9 @@ export default function AudioNestApp({
 }) {
   return (
     <Provider store={store}>
-      {/* @ts-ignore */}
       <SpotifyProvider>
-        {/* @ts-ignore */}
         <ChartProvider>
-          {/* @ts-ignore */}
           <ThemeColors>
-            {/* @ts-ignore */}
             <FontProvider>
               <Head>
                 <title>AudioNest</title>

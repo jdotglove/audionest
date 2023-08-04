@@ -127,14 +127,14 @@ export default function RecommendationGenerator() {
                                 height={55}
                                 width={55}
                                 roundedCircle
-                                alt="Profile Picture"
+                                alt="Artist Profile Picture"
                               />
                             ) : (
                               <NextImage
                                 src={placeholderImg}
                                 height={55}
                                 width={55}
-                                alt="Profile Picture"
+                                alt="Default Artist Profile Picture"
                               />
                             )}
                             {artist.name}
@@ -189,7 +189,6 @@ export default function RecommendationGenerator() {
                             action
                             variant="light"
                             className="d-flex justify-content-between align-items-center"
-                            key={track.name}
                           >
                             {track.album.images[0] ? (
                               <Image
@@ -197,14 +196,14 @@ export default function RecommendationGenerator() {
                                 height={55}
                                 width={55}
                                 roundedCircle
-                                alt="Profile Picture"
+                                alt="Track Album Picture"
                               />
                             ) : (
                               <NextImage
                                 src={placeholderImg}
                                 height={55}
                                 width={55}
-                                alt="Profile Picture"
+                                alt="Default Album Profile Picture"
                               />
                             )}
                             {track.name} - {track.artists[0].name}

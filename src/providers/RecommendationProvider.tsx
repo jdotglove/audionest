@@ -50,8 +50,6 @@ class RecommendationProvider extends React.Component<
   ) {
     super(props);
     this.state = {
-      addSeedArtist: undefined,
-      generateRecommendations: undefined,
       listOfSeedGenres: [],
       recommendedTrackList: [],
       selectedSeedArtists: [],
@@ -72,13 +70,17 @@ class RecommendationProvider extends React.Component<
         },
         data: JSON.stringify({
           ...recommendationsConfigConstants,
-          seed_artists: this.state.selectedSeedArtists,
+          seed_artists: this.state.selectedSeedArtists.map(
+            (artistObj) => artistObj.id
+          ),
           seed_genres: this.state.selectedSeedGenres,
-          seed_tracks: this.state.selectedSeedTracks,
+          seed_tracks: this.state.selectedSeedTracks.map(
+            (trackObj) => trackObj.id
+          ),
         }),
       });
       console.log("Response: ", response);
-      this.setState({ recommendedTrackList: [...response.data]})
+      this.setState({ recommendedTrackList: [...response.data] });
     } catch (error: any) {
       console.error("ERROR: Could not retrieve recommendation", error);
     }
@@ -127,7 +129,7 @@ class RecommendationProvider extends React.Component<
       this.setState({
         selectedSeedArtists: [
           ...this.state.selectedSeedArtists,
-          artistPayload.id,
+          { id: artistPayload.id, name: artistPayload.name },
         ],
       });
     }
@@ -148,18 +150,25 @@ class RecommendationProvider extends React.Component<
     }
     if (!this.state.selectedSeedArtists.includes(trackPayload.id)) {
       this.setState({
-        selectedSeedTracks: [...this.state.selectedSeedTracks, trackPayload.id],
+        selectedSeedTracks: [
+          ...this.state.selectedSeedTracks,
+          { id: trackPayload.id, name: trackPayload.name },
+        ],
       });
     }
   };
 
   atLeastOneSeedSelected = () => {
-    return (this.state.selectedSeedArtists.length + this.state.selectedSeedTracks.length >= 1);
-  }
+    return (
+      this.state.selectedSeedArtists.length +
+        this.state.selectedSeedTracks.length >=
+      1
+    );
+  };
 
   playlistToSave = () => {
-    return this.state.recommendedTrackList.length > 0
-  }
+    return this.state.recommendedTrackList.length > 0;
+  };
 
   componentDidMount = async () => {
     this.getListOfSeedGenres();
