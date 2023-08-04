@@ -8,7 +8,8 @@ import {
 import { SpotifyTokenCache } from "../cache";
 import RecommendationContext from "../contexts/RecommendationContext";
 
-const recommendationConfigConstants = {
+const recommendationsConfigConstants = {
+  limit: 10,
   min_acousticness: 0, // range 0 - 1
   max_acousticness: 1,
   min_danceability: 0,
@@ -28,7 +29,7 @@ const recommendationConfigConstants = {
   // max_loudness: 1,
   min_mode: 0,
   max_mode: 1,
-  min_popularity: 0,
+  min_popularity: 30, // TODO: comeback and play with this floor
   max_popularity: 100,
   min_speechiness: 0,
   max_speechiness: 1,
@@ -52,17 +53,15 @@ class RecommendationProvider extends React.Component<
       addSeedArtist: undefined,
       generateRecommendations: undefined,
       listOfSeedGenres: [],
+      recommendedTrackList: [],
       selectedSeedArtists: [],
       selectedSeedGenres: [],
       selectedSeedTracks: [],
     };
   }
 
-  generateRecommendations = async (
-    recommendationsConfig: Record<string, string | number | Array<string>>
-  ) => {
+  generateRecommendations = async () => {
     try {
-      console.log("Getting Recommendations: ", recommendationsConfig);
       const accessToken = SpotifyTokenCache.get("token");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/recommendations?token=${accessToken}`,
@@ -72,11 +71,14 @@ class RecommendationProvider extends React.Component<
           "Content-Type": "application/json",
         },
         data: JSON.stringify({
-          ...recommendationsConfig,
-          ...recommendationConfigConstants,
+          ...recommendationsConfigConstants,
+          seed_artists: this.state.selectedSeedArtists,
+          seed_genres: this.state.selectedSeedGenres,
+          seed_tracks: this.state.selectedSeedTracks,
         }),
       });
       console.log("Response: ", response);
+      this.setState({ recommendedTrackList: [...response.data]})
     } catch (error: any) {
       console.error("ERROR: Could not retrieve recommendation", error);
     }
@@ -95,6 +97,25 @@ class RecommendationProvider extends React.Component<
       this.setState({ listOfSeedGenres: [...(response?.data || [])] });
     } catch (error: any) {
       console.error("ERROR: Could not retrieve recommendation", error);
+    }
+  };
+
+  handleGenreInputChange = (genre: string, checkboxObj: any) => {
+    if (checkboxObj.checked) {
+      if (this.maxSeedCapacityReached()) {
+        return;
+      }
+      this.setState({
+        selectedSeedGenres: [...this.state.selectedSeedGenres, genre],
+      });
+    } else {
+      this.setState({
+        selectedSeedGenres: [
+          ...this.state.selectedSeedGenres.filter(
+            (selectedGenre) => selectedGenre !== genre
+          ),
+        ],
+      });
     }
   };
 
@@ -132,13 +153,15 @@ class RecommendationProvider extends React.Component<
     }
   };
 
+  atLeastOneSeedSelected = () => {
+    return (this.state.selectedSeedArtists.length + this.state.selectedSeedTracks.length >= 1);
+  }
+
+  playlistToSave = () => {
+    return this.state.recommendedTrackList.length > 0
+  }
+
   componentDidMount = async () => {
-    this.generateRecommendations({
-      limit: 10,
-      seed_artists: [],
-      seed_genres: [],
-      seed_tracks: ["64791af3dfdfa1e845e8bd7a"],
-    });
     this.getListOfSeedGenres();
   };
   render() {
@@ -148,10 +171,13 @@ class RecommendationProvider extends React.Component<
           addSeedArtist: (artistPayload: any) =>
             this.addSeedArtist(artistPayload),
           addSeedTrack: (trackPayload: any) => this.addSeedTrack(trackPayload),
-          generateRecommendations: (
-            recommendationConfig: Record<string, any>
-          ) => this.generateRecommendations(recommendationConfig),
+          atLeastOneSeedSelected: () => this.atLeastOneSeedSelected(),
+          generateRecommendations: () => this.generateRecommendations(),
+          handleGenreInputChange: (genre: string, checkboxObj: any) =>
+            this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
+          playlistToSave: () => this.playlistToSave(),
+          recommendedTrackList: this.state.recommendedTrackList,
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,

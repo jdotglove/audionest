@@ -17,7 +17,7 @@ export interface ArtistProviderProps {
 export type SelectedTrackRecord = Pick<SpotifyApi.TrackObjectFull, 'id'> & Pick<SpotifyApi.TrackObjectFull, 'name'>;
 
 export interface SpotifyProviderState {
-  authenticateSpotifyUser: Function;
+  artistSearchResults: Array<any>
   currentSelectedPlaylist: {
     id: string;
     name: string;
@@ -28,10 +28,10 @@ export interface SpotifyProviderState {
   isLoggedIn: boolean;
   playlists: Array<Audionest.Playlist['_id'] | string>;
   user: Audionest.User;
-  searchItems: Function;
   token: any;
   topArtists: Array<Audionest.Artist['_id'] | string>;
   topTracks: Array<Audionest.Track['_id'] | string>;
+  trackSearchResults: Array<any>;
 }
 
 export type PlaylistProviderState = {
@@ -42,6 +42,7 @@ export type RecommendationProviderState = {
   addSeedArtist: () => void;
   generateRecommendations: () => Audionest.Recommendation;
   listOfSeedGenres: Array<Audionest.Track['genre']>;
+  recommendedTrackList: Array<any>;
   selectedSeedArtists: Array<string>;
   selectedSeedGenres: Array<string>;
   selectedSeedTracks: Array<string>;

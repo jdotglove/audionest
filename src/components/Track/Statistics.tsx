@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import React, { Fragment } from "react";
+import { Container, Card } from "react-bootstrap";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -26,11 +26,21 @@ export default function TrackStatistics() {
       <ChartContext.Consumer>
         {({ chartData }) =>
           chartData ? (
-            <ListGroup>
+            <Card>
               <Radar
                 data={chartData}
                 options={{
-                  scales: { r: { min: 0, max: 100 } },
+                  scales: {
+                    r: {
+                      min: 0,
+                      max: 100,
+                      pointLabels: {
+                        font: {
+                          size: 16
+                        }
+                      }
+                    },
+                  },
                   plugins: {
                     legend: {
                       display: false,
@@ -38,7 +48,7 @@ export default function TrackStatistics() {
                   },
                 }}
               />
-            </ListGroup>
+            </Card>
           ) : (
             <p>Select a track to see analysis</p>
           )

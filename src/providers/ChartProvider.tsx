@@ -34,7 +34,6 @@ ChartProviderState
           'Content-Type': 'application/json',
         },
       });
-      console.log('Aduio Features: ', response);
       TrackStatisticsCache.set(trackId, response.data);
       return response.data;
     } catch (err) {
@@ -71,7 +70,6 @@ ChartProviderState
   });
 
   setChartData = async (trackIdsArray: Array<Audionest.Track['_id']>) => {
-    console.log('Here Track Data', trackIdsArray);
     try {
       // Get a track's audio analysis
       const data = await Promise.all(
@@ -110,6 +108,7 @@ ChartProviderState
           chartData: this.state.chartData,
         }}
       >
+        {/* @ts-ignore */}
         <>{this.props.children}</>
       </ChartContext.Provider>
     );

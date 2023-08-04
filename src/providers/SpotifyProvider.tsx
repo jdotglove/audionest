@@ -35,11 +35,9 @@ SpotifyProviderState
     if (!accessToken) {
       accessToken = SpotifyTokenCache.get('token');
     }
-    console.log('Get URL Hash: ', accessToken);
     if (accessToken && !this.state.isLoggedIn) {
       await this.login(accessToken);
     }
-    console.log('Mounted In Provider!', this.state);
   }
 
   login = async (accessToken: string) => {
@@ -70,7 +68,6 @@ SpotifyProviderState
   loadUserTopArtists = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Artists Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-artists?token=${accessToken}`,
         method: 'get',
@@ -79,7 +76,6 @@ SpotifyProviderState
           'Content-Type': 'application/json',
         },
       });
-      //@ts-ignore
       this.setState({ topArtists: [ ...(response?.data.map((artist: Audionest.Artist) => artist._id) || [])] });
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
@@ -89,7 +85,6 @@ SpotifyProviderState
   loadUserTopTracks = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Tracks Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-tracks?token=${accessToken}`,
         method: 'get',
@@ -99,7 +94,6 @@ SpotifyProviderState
         },
       });
       this.setState({ topTracks: [...(response?.data.map((track: Audionest.Track) => track._id) || [])] });
-      console.log('Top Tracks: ', this.state.topTracks);
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
@@ -108,7 +102,6 @@ SpotifyProviderState
   loadUserPlaylists = async (userId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
-      console.log('Playlist Access Token: ', accessToken);
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlists?token=${accessToken}`,
         method: 'get',
@@ -118,14 +111,12 @@ SpotifyProviderState
         },
       });
       this.setState({ playlists: [...(response?.data || [])] });
-      console.log('Playlists: ', this.state.playlists);
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
   };
 
   searchItems = async (searchType: string, searchValue: string) => {
-    console.log('Here in Search', searchType, searchValue);
     try {
       const accessToken = SpotifyTokenCache.get('token');
       let searchUrl = '';
@@ -147,11 +138,10 @@ SpotifyProviderState
         }),
       });
       if (searchType === 'artist') {
-        this.setState({ artistSearchResults: [...response.data]})
+        this.setState({ artistSearchResults: [...response.data as Array<any>]})
       } else if (searchType === 'track') {
-        this.setState({ trackSearchResults: [...response.data]})
+        this.setState({ trackSearchResults: [...response.data as Array<any>]})
       }
-      console.log('Search Response: ', response);
     } catch (err) {
       console.error('ERROR: could not search spotify item.', err);
     }
@@ -163,7 +153,6 @@ SpotifyProviderState
 
   setSelectedTracks = async (trackIdArray: Audionest.Track['_id'][]) => {
     const accessToken = SpotifyTokenCache.get('token');
-    console.log('Selected Tracks Access Token: ', accessToken);
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
       method: 'get',
@@ -172,7 +161,6 @@ SpotifyProviderState
         'Content-Type': 'application/json',
       },
     });
-    console.log('Selected Tracks Response: ', JSON.stringify(response));
     this.setState({
       currentSelectedTracks: response.data
     });
@@ -205,6 +193,7 @@ SpotifyProviderState
           user: this.state.user,
         }}
       >
+        {/* @ts-ignore */}
         <>{this.props.children}</>
       </SpotifyContext.Provider>
     );

@@ -1,12 +1,10 @@
 import { createContext } from 'react';
 
 const SpotifyContext = createContext({
-  artistSearchResults: undefined,
+  artistSearchResults: undefined as Array<any>,
   authenticateSpotifyUser: undefined,
   currentSelectedPlaylist: undefined,
   currentSelectedTracks: undefined,
-  getSeedRecommendations: undefined,
-  getAvailableGenreSeeds: undefined,
   isLoggedIn: undefined,
   login: undefined,
   recommendations: undefined,
@@ -14,7 +12,7 @@ const SpotifyContext = createContext({
   searchItems: undefined,
   setSelectedPlaylist: undefined,
   setSelectedTracks: undefined,
-  trackSearchResults: undefined,
+  trackSearchResults: undefined as Array<any>,
   topArtists: undefined as Audionest.Artist['_id'][],
   topTracks: undefined as Audionest.Track['_id'][],
   user: undefined as Audionest.User,

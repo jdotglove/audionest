@@ -96,6 +96,7 @@ class PlaylistProvider extends React.Component<PlaylistProviderProps, PlaylistPr
           getPlaylistTracks: (id: string) => this.getPlaylistTracks(id),
         }}
       >
+        {/* @ts-ignore */}
         <>{this.props.children}</>
       </PlaylistContext.Provider>
     );
