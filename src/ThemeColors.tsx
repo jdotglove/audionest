@@ -17,6 +17,7 @@ const mainTheme = createTheme({
 class ThemeColors extends React.Component {
   render() {
     return (
+      // @ts-ignore
       <ThemeProvider theme={mainTheme}>{this.props.children}</ThemeProvider>
     );
   }
