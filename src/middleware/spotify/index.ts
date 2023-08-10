@@ -7,14 +7,15 @@ async function redirectToAuthCodeFlow(clientId: string) {
 
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
-
+  
   localStorage.setItem('verifier', verifier);
 
+  // TODO: come back to implement refresh logic with code response type
   const params = new URLSearchParams();
   params.append('client_id', clientId);
   params.append('response_type', 'token');
   params.append('redirect_uri', process.env.NEXT_PUBLIC_REDIRECT_URL);
-  params.append('scope', 'user-read-private user-read-email user-top-read');
+  params.append('scope', 'user-read-private user-read-email user-top-read playlist-modify-private playlist-modify-public');
   params.append('code_challenge_method', 'S256');
   params.append('code_challenge', challenge);
 

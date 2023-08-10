@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 import PlaylistContext from '../../contexts/PlaylistContext';
 
@@ -10,8 +9,6 @@ export default function PlaylistSelector({
   setSelectedPlaylist: Function;
   playlist: Audionest.Playlist;
 }) {
-  const router = useRouter();
-  
   return (
     <PlaylistContext.Consumer>
       {({ getPlaylistTracks }) => (
@@ -24,9 +21,9 @@ export default function PlaylistSelector({
           }}
           onClick={async () => {
             await setSelectedPlaylist({
-              spotifyUri: playlist.spotifyUri,
+              uri: playlist.uri,
               name: playlist.name,
-              tracks: await getPlaylistTracks(playlist._id),
+              tracks: await getPlaylistTracks(playlist.id),
             });
           }}
         >

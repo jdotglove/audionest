@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ChartProviderState,
-  SelectedTrackRecord,
   SpotifyProviderProps,
 } from '../../types';
 import ChartContext from '../contexts/ChartContext';
@@ -19,23 +18,22 @@ ChartProviderState
     };
   }
 
-  getTrackAudioFeatures = async (trackId: string) => {
-    const cacheValue = TrackStatisticsCache.get(trackId);
+  getTrackAudioFeatures = async (trackSpotifyId: string) => {
+    const cacheValue = TrackStatisticsCache.get(trackSpotifyId);
     if (cacheValue !== -1) {
       return cacheValue;
     }
     try {
       const accessToken = SpotifyTokenCache.get('token');
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackId}/audio-features?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackSpotifyId}/audio-features?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
       });
-      console.log('Aduio Features: ', response);
-      TrackStatisticsCache.set(trackId, response.data);
+      TrackStatisticsCache.set(trackSpotifyId, response.data);
       return response.data;
     } catch (err) {
       console.error('ERROR: Could not retrieve audio features.', err);
@@ -70,15 +68,14 @@ ChartProviderState
     )),
   });
 
-  setChartData = async (trackIdsArray: Array<Audionest.Track['_id']>) => {
-    console.log('Here Track Data', trackIdsArray);
+  setChartData = async (trackIdsArray: Array<any>) => {
     try {
       // Get a track's audio analysis
       const data = await Promise.all(
         trackIdsArray.map(async (trackId) => {
           return this.cleanTrackFeaturesData(
-            await this.getTrackAudioFeatures(trackId),
-          );
+            await this.getTrackAudioFeatures(trackId)
+          )
         }),
       );
       const averages = data.reduce((acc, datum) => {
@@ -110,7 +107,8 @@ ChartProviderState
           chartData: this.state.chartData,
         }}
       >
-        <div>{this.props.children}</div>
+        {/* @ts-ignore */}
+        <>{this.props.children}</>
       </ChartContext.Provider>
     );
   }

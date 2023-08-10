@@ -1,23 +1,23 @@
 import React from 'react';
 
 import axios from '../plugins/axios';
-import { PlaylistProviderState, SpotifyProviderProps } from '../../types';
+import { PlaylistProviderState, PlaylistProviderProps } from '../../types';
 import { SpotifyTokenCache } from '../cache';
 import PlaylistContext from '../contexts/PlaylistContext'
 
-class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistProviderState> {
-  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
+class PlaylistProvider extends React.Component<PlaylistProviderProps, PlaylistProviderState> {
+  constructor(props: PlaylistProviderProps | Readonly<PlaylistProviderProps>) {
     super(props);
     this.state = {
       tracks: [],
     };
   }
   
-  getPlaylistTracks = async (playlistId: string) => {
+  getPlaylistTracks = async (playlistSpotifyId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistId}/tracks?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistSpotifyId}/tracks?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
@@ -30,7 +30,6 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
       console.error('ERROR: Could not retrieve playlist\'s tracks.', err);
     }
   };
-
   render() {
     return (
       <PlaylistContext.Provider
@@ -38,7 +37,8 @@ class PlaylistProvider extends React.Component<SpotifyProviderProps, PlaylistPro
           getPlaylistTracks: (id: string) => this.getPlaylistTracks(id),
         }}
       >
-        <div>{this.props.children}</div>
+        {/* @ts-ignore */}
+        <>{this.props.children}</>
       </PlaylistContext.Provider>
     );
   }

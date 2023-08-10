@@ -80,17 +80,6 @@ function ResumeTabs() {
             </div>
           </Col>
         </Row>
-        <Row className="pt-3 verb-iframe-row">
-          <Col
-            style={{
-              fontSize: 'small',
-              fontWeight: 500,
-            }}
-          >
-            Current live work website{' '}:
-            <iframe className="verb-iframe" src="https://www.verbenergy.co/" />
-          </Col>
-        </Row>
       </Tab>
       {/* <Tab tabClassName="text-white" eventKey="projects" title="Projects">
         More content coming soon...

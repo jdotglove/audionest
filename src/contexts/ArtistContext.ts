@@ -6,7 +6,7 @@ const ArtistContext = createContext({
   name: '',
   genres: [],
   popularity: 0,
-  spotifyUri: '',
+  uri: '',
   tracks: [],
 });
 

@@ -15,7 +15,7 @@ const TrackContext = createContext({
     loudness: 0,
     mode: 0,
     speechiness: 0,
-    spotifyUri: '',
+    uri: '',
     tempo: 0,
     timeSignature: 0,
     valence: 0,
@@ -25,7 +25,7 @@ const TrackContext = createContext({
   explicit: false,
   name: '',
   popularity: 0,
-  spotifyUri: '',
+  uri: '',
   trackNumber: 0,
   trackId: undefined,
 });

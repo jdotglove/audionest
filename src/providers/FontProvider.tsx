@@ -9,6 +9,7 @@ const fraunces = Fraunces({
 class FontProvider extends React.Component {
   render() {
     return (
+      // @ts-ignore
       <span className={fraunces.className}>{this.props.children}</span>
     );
   }

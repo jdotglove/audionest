@@ -18,24 +18,9 @@ export default function SpotifyNavbar() {
               {/* TODO: need to check into better routing flow */}
               {/* Might need to avoid nesting routes so deep and prefix them instead */}
               <Navbar.Brand href="/">AudioNest</Navbar.Brand>
-              {isLoggedIn ? (
-                <Nav className="me-auto">
-                  <Nav.Link className="text-black" href="spotify/user-details">
-                    User Details
-                  </Nav.Link>
-                  <Nav.Link className="text-black" href="spotify/playlist-analysis">
-                    Playlist Analysis
-                  </Nav.Link>
-                  <Nav.Link className="text-black" href="spotify/playlist-generator">
-                    Playlist Generator
-                  </Nav.Link>
-                </Nav>
-              ) : (
-                <div />
-              )}
-              <Navbar.Text>
-                Welcome, {user?.displayName}!
-              </Navbar.Text>
+                <Navbar.Text>
+                  Welcome, {user?.displayName}!
+                </Navbar.Text>
               {/* {user?.images[0] && (
                 <Image
                   src={user.images[0].url}

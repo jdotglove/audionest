@@ -14,24 +14,8 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
       name: '',
       genres: [],
       popularity: 0,
-      spotifyUri: '',
+      uri: '',
       tracks: [],
-    //   averageAudioFeatures: {
-    //     acousticness: 0,
-    //     analysisUrl: '',
-    //     danceability: 0,
-    //     energy: 0,
-    //     instrumentalness: 0,
-    //     key: 0,
-    //     liveness: 0,
-    //     loudness: 0,
-    //     mode: 0,
-    //     speechiness: 0,
-    //     spotifyUri: '',
-    //     tempo: 0,
-    //     timeSignature: 0,
-    //     valence: 0,
-    //   },
     };
   }
 
@@ -56,7 +40,8 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
           ...this.state,
         }}
       >
-        <div>{this.props.children}</div>
+        {/* @ts-ignore */}
+        <>{this.props.children}</>
       </ArtistContext.Provider>
     );
   }
