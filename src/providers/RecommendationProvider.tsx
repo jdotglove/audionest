@@ -176,7 +176,12 @@ class RecommendationProvider extends React.Component<
     });
   };
 
-  savePlaylist = async (userId: string, spotifyUserId: string) => {
+  savePlaylist = async (
+    userId: string,
+    spotifyUserId: string,
+    playlistTitle: string,
+    playlistDescription: string
+  ) => {
     try {
       const accessToken = SpotifyTokenCache.get("token");
       await axios({
@@ -188,7 +193,8 @@ class RecommendationProvider extends React.Component<
         },
         data: JSON.stringify({
           spotifyId: spotifyUserId,
-          playlistName: "Test Playlist",
+          playlistName: playlistTitle,
+          playlistDescription,
           publicPlaylist: false,
           tracks: this.state.recommendedTrackList.map(
             (trackObj) => trackObj.uri
@@ -218,8 +224,18 @@ class RecommendationProvider extends React.Component<
           listOfSeedGenres: this.state.listOfSeedGenres,
           playlistToSave: () => this.playlistToSave(),
           recommendedTrackList: this.state.recommendedTrackList,
-          savePlaylist: (userId: string, spotifyUserId: string) =>
-            this.savePlaylist(userId, spotifyUserId),
+          savePlaylist: (
+            userId: string,
+            spotifyUserId: string,
+            playlistTitle: string,
+            playlistDescription: string
+          ) =>
+            this.savePlaylist(
+              userId,
+              spotifyUserId,
+              playlistTitle,
+              playlistDescription
+            ),
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,
