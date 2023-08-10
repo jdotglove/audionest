@@ -14,7 +14,7 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
       name: '',
       genres: [],
       popularity: 0,
-      spotifyUri: '',
+      uri: '',
       tracks: [],
     };
   }

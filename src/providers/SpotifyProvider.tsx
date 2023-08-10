@@ -2,7 +2,7 @@ import axios from '../plugins/axios';
 import React from 'react';
 
 import { getURLHash } from '../utils/spotify';
-import { SelectedTrackRecord, SpotifyProviderProps, SpotifyProviderState } from '../../types';
+import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 import { authenticateSpotify } from '../middleware/spotify';
 import { SpotifyTokenCache } from '../cache';
@@ -56,54 +56,54 @@ SpotifyProviderState
           password: '',
         }),
       });
-      this.loadUserTopArtists(response.data._id);
-      this.loadUserTopTracks(response.data._id);
-      this.loadUserPlaylists(response.data._id);
+      await this.loadUserTopArtists(response.data.id);
+      await this.loadUserTopTracks(response.data.id);
+      await this.loadUserPlaylists(response.data.id);
       this.setState({ user: { ...response.data }, isLoggedIn: true, token: accessToken});
     } catch (error) {
-      console.error('ERROR: Could not login user.', error);
+      console.error('ERROR: Could not login user.', error.message);
     }
   };
 
-  loadUserTopArtists = async (userId: string) => {
+  loadUserTopArtists = async (userSpotifyId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-artists?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-artists?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
       });
-      this.setState({ topArtists: [ ...(response?.data.map((artist: Audionest.Artist) => artist._id) || [])] });
+      this.setState({ topArtists: [ ...(response?.data.map((artist: Audionest.Artist) => artist.id) || [])] });
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
   };
 
-  loadUserTopTracks = async (userId: string) => {
+  loadUserTopTracks = async (userSpotifyId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/top-tracks?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-tracks?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           'Content-Type': 'application/json',
         },
       });
-      this.setState({ topTracks: [...(response?.data.map((track: Audionest.Track) => track._id) || [])] });
+      this.setState({ topTracks: [...(response?.data.map((track: Audionest.Track) => track.id) || [])] });
     } catch (err) {
       console.error('ERROR: Could not retrieve user playlists.', err);
     }
   };
 
-  loadUserPlaylists = async (userId: string) => {
+  loadUserPlaylists = async (userSpotifyId: string) => {
     try {
       const accessToken = SpotifyTokenCache.get('token');
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlists?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playlists?token=${accessToken}`,
         method: 'get',
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
@@ -151,8 +151,9 @@ SpotifyProviderState
     this.setState({ currentSelectedPlaylist: playlistData });
   };
 
-  setSelectedTracks = async (trackIdArray: Audionest.Track['_id'][]) => {
+  setSelectedTracks = async (trackIdArray: Array<any>) => {
     const accessToken = SpotifyTokenCache.get('token');
+    console.log('Id Array: ', trackIdArray)
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
       method: 'get',
@@ -162,7 +163,7 @@ SpotifyProviderState
       },
     });
     this.setState({
-      currentSelectedTracks: response.data
+      currentSelectedTracks: response.data,
     });
   };
 

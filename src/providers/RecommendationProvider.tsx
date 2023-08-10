@@ -79,7 +79,6 @@ class RecommendationProvider extends React.Component<
           ),
         }),
       });
-      console.log("Response: ", response);
       this.setState({ recommendedTrackList: [...response.data] });
     } catch (error: any) {
       console.error("ERROR: Could not retrieve recommendation", error);
@@ -170,6 +169,37 @@ class RecommendationProvider extends React.Component<
     return this.state.recommendedTrackList.length > 0;
   };
 
+  clearSelectedSeeds = () => {
+    this.setState({
+      selectedSeedArtists: [],
+      selectedSeedGenres: [],
+    });
+  };
+
+  savePlaylist = async (userId: string, spotifyUserId: string) => {
+    try {
+      const accessToken = SpotifyTokenCache.get("token");
+      await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlist?token=${accessToken}`,
+        method: "post",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          spotifyId: spotifyUserId,
+          playlistName: "Test Playlist",
+          publicPlaylist: false,
+          tracks: this.state.recommendedTrackList.map(
+            (trackObj) => trackObj.uri
+          ),
+        }),
+      });
+    } catch (error: any) {
+      console.error("ERROR: Could not save playlist", error);
+    }
+  };
+
   componentDidMount = async () => {
     this.getListOfSeedGenres();
   };
@@ -181,12 +211,15 @@ class RecommendationProvider extends React.Component<
             this.addSeedArtist(artistPayload),
           addSeedTrack: (trackPayload: any) => this.addSeedTrack(trackPayload),
           atLeastOneSeedSelected: () => this.atLeastOneSeedSelected(),
+          clearSelectedSeeds: () => this.clearSelectedSeeds(),
           generateRecommendations: () => this.generateRecommendations(),
           handleGenreInputChange: (genre: string, checkboxObj: any) =>
             this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
           playlistToSave: () => this.playlistToSave(),
           recommendedTrackList: this.state.recommendedTrackList,
+          savePlaylist: (userId: string, spotifyUserId: string) =>
+            this.savePlaylist(userId, spotifyUserId),
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,

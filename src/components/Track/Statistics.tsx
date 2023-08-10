@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Container, Card } from "react-bootstrap";
 import {
   Chart as ChartJS,
@@ -45,6 +45,10 @@ export default function TrackStatistics() {
                     legend: {
                       display: false,
                     },
+                  },
+                  // @ts-ignore
+                  tooltips: {
+                    mode: "label"
                   },
                 }}
               />

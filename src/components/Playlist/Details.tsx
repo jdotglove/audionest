@@ -16,7 +16,7 @@ export default function PlaylistDetails() {
               <Row>
                 <Col>
                   <h3>Selected Playlist Details:</h3>
-                  <Card bg="light" style={{ width: "18rem" }}>
+                  <Card bg="light" style={{ width: "18rem", height: "48rem" }}>
                     <Card.Header
                       className={styles["playlist-track-container-header"]}
                     >
@@ -27,7 +27,7 @@ export default function PlaylistDetails() {
                             onClick={async () => {
                               const trackIdArray =
                                 currentSelectedPlaylist.tracks.map(
-                                  ({ _id }) => _id
+                                  ({ id }) => id
                                 );
                               setSelectedTracks(trackIdArray);
                               await setChartData(trackIdArray);
@@ -38,11 +38,11 @@ export default function PlaylistDetails() {
                         )}
                       </ChartContext.Consumer>
                     </Card.Header>
-                    <Card.Body>
-                      <ListGroup className={styles["playlist-track-group"]}>
+                    <Card.Body className="overflow-scroll">
+                      <ListGroup>
                         {currentSelectedPlaylist.tracks.map((track) => (
                           <TrackSelector
-                            key={track._id}
+                            key={track.id}
                             track={track}
                             setSelectedTracks={setSelectedTracks}
                           />

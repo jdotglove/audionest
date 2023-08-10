@@ -1,11 +1,8 @@
 import NextImage from "next/image";
-import React, { Fragment, useRef, useEffect, useContext } from "react";
+import React, { Fragment, useRef, useContext } from "react";
 import {
   Image,
-  Form,
   Button,
-  CardGroup,
-  Row,
   Card,
   ListGroup,
 } from "react-bootstrap";
@@ -14,7 +11,6 @@ import AddIcon from "@mui/icons-material/Add";
 
 import placeholderImg from "../../../public/placeholder.png";
 import SpotifyContext from "../../contexts/SpotifyContext";
-import RecommendationProvider from "../../providers/RecommendationProvider";
 import RecommendationContext from "../../contexts/RecommendationContext";
 
 export default function RecommendationGenerator() {
@@ -41,47 +37,14 @@ export default function RecommendationGenerator() {
         {({
           addSeedArtist,
           addSeedTrack,
-          atLeastOneSeedSelected,
-          generateRecommendations,
-          handleGenreInputChange,
-          listOfSeedGenres,
         }) => (
           <Fragment>
-            {/* <Card
-                  bg="light"
-                  className="mx-3 text-bg-light"
-                  style={{ width: "24rem", height: "24rem" }}
-                >
-                  <Card.Title>
-                    <h2 className="px-3 text-black">Seed Genres</h2>
-                  </Card.Title>
-                  <Card.Body className="overflow-scroll">
-                    <Form>
-                      {listOfSeedGenres.map((genre) => (
-                        <div
-                          key={`inline-${genre}`}
-                          className="mb-3 text-black"
-                        >
-                          <Form.Check
-                            inline
-                            label={genre}
-                            onClick={(e) =>
-                              handleGenreInputChange(genre, e.target)
-                            }
-                            id={`inline-${genre}-3`}
-                          />
-                        </div>
-                      ))}
-                    </Form>
-                  </Card.Body>
-                </Card> */}
             <Card
               className="mx-3 text-bg-light"
-              style={{ width: "24rem", height: "22rem" }}
+              style={{ width: "24rem", height: "20rem" }}
             >
               <Card.Title>
                 <h2 className="px-3 text-black">Seed Artists</h2>
-                <p className="px-3 text-black">Limited to top 3 results</p>
                 <div className="px-3 input-group mb-3">
                   <span
                     className="text-black input-group-text"
@@ -104,7 +67,7 @@ export default function RecommendationGenerator() {
                   </Button>
                 </div>
                 <div className="px-3">
-                  <h5>Search Results:</h5>
+                  <h5>Search Results: (Top 3)</h5>
                 </div>
               </Card.Title>
               <Card.Body className="overflow-scroll">
@@ -149,11 +112,10 @@ export default function RecommendationGenerator() {
             </Card>
             <Card
               className="mx-3 text-bg-light"
-              style={{ width: "24rem", height: "22rem" }}
+              style={{ width: "24rem", height: "20rem" }}
             >
               <Card.Title>
                 <h2 className="px-3 text-black">Seed Tracks</h2>
-                <p className="px-3">Limited to top 3 results</p>
                 <div className="px-3 input-group mb-3">
                   <span
                     className="text-black input-group-text"
@@ -176,7 +138,7 @@ export default function RecommendationGenerator() {
                   </Button>
                 </div>
                 <div className="px-3">
-                  <h5>Search Results:</h5>
+                  <h5>Search Results: (Top 3)</h5>
                 </div>
               </Card.Title>
               <Card.Body className="overflow-scroll">

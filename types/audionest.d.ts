@@ -1,36 +1,34 @@
 declare module Audionest {
-  interface DBModel {
-    _id: string;
+  interface SpotifyModel {
+    id: string;
+    uri: string
   };
-  export interface Artist extends DBModel {
+  export interface Artist extends SpotifyModel {
     genres: Array<string>;
     name: string;
     popularity: number;
-    spotifyUri: string;
   };
-  export interface Album extends DBModel {
+  export interface Album extends SpotifyModel {
     albumType: string;
-    artists: Array<Artist['_id']>;
+    artists: Array<any>;
     availableMarkets: Array<string>;
     name: string;
     releaseDate: string;
     releaseDatePercision: string;
-    spotifyUri: string;
     totalTracks: number;
   };
-  export interface Playlist extends DBModel {
+  export interface Playlist extends SpotifyModel {
     name: string;
-    owner: User['_id'];
-    spotifyUri: string;
-    tracks: Array<Track['_id']>;
+    owner: any;
+    tracks: Array<any>;
   };
-  export interface Recommendation extends DBModel {
+  export interface Recommendation extends SpotifyModel {
     seeds: Array<any>;
     tracks: Array<Track>;
   }
-  export interface Track extends DBModel {
-    album: Album['_id'];
-    artists: Array<Artist['_id']>;
+  export interface Track extends SpotifyModel {
+    album: any;
+    artists: Array<any>;
     availableMarkets: Array<string>;
     audioFeatures: {
       acousticness: number;
@@ -43,7 +41,6 @@ declare module Audionest {
       loudness: number;
       mode: number;
       speechiness: number;
-      spotifyUri: string;
       tempo: number;
       timeSignature: number;
       valence: number;
@@ -52,16 +49,14 @@ declare module Audionest {
     genre?: string;
     name: string;
     popularity: number;
-    spotifyUri: string;
     trackNumber: number;
   };
-  export interface User extends DBModel {
+  export interface User extends SpotifyModel {
     country: string;
     displayName: string;
     email: string;
-    playlists: Array<Playlist['_id']>;
-    spotifyUri: string;
-    topArtists: Array<Artist['_id']>;
-    topTracks: Array<Track['_id']>;
+    playlists: Array<any>;
+    topArtists: Array<any>;
+    topTracks: Array<any>;
   };
 }

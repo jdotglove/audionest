@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Row, Col, Container, Tabs, Tab, Alert } from "react-bootstrap";
+import { Row, Col, Container, Tabs, Tab, Alert, Button } from "react-bootstrap";
 
 import RecommendationDisplay from "../../../src/components/Recommendation/Display";
 import RecommendationGenerator from "../../../src/components/Recommendation/Generator";
@@ -19,7 +19,7 @@ export default function SpotifyDashboard() {
         </Col>
       </Row>
       <SpotifyContext.Consumer>
-        {({ isLoggedIn }) =>
+        {({ isLoggedIn, user }) =>
           !isLoggedIn ? (
             <Container>
               <Row>
@@ -52,19 +52,46 @@ export default function SpotifyDashboard() {
                     <RecommendationProvider>
                       <Row>
                         <RecommendationContext.Consumer>
-                          {({ selectedSeedArtists, selectedSeedTracks }) => (
-                            <Alert key="seed-alert" variant="info">
+                          {({
+                            selectedSeedArtists,
+                            selectedSeedTracks,
+                            clearSelectedSeeds,
+                          }) => (
+                            <Alert key="seed-alert" variant="light">
                               <Alert.Heading as="h5">
-                                Selected Seeds
+                                Selected Seeds (Max 5 in total)
                               </Alert.Heading>
                               <div>
-                                Tracks: { selectedSeedTracks.map((trackObj) => (<Fragment>{trackObj.id}</Fragment>))}
+                                Tracks:{" "}
+                                {selectedSeedTracks.map((trackObj, idx) => (
+                                  <Fragment key={trackObj.id}>
+                                    {trackObj.name}
+                                    {selectedSeedTracks[idx + 1] ? (
+                                      <Fragment>, </Fragment>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </Fragment>
+                                ))}
                               </div>
-                              <div>
-                                Artists: { selectedSeedArtists.map((artistObj) => (<Fragment>{artistObj.id}</Fragment>))}
-                              </div>
-                              No more than 5 seed items can be selected in
-                              combination (ex. 2 artists, and 3 tracks)
+                              Artists:{" "}
+                              {selectedSeedArtists.map((artistObj, idx) => (
+                                <Fragment key={artistObj.id}>
+                                  {artistObj.name}
+                                  {selectedSeedArtists[idx + 1] ? (
+                                    <Fragment>, </Fragment>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Fragment>
+                              ))}
+                              <hr />
+                              <Button
+                                variant="dark"
+                                onClick={clearSelectedSeeds}
+                              >
+                                Clear Seeds
+                              </Button>
                             </Alert>
                           )}
                         </RecommendationContext.Consumer>
@@ -74,7 +101,7 @@ export default function SpotifyDashboard() {
                           <RecommendationGenerator />
                         </Col>
                         <Col>
-                          <RecommendationDisplay />
+                          <RecommendationDisplay user={user} />
                         </Col>
                       </Row>
                     </RecommendationProvider>

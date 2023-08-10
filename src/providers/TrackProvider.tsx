@@ -22,7 +22,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
         loudness: 0,
         mode: 0,
         speechiness: 0,
-        spotifyUri: '',
+        uri: '',
         tempo: 0,
         timeSignature: 0,
         valence: 0,
@@ -32,7 +32,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
       explicit: false,
       name: '',
       popularity: 0,
-      spotifyUri: '',
+      uri: '',
       trackNumber: 0,
       trackId: props.trackId,
     };

@@ -21,16 +21,16 @@ export interface SpotifyProviderState {
   currentSelectedPlaylist: {
     id: string;
     name: string;
-    tracks: Array<Audionest.Track['_id']> | null;
+    tracks: Array<any> | null;
   };
-  currentSelectedTracks: Array<Audionest.Track['_id'] | string>;
+  currentSelectedTracks: Array<any>;
   genreSeeds: any;
   isLoggedIn: boolean;
-  playlists: Array<Audionest.Playlist['_id'] | string>;
+  playlists: Array<any>;
   user: Audionest.User;
   token: any;
-  topArtists: Array<Audionest.Artist['_id'] | string>;
-  topTracks: Array<Audionest.Track['_id'] | string>;
+  topArtists: Array<any>;
+  topTracks: Array<any>;
   trackSearchResults: Array<any>;
 }
 
@@ -47,8 +47,8 @@ export type RecommendationProviderState = {
 };
 
 export type TrackProviderState = {
-  album: Audionest.Album['_id'] | string,
-  artists: Array<Audionest.Artist['_id'] | string>;
+  album: any,
+  artists: Array<any>;
   audioFeatures: {
     acousticness: number;
     analysisUrl: string;
@@ -60,7 +60,7 @@ export type TrackProviderState = {
     loudness: number;
     mode: number;
     speechiness: number;
-    spotifyUri: string;
+    uri: string;
     tempo: number;
     timeSignature: number;
     valence: number;
@@ -70,19 +70,19 @@ export type TrackProviderState = {
   explicit: boolean;
   name: string;
   popularity: number;
-  spotifyUri: string;
+  uri: string;
   trackNumber: number;
-  trackId: Audionest.Track['_id'] | string;
+  trackId: any;
 };
 
 export type ArtistProviderState = {
-  albums: Array<Audionest.Album['_id'] | string>;
-  artistId: Audionest.Artist['_id'] | string;
+  albums: Array<any>;
+  artistId: any;
   genres: Array<string>;
   name: string;
   popularity: number;
-  spotifyUri: string;
-  tracks: Array<Audionest.Track['_id'] | string>;
+  uri: string;
+  tracks: Array<any>;
   // TODO: come back to average audio features
   // averageAudioFeatures: {
   //   acousticness: number;
@@ -95,7 +95,7 @@ export type ArtistProviderState = {
   //   loudness: number;
   //   mode: number;
   //   speechiness: number;
-  //   spotifyUri: string;
+  //   uri: string;
   //   tempo: number;
   //   timeSignature: number;
   //   valence: number;

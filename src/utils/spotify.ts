@@ -31,3 +31,5 @@ export const getURLHash = async () => (window
     }, {})
   : ''
 );
+
+export const parseUriForId = (spotifyUri: string) => spotifyUri.split(':')[2];

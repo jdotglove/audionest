@@ -23,10 +23,10 @@ export default function IntegrationHub() {
             <Col>
               <div className="d-grid gap-2">
                 <Button size="lg" onClick={async () => {
-                  authenticateSpotifyUser();
+                  await authenticateSpotifyUser();
                 }}>Login</Button>
                 <Button size="lg" onClick={async () => {
-                  authenticateSpotifyUser(true);
+                  await authenticateSpotifyUser(true);
                 }}>Create Account</Button>
               </div>
             </Col>

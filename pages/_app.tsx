@@ -6,7 +6,6 @@ import store from "../store";
 import SpotifyProvider from "../src/providers/SpotifyProvider";
 import ThemeColors from "../src/ThemeColors";
 import "../styles/scss/index.scss";
-import PlaylistProvider from "../src/providers/PlaylistProvider";
 import ChartProvider from "../src/providers/ChartProvider";
 import FontProvider from "../src/providers/FontProvider";
 
