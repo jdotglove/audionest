@@ -44,7 +44,6 @@ export default function RecommendationGenerator() {
                   >
                     <SearchIcon />
                   </span>
-
                   <input
                     type="text"
                     ref={searchArtistInput}

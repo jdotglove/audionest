@@ -53,81 +53,79 @@ export default function SpotifyDashboard() {
                   </Tab>
                   <Tab eventKey="playlist-generator" title="Playlist Generator">
                     <RecommendationProvider>
-                        <Row>
-                          <RecommendationContext.Consumer>
-                            {({
-                              selectedSeedArtists,
-                              selectedSeedTracks,
-                              clearSelectedSeeds,
-                            }) => (
-                              <Alert key="seed-alert" variant="light">
-                                <Alert.Heading as="h5">
-                                  Selected Seeds (Max 5 in total)
-                                </Alert.Heading>
-                                <div>
-                                  Tracks:{" "}
-                                  {selectedSeedTracks.map((trackObj, idx) => (
-                                    <Fragment key={trackObj.id}>
-                                      {trackObj.name}
-                                      {selectedSeedTracks[idx + 1] ? (
-                                        <Fragment>, </Fragment>
-                                      ) : (
-                                        <Fragment></Fragment>
-                                      )}
-                                    </Fragment>
-                                  ))}
-                                </div>
-                                Artists:{" "}
-                                {selectedSeedArtists.map((artistObj, idx) => (
-                                  <Fragment key={artistObj.id}>
-                                    {artistObj.name}
-                                    {selectedSeedArtists[idx + 1] ? (
+                      <Row>
+                        <RecommendationContext.Consumer>
+                          {({
+                            selectedSeedArtists,
+                            selectedSeedTracks,
+                            clearSelectedSeeds,
+                          }) => (
+                            <Alert key="seed-alert" variant="light">
+                              <Alert.Heading as="h5">
+                                Selected Seeds (Max 5 in total)
+                              </Alert.Heading>
+                              <div>
+                                Tracks:{" "}
+                                {selectedSeedTracks.map((trackObj, idx) => (
+                                  <Fragment key={trackObj.id}>
+                                    {trackObj.name}
+                                    {selectedSeedTracks[idx + 1] ? (
                                       <Fragment>, </Fragment>
                                     ) : (
                                       <Fragment></Fragment>
                                     )}
                                   </Fragment>
                                 ))}
-                                <hr />
-                                <Row>
-                                  <Col md={4}>
-                                    <Button
-                                      variant="danger"
-                                      onClick={clearSelectedSeeds}
-                                    >
-                                      Clear Seeds
-                                    </Button>
-                                  </Col>
-                                  <PlaylistContext.Consumer>
-                                    {({
-                                      toggleShowPlaylistBuilder,
-                                    }) => (
-                                      <Col md={{ span: 2, offset: 6 }}>
-                                        <Button
-                                          variant="dark"
-                                          onClick={() =>
-                                            toggleShowPlaylistBuilder(true)
-                                          }
-                                        >
-                                          View Playlist
-                                        </Button>
-                                      </Col>
-                                    )}
-                                  </PlaylistContext.Consumer>
-                                </Row>
-                              </Alert>
-                            )}
-                          </RecommendationContext.Consumer>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <RecommendationGenerator />
-                          </Col>
-                          <Col>
-                            <RecommendationDisplay />
-                          </Col>
-                        </Row>
-                        <RecommendationSelection user={user} />
+                              </div>
+                              Artists:{" "}
+                              {selectedSeedArtists.map((artistObj, idx) => (
+                                <Fragment key={artistObj.id}>
+                                  {artistObj.name}
+                                  {selectedSeedArtists[idx + 1] ? (
+                                    <Fragment>, </Fragment>
+                                  ) : (
+                                    <Fragment></Fragment>
+                                  )}
+                                </Fragment>
+                              ))}
+                              <hr />
+                              <Row>
+                                <Col md={4}>
+                                  <Button
+                                    variant="danger"
+                                    onClick={clearSelectedSeeds}
+                                  >
+                                    Clear Seeds
+                                  </Button>
+                                </Col>
+                                <PlaylistContext.Consumer>
+                                  {({ toggleShowPlaylistBuilder }) => (
+                                    <Col md={{ span: 2, offset: 6 }}>
+                                      <Button
+                                        variant="dark"
+                                        onClick={() =>
+                                          toggleShowPlaylistBuilder(true)
+                                        }
+                                      >
+                                        View Playlist
+                                      </Button>
+                                    </Col>
+                                  )}
+                                </PlaylistContext.Consumer>
+                              </Row>
+                            </Alert>
+                          )}
+                        </RecommendationContext.Consumer>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <RecommendationGenerator />
+                        </Col>
+                        <Col>
+                          <RecommendationDisplay />
+                        </Col>
+                      </Row>
+                      <RecommendationSelection user={user} />
                     </RecommendationProvider>
                   </Tab>
                 </Tabs>
