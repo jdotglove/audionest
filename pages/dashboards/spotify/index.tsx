@@ -3,16 +3,19 @@ import { Row, Col, Container, Tabs, Tab, Alert, Button } from "react-bootstrap";
 
 import RecommendationDisplay from "../../../src/components/Recommendation/Display";
 import RecommendationGenerator from "../../../src/components/Recommendation/Generator";
+import RecommendationSelection from "../../../src/components/Recommendation/Selection";
 import PlaylistAnalysis from "../../../src/components/Playlist/Analysis";
 import SpotifyContext from "../../../src/contexts/SpotifyContext";
 import SpotifyNavbar from "../../../src/components/Navbars/SpotifyNavbar";
 import UserDetails from "../../../src/components/Containers/UserDetails";
 import RecommendationProvider from "../../../src/providers/RecommendationProvider";
 import RecommendationContext from "../../../src/contexts/RecommendationContext";
+import PlaylistProvider from "../../../src/providers/PlaylistProvider";
+import PlaylistContext from "../../../src/contexts/PlaylistContext";
 
 export default function SpotifyDashboard() {
   return (
-    <>
+    <Fragment>
       <Row>
         <Col>
           <SpotifyNavbar />
@@ -69,7 +72,7 @@ export default function SpotifyDashboard() {
                                     {selectedSeedTracks[idx + 1] ? (
                                       <Fragment>, </Fragment>
                                     ) : (
-                                      <></>
+                                      <Fragment></Fragment>
                                     )}
                                   </Fragment>
                                 ))}
@@ -81,17 +84,35 @@ export default function SpotifyDashboard() {
                                   {selectedSeedArtists[idx + 1] ? (
                                     <Fragment>, </Fragment>
                                   ) : (
-                                    <></>
+                                    <Fragment></Fragment>
                                   )}
                                 </Fragment>
                               ))}
                               <hr />
-                              <Button
-                                variant="dark"
-                                onClick={clearSelectedSeeds}
-                              >
-                                Clear Seeds
-                              </Button>
+                              <Row>
+                                <Col md={4}>
+                                  <Button
+                                    variant="danger"
+                                    onClick={clearSelectedSeeds}
+                                  >
+                                    Clear Seeds
+                                  </Button>
+                                </Col>
+                                <PlaylistContext.Consumer>
+                                  {({ toggleShowPlaylistBuilder }) => (
+                                    <Col md={{ span: 2, offset: 6 }}>
+                                      <Button
+                                        variant="dark"
+                                        onClick={() =>
+                                          toggleShowPlaylistBuilder(true)
+                                        }
+                                      >
+                                        View Playlist
+                                      </Button>
+                                    </Col>
+                                  )}
+                                </PlaylistContext.Consumer>
+                              </Row>
                             </Alert>
                           )}
                         </RecommendationContext.Consumer>
@@ -101,9 +122,10 @@ export default function SpotifyDashboard() {
                           <RecommendationGenerator />
                         </Col>
                         <Col>
-                          <RecommendationDisplay user={user} />
+                          <RecommendationDisplay />
                         </Col>
                       </Row>
+                      <RecommendationSelection user={user} />
                     </RecommendationProvider>
                   </Tab>
                 </Tabs>
@@ -112,6 +134,6 @@ export default function SpotifyDashboard() {
           )
         }
       </SpotifyContext.Consumer>
-    </>
+    </Fragment>
   );
 }

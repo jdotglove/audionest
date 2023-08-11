@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Container, Card, Col, Row } from "react-bootstrap";
 
 import ArtistProvider from "../../providers/ArtistProvider";
@@ -44,14 +44,14 @@ export default function UserDetails() {
                                   >
                                     <ArtistContext.Consumer>
                                       {({ name: artistName }) => (
-                                        <>
+                                        <Fragment>
                                           {artistName}
                                           {artists.length - 1 > idx ? (
-                                            <>, </>
+                                            <Fragment>, </Fragment>
                                           ) : (
-                                            <> </>
+                                            <Fragment> </Fragment>
                                           )}{" "}
-                                        </>
+                                        </Fragment>
                                       )}
                                     </ArtistContext.Consumer>
                                   </ArtistProvider>

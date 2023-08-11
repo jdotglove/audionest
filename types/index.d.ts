@@ -35,7 +35,16 @@ export interface SpotifyProviderState {
 }
 
 export type PlaylistProviderState = {
-  tracks: any;
+  selectedTracks: any;
+  showPlaylistBuilder: boolean;
+};
+
+export type RecommendationProviderState = {
+  listOfSeedGenres: Array<Audionest.Track['genre']>;
+  recommendedTrackList: Array<any>;
+  selectedSeedArtists: Array<any>;
+  selectedSeedGenres: Array<string>;
+  selectedSeedTracks: Array<any>;
 };
 
 export type RecommendationProviderState = {

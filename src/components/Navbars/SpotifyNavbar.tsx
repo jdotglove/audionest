@@ -19,18 +19,19 @@ export default function SpotifyNavbar() {
               {/* Might need to avoid nesting routes so deep and prefix them instead */}
               <Navbar.Brand href="/">AudioNest</Navbar.Brand>
                 <Navbar.Text>
-                  Welcome, {user?.displayName}!
-                </Navbar.Text>
-              {/* {user?.images[0] && (
+                  Welcome, {user?.display_name}!
+                  {user?.images[0] && (
                 <Image
+                  className="mx-2"
                   src={user.images[0].url}
                   height={30}
                   width={30}
                   roundedCircle
-                  className="mx-2"
                   alt="Profile Picture"
                 />
-              )} */}
+              )}
+                </Navbar.Text>
+             
             </Container>
           </Navbar>
           <Navbar
@@ -43,20 +44,10 @@ export default function SpotifyNavbar() {
             <Container fluid>
               <Navbar.Brand href="/">AudioNest</Navbar.Brand>
               {isLoggedIn ? (
-                <Nav className="align-items-center">
+                <Nav>
                   <Navbar.Text>
-                    Welcome, {user.displayName}!
+                    Welcome, {user.display_name}!
                   </Navbar.Text>
-                  {/* {user.images[0] && (
-                    <Image
-                      src={user.images[0].url}
-                      height={30}
-                      width={30}
-                      roundedCircle
-                      className="mx-2"
-                      alt="Profile Picture"
-                    />
-                  )} */}
                 </Nav>
               ) : (
                 <div />

@@ -1,11 +1,6 @@
 import NextImage from "next/image";
 import React, { Fragment, useRef, useContext } from "react";
-import {
-  Image,
-  Button,
-  Card,
-  ListGroup,
-} from "react-bootstrap";
+import { Image, Button, Card, ListGroup, Row, Col } from "react-bootstrap";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -34,13 +29,10 @@ export default function RecommendationGenerator() {
   return (
     <Fragment>
       <RecommendationContext.Consumer>
-        {({
-          addSeedArtist,
-          addSeedTrack,
-        }) => (
+        {({ addSeedArtist, addSeedTrack }) => (
           <Fragment>
             <Card
-              className="mx-3 text-bg-light"
+              className="text-bg-light"
               style={{ width: "24rem", height: "20rem" }}
             >
               <Card.Title>
@@ -67,7 +59,7 @@ export default function RecommendationGenerator() {
                   </Button>
                 </div>
                 <div className="px-3">
-                  <h5>Search Results: (Top 3)</h5>
+                  <h5>Search Results: (Top 3 Matches)</h5>
                 </div>
               </Card.Title>
               <Card.Body className="overflow-scroll">
@@ -111,7 +103,7 @@ export default function RecommendationGenerator() {
               </Card.Body>
             </Card>
             <Card
-              className="mx-3 text-bg-light"
+              className="text-bg-light"
               style={{ width: "24rem", height: "20rem" }}
             >
               <Card.Title>
@@ -138,7 +130,7 @@ export default function RecommendationGenerator() {
                   </Button>
                 </div>
                 <div className="px-3">
-                  <h5>Search Results: (Top 3)</h5>
+                  <h5>Search Results: (Top 3 Matches)</h5>
                 </div>
               </Card.Title>
               <Card.Body className="overflow-scroll">

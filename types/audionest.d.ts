@@ -53,8 +53,9 @@ declare module Audionest {
   };
   export interface User extends SpotifyModel {
     country: string;
-    displayName: string;
+    display_name: string;
     email: string;
+    images: Array<any>
     playlists: Array<any>;
     topArtists: Array<any>;
     topTracks: Array<any>;
