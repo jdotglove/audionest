@@ -8,6 +8,7 @@ import ThemeColors from "../src/ThemeColors";
 import "../styles/scss/index.scss";
 import ChartProvider from "../src/providers/ChartProvider";
 import FontProvider from "../src/providers/FontProvider";
+import PlaylistProvider from "../src/providers/PlaylistProvider";
 
 export default function AudioNestApp({
   Component,
@@ -19,6 +20,7 @@ export default function AudioNestApp({
   return (
     <Provider store={store}>
       <SpotifyProvider>
+        <PlaylistProvider>
         <ChartProvider>
           <ThemeColors>
             <FontProvider>
@@ -33,6 +35,7 @@ export default function AudioNestApp({
             </FontProvider>
           </ThemeColors>
         </ChartProvider>
+        </PlaylistProvider>
       </SpotifyProvider>
     </Provider>
   );

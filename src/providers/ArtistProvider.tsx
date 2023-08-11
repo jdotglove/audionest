@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import axios from '../plugins/axios';
 import { ArtistProviderState, ArtistProviderProps } from '../../types';
@@ -41,7 +41,7 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
         }}
       >
         {/* @ts-ignore */}
-        <>{this.props.children}</>
+        <Fragment>{this.props.children}</Fragment>
       </ArtistContext.Provider>
     );
   }

@@ -16,7 +16,7 @@ export default function IntegrationHub() {
         <Container>
           <Row className="py-2">
             <Col>
-              <h1><span style={{ color: '#98611F' }}>Spotify</span> Integration</h1>
+              <h1><span style={{ color: '#98611F' }}>Spotify</span> Virtual Crate Digger</h1>
             </Col>
           </Row>
           <Row className="py-2" md={3}>
@@ -25,9 +25,9 @@ export default function IntegrationHub() {
                 <Button size="lg" onClick={async () => {
                   await authenticateSpotifyUser();
                 }}>Login</Button>
-                <Button size="lg" onClick={async () => {
+                {/* <Button size="lg" onClick={async () => {
                   await authenticateSpotifyUser(true);
-                }}>Create Account</Button>
+                }}>Create Account</Button> */}
               </div>
             </Col>
           </Row>

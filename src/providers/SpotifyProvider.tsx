@@ -1,5 +1,5 @@
 import axios from '../plugins/axios';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { getURLHash } from '../utils/spotify';
 import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
@@ -153,7 +153,6 @@ SpotifyProviderState
 
   setSelectedTracks = async (trackIdArray: Array<any>) => {
     const accessToken = SpotifyTokenCache.get('token');
-    console.log('Id Array: ', trackIdArray)
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
       method: 'get',
@@ -195,7 +194,7 @@ SpotifyProviderState
         }}
       >
         {/* @ts-ignore */}
-        <>{this.props.children}</>
+        <Fragment>{this.props.children}</Fragment>
       </SpotifyContext.Provider>
     );
   }

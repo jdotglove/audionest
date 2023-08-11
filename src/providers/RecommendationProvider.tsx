@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import axios from "../plugins/axios";
 import {
@@ -165,45 +165,11 @@ class RecommendationProvider extends React.Component<
     );
   };
 
-  playlistToSave = () => {
-    return this.state.recommendedTrackList.length > 0;
-  };
-
   clearSelectedSeeds = () => {
     this.setState({
       selectedSeedArtists: [],
       selectedSeedGenres: [],
     });
-  };
-
-  savePlaylist = async (
-    userId: string,
-    spotifyUserId: string,
-    playlistTitle: string,
-    playlistDescription: string
-  ) => {
-    try {
-      const accessToken = SpotifyTokenCache.get("token");
-      await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userId}/playlist?token=${accessToken}`,
-        method: "post",
-        headers: {
-          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({
-          spotifyId: spotifyUserId,
-          playlistName: playlistTitle,
-          playlistDescription,
-          publicPlaylist: false,
-          tracks: this.state.recommendedTrackList.map(
-            (trackObj) => trackObj.uri
-          ),
-        }),
-      });
-    } catch (error: any) {
-      console.error("ERROR: Could not save playlist", error);
-    }
   };
 
   componentDidMount = async () => {
@@ -222,27 +188,14 @@ class RecommendationProvider extends React.Component<
           handleGenreInputChange: (genre: string, checkboxObj: any) =>
             this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
-          playlistToSave: () => this.playlistToSave(),
           recommendedTrackList: this.state.recommendedTrackList,
-          savePlaylist: (
-            userId: string,
-            spotifyUserId: string,
-            playlistTitle: string,
-            playlistDescription: string
-          ) =>
-            this.savePlaylist(
-              userId,
-              spotifyUserId,
-              playlistTitle,
-              playlistDescription
-            ),
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,
         }}
       >
         {/* @ts-ignore */}
-        <>{this.props.children}</>
+        <Fragment>{this.props.children}</Fragment>
       </RecommendationContext.Provider>
     );
   }

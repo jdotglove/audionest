@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   ChartProviderState,
   SpotifyProviderProps,
@@ -108,7 +108,7 @@ ChartProviderState
         }}
       >
         {/* @ts-ignore */}
-        <>{this.props.children}</>
+        <Fragment>{this.props.children}</Fragment>
       </ChartContext.Provider>
     );
   }

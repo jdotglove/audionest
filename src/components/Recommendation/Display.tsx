@@ -1,103 +1,43 @@
-import React, { Fragment, useContext, useState, useRef } from "react";
+import React, { Fragment } from "react";
 import NextImage from "next/image";
-import { Button, Image, ListGroup, Row, Col, Card, Modal } from "react-bootstrap";
+import { Button, Image, ListGroup, Row, Col, Card } from "react-bootstrap";
 
 import placeholderImg from "../../../public/placeholder.png";
 import RecommendationContext from "../../contexts/RecommendationContext";
-import { parseUriForId } from "../../utils/spotify";
+import PlaylistContext from "../../contexts/PlaylistContext";
 
-export default function RecommendationDisplay({ user }) {
-  const playlistTitleInput = useRef(null);
-  const playlistDescriptionInput = useRef(null);
-  const userSpotifyId = parseUriForId(user.uri);
-  const [modelOpen, setModalOpen] = useState(false);
-  const { savePlaylist } = useContext(RecommendationContext);
-  const handleCloseModal = () => setModalOpen(false);
-  const handleOpenModal = () => setModalOpen(true);
-  const handleSave = () => {
-    const title = playlistTitleInput.current.value;
-    const description = playlistDescriptionInput.current.value;
-    handleCloseModal();
-    savePlaylist(user._id, userSpotifyId, title, description);
-  }
+export default function RecommendationDisplay() {
   return (
     <Fragment>
-      <Modal show={modelOpen} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Set Playlist Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row className="py-2">
-            <Col>
-              Playlist Title:{' '}
-              <input
-                type="text"
-                ref={playlistTitleInput}
-                aria-label="Playlist Title"
-                aria-describedby="playlist-title"
-              />
-            </Col>
-          </Row>
-          <Row className="py-2">
-            <Col>
-              Playlist Description:{' '}
-              <textarea
-                maxLength={150}
-                ref={playlistDescriptionInput}
-                aria-label="Playlist Title"
-                aria-describedby="playlist-title"
-              />
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
       <RecommendationContext.Consumer>
         {({
           atLeastOneSeedSelected,
           generateRecommendations,
           recommendedTrackList,
-          playlistToSave,
         }) => (
           <Fragment>
-            <Row className="pb-2">
+            <Row className="mx-2 pb-2">
               <Col>
                 <Button
-                  className="mx-3 mt-1"
+                  className="mt-1"
                   onClick={generateRecommendations}
                   disabled={!atLeastOneSeedSelected()}
                   variant={"light"}
                 >
-                  Generate New Playlist
+                  Generate Recommendations
                 </Button>
-
-                {playlistToSave() ? (
-                  <Button
-                    className="mx-3 mt-1"
-                    onClick={handleOpenModal}
-                    variant={"light"}
-                  >
-                    Save Playlist
-                  </Button>
-                ) : (
-                  <></>
-                )}
               </Col>
             </Row>
             <Card
-              style={{ width: "32rem", height: "32rem" }}
-              className="overflow-scroll"
+              style={{ width: "40rem", height: "32rem" }}
+              className="mx-2 overflow-scroll"
             >
               <ListGroup variant="flush">
                 {recommendedTrackList.map((track) => (
-                  <ListGroup.Item key={track.id}>
+                  <ListGroup.Item
+                    className="d-flex justify-content-between align-items-center"
+                    key={track.id}
+                  >
                     {track.album.images[0] ? (
                       <Image
                         src={track.album.images[0]?.url}
@@ -117,6 +57,16 @@ export default function RecommendationDisplay({ user }) {
                     <span className="px-2">
                       {track.name} - {track.artists[0].name}
                     </span>
+                    <PlaylistContext.Consumer>
+                      {({ addToPlaylistBuilder }) => (
+                        <Button
+                          variant="link"
+                          onClick={() => addToPlaylistBuilder(track)}
+                        >
+                          Add To Playlist
+                        </Button>
+                      )}
+                    </PlaylistContext.Consumer>
                   </ListGroup.Item>
                 ))}
               </ListGroup>

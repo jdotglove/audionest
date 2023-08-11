@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import axios from '../plugins/axios';
 import { TrackProviderState, TrackProviderProps } from '../../types';
@@ -81,7 +81,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
         }}
       >
         {/* @ts-ignore */}
-        <>{this.props.children}</>
+        <Fragment>{this.props.children}</Fragment>
       </TrackContext.Provider>
     );
   }

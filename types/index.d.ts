@@ -35,7 +35,8 @@ export interface SpotifyProviderState {
 }
 
 export type PlaylistProviderState = {
-  tracks: any;
+  selectedTracks: any;
+  showPlaylistBuilder: boolean;
 };
 
 export type RecommendationProviderState = {
