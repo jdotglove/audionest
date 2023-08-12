@@ -30,7 +30,7 @@ export default function RecommendationDisplay({ user }) {
                   Generate Recommendations
                 </Button>
               </Col>
-              <Col>
+              {/* <Col>
                 <Button
                   className="mt-1"
                   onClick={addToQueue}
@@ -39,7 +39,7 @@ export default function RecommendationDisplay({ user }) {
                 >
                   Add All To Queue
                 </Button>
-              </Col>
+              </Col> */}
             </Row>
             <Card
               style={{ width: "40rem", height: "32rem" }}
