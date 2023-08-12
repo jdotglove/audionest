@@ -52,6 +52,8 @@ class RecommendationProvider extends React.Component<
     this.state = {
       listOfSeedGenres: [],
       recommendedTrackList: [],
+      showQueueAlert: false,
+      queueAddResult: undefined,
       selectedSeedArtists: [],
       selectedSeedGenres: [],
       selectedSeedTracks: [],
@@ -81,7 +83,7 @@ class RecommendationProvider extends React.Component<
       });
       this.setState({ recommendedTrackList: [...response.data] });
     } catch (error: any) {
-      console.error("ERROR: Could not retrieve recommendation", error);
+      console.error("ERROR: Could not retrieve recommendation", error.message);
     }
   };
   getListOfSeedGenres = async () => {
@@ -97,7 +99,7 @@ class RecommendationProvider extends React.Component<
       });
       this.setState({ listOfSeedGenres: [...(response?.data || [])] });
     } catch (error: any) {
-      console.error("ERROR: Could not retrieve recommendation", error);
+      console.error("ERROR: Could not retrieve recommendation", error.message);
     }
   };
 
@@ -168,27 +170,64 @@ class RecommendationProvider extends React.Component<
   clearSelectedSeeds = () => {
     this.setState({
       selectedSeedArtists: [],
-      selectedSeedGenres: [],
+      selectedSeedTracks: [],
     });
   };
 
-  componentDidMount = async () => {
-    this.getListOfSeedGenres();
-  };
+  addToQueue = async (userSpotifyId: string, track: any) => {
+    try {
+      const accessToken = SpotifyTokenCache.get("token");
+      await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/queue?token=${accessToken}`,
+        method: "post",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          trackUri: track.uri,
+        }),
+      });
+      this.setState({
+        showQueueAlert: true,
+        queueAddResult: 'success',
+      });
+    } catch (error: any) {
+      console.error("ERROR: Could not add track to queue", error.message);
+      this.setState({
+        showQueueAlert: true,
+        queueAddResult: 'error',
+      })
+    }
+  }
+
+  dismissAddToQueueAlert = () => {
+    this.setState({
+      showQueueAlert: false,
+    });
+  }
+
+  // componentDidMount = async () => {
+  //   this.getListOfSeedGenres();
+  // };
   render() {
     return (
       <RecommendationContext.Provider
         value={{
+          addToQueue: (userSpotifyId: string, track: any) => this.addToQueue(userSpotifyId, track),
           addSeedArtist: (artistPayload: any) =>
             this.addSeedArtist(artistPayload),
           addSeedTrack: (trackPayload: any) => this.addSeedTrack(trackPayload),
           atLeastOneSeedSelected: () => this.atLeastOneSeedSelected(),
+          dismissAddToQueueAlert: () => this.dismissAddToQueueAlert(),
           clearSelectedSeeds: () => this.clearSelectedSeeds(),
           generateRecommendations: () => this.generateRecommendations(),
           handleGenreInputChange: (genre: string, checkboxObj: any) =>
             this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
+          queueAddResult: this.state.queueAddResult,
           recommendedTrackList: this.state.recommendedTrackList,
+          showQueueAlert: this.state.showQueueAlert,
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,

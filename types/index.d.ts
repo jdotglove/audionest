@@ -42,6 +42,8 @@ export type PlaylistProviderState = {
 export type RecommendationProviderState = {
   listOfSeedGenres: Array<Audionest.Track['genre']>;
   recommendedTrackList: Array<any>;
+  queueAddResult: string;
+  showQueueAlert: boolean;
   selectedSeedArtists: Array<any>;
   selectedSeedGenres: Array<string>;
   selectedSeedTracks: Array<any>;

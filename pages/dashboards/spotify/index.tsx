@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Row, Col, Container, Tabs, Tab, Alert, Button } from "react-bootstrap";
+import { Alert, Row, Col, Container, Tabs, Tab, Card, Button } from "react-bootstrap";
 
 import RecommendationDisplay from "../../../src/components/Recommendation/Display";
 import RecommendationGenerator from "../../../src/components/Recommendation/Generator";
@@ -56,64 +56,87 @@ export default function SpotifyDashboard() {
                       <Row>
                         <RecommendationContext.Consumer>
                           {({
+                            dismissAddToQueueAlert,
                             selectedSeedArtists,
                             selectedSeedTracks,
                             clearSelectedSeeds,
+                            showQueueAlert,
+                            queueAddResult,
                           }) => (
-                            <Alert key="seed-alert" variant="light">
-                              <Alert.Heading as="h5">
-                                Selected Seeds (Max 5 in total)
-                              </Alert.Heading>
-                              <div>
-                                Tracks:{" "}
-                                {selectedSeedTracks.map((trackObj, idx) => (
-                                  <Fragment key={trackObj.id}>
-                                    {trackObj.name}
-                                    {selectedSeedTracks[idx + 1] ? (
+                            <Card
+                              className="my-2"
+                              text="dark"
+                              bg="light"
+                              key="seed-alert"
+                            >
+                              <Card.Header>
+                                <h5>Selected Seeds (Max 5 in total)</h5>
+                              </Card.Header>
+                              <Card.Body>
+                                <div>
+                                  Tracks:{" "}
+                                  {selectedSeedTracks.map((trackObj, idx) => (
+                                    <Fragment key={trackObj.id}>
+                                      {trackObj.name}
+                                      {selectedSeedTracks[idx + 1] ? (
+                                        <Fragment>, </Fragment>
+                                      ) : (
+                                        <Fragment></Fragment>
+                                      )}
+                                    </Fragment>
+                                  ))}
+                                </div>
+                                Artists:{" "}
+                                {selectedSeedArtists.map((artistObj, idx) => (
+                                  <Fragment key={artistObj.id}>
+                                    {artistObj.name}
+                                    {selectedSeedArtists[idx + 1] ? (
                                       <Fragment>, </Fragment>
                                     ) : (
                                       <Fragment></Fragment>
                                     )}
                                   </Fragment>
                                 ))}
-                              </div>
-                              Artists:{" "}
-                              {selectedSeedArtists.map((artistObj, idx) => (
-                                <Fragment key={artistObj.id}>
-                                  {artistObj.name}
-                                  {selectedSeedArtists[idx + 1] ? (
-                                    <Fragment>, </Fragment>
-                                  ) : (
-                                    <Fragment></Fragment>
-                                  )}
-                                </Fragment>
-                              ))}
-                              <hr />
-                              <Row>
-                                <Col md={4}>
-                                  <Button
-                                    variant="danger"
-                                    onClick={clearSelectedSeeds}
-                                  >
-                                    Clear Seeds
-                                  </Button>
-                                </Col>
-                                <PlaylistContext.Consumer>
-                                  {({ toggleShowPlaylistBuilder }) => (
-                                    <Col md={{ span: 2, offset: 6 }}>
-                                      <Button
-                                        variant="dark"
-                                        onClick={() =>
-                                          toggleShowPlaylistBuilder(true)
-                                        }
-                                      >
-                                        View Playlist
-                                      </Button>
-                                    </Col>
-                                  )}
-                                </PlaylistContext.Consumer>
-                              </Row>
-                            </Alert>
+                              </Card.Body>
+                              <Card.Footer>
+                                <Row>
+                                  <Col md={4}>
+                                    <Button
+                                      variant="danger"
+                                      onClick={clearSelectedSeeds}
+                                    >
+                                      Clear Seeds
+                                    </Button>
+                                  </Col>
+                                  <PlaylistContext.Consumer>
+                                    {({ toggleShowPlaylistBuilder }) => (
+                                      <Col md={{ span: 2, offset: 6 }}>
+                                        <Button
+                                          variant="dark"
+                                          onClick={() =>
+                                            toggleShowPlaylistBuilder(true)
+                                          }
+                                        >
+                                          View Playlist
+                                        </Button>
+                                      </Col>
+                                    )}
+                                  </PlaylistContext.Consumer>
+                                </Row>
+                              </Card.Footer>
+                              <Alert
+                                show={showQueueAlert}
+                                variant={queueAddResult}
+                                onClose={() => dismissAddToQueueAlert()}
+                                dismissible
+                              >
+                                {queueAddResult === 'success' ? (
+                                  <div>Added To Queue!</div>) : (
+                                    <div>Error Adding To Queue</div>
+                                  )
+                                }
+                              </Alert>
+                            </Card>
                           )}
                         </RecommendationContext.Consumer>
                       </Row>
@@ -122,7 +145,7 @@ export default function SpotifyDashboard() {
                           <RecommendationGenerator />
                         </Col>
                         <Col>
-                          <RecommendationDisplay />
+                          <RecommendationDisplay user={user} />
                         </Col>
                       </Row>
                       <RecommendationSelection user={user} />
