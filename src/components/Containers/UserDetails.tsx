@@ -19,9 +19,8 @@ export default function UserDetails() {
                 <div>
                   <h3>Here are your current top tracks</h3>
                   <Card
-                    className="overflow-scroll"
+                    className="overflow-scroll top-tracks-card"
                     bg="light"
-                    style={{ height: "24rem", width: "32rem" }}
                   >
                     <Card.Header
                       className={styles["playlist-track-container-header"]}
@@ -71,7 +70,7 @@ export default function UserDetails() {
                 <div>
                   <h3>Here are your current top artists</h3>
                   <Card
-                    className="overflow-scroll"
+                    className="overflow-scroll top-tracks-card"
                     bg="light"
                     style={{ height: "24rem", width: "32rem" }}
                   >

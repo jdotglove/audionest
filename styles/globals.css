@@ -1,53 +1,27 @@
-.verb-iframe {
-  width: 100%;
-}
-
-.welcome-svg-path-triangle {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 1000;
-  animation: dash 5s linear alternate infinite;
-}
-
-@keyframes dash {
-  from {
-    stroke-dashoffset: 1000;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@media only screen and (min-width: 350px) { 
-  .verb-iframe {
-    height: 320px;
-  }
+/* Medium to small devices (landscape tablets, 768px and down) */
+@media only screen and (max-width: 768px) { 
   .navbar-desktop {
     display: none;
   }
-}
-@media only screen and (min-width: 768px) { 
-  .verb-iframe {
-    height: 500px;
+  .top-tracks-card {
+    max-height: 24rem;
+    max-width: 20rem;
   }
-  .navbar-desktop {
-    display: none;
+  .top-artists-card {
+    max-height: 24rem;
+    max-width: 20rem;
   }
 }
 
-@media screen and (min-width: 992px) { 
-  .verb-iframe {
-    height: 650px;
-  }
+/* Large devices (laptops/desktops, 992px and up) */
+@media screen and (min-width: 992px) {
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  .verb-iframe {
-    height: 750px;
-    width: 80%;
-  }
-
-  .verb-iframe-row {
-    text-align: center;
+  .top-tracks-card {
+    max-height: 24rem;
+    max-width: 32rem;
   }
 }
+
