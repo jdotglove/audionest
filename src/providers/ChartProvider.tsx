@@ -4,7 +4,7 @@ import {
   SpotifyProviderProps,
 } from '../../types';
 import ChartContext from '../contexts/ChartContext';
-import { SpotifyTokenCache, TrackStatisticsCache } from '../cache';
+import { SpotifyCache, TrackStatisticsCache } from '../cache';
 import axios from '../plugins/axios';
 
 class ChartProvider extends React.Component<
@@ -24,7 +24,7 @@ ChartProviderState
       return cacheValue;
     }
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackSpotifyId}/audio-features?token=${accessToken}`,
         method: 'get',

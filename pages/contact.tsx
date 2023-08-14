@@ -29,14 +29,14 @@ export default function Contact() {
             <div>
               <strong>Links: </strong>
               <ul>
-                <a href="https://www.linkedin.com/in/jarod-glover-47b944129/">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/jarod-glover/">LinkedIn</a>
               </ul>
               <ul>
                 <a href="https://github.com/jdotglove">Github</a>
               </ul>
-              <ul>
+              {/* <ul>
                 <a href="https://leetcode.com/jdotglove/">LeetCode</a>
-              </ul>
+              </ul> */}
             </div>
           </Col>
         </Row>

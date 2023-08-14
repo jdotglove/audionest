@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import axios from '../plugins/axios';
 import { ArtistProviderState, ArtistProviderProps } from '../../types';
-import { SpotifyTokenCache } from '../cache';
+import { SpotifyCache } from '../cache';
 import ArtistContext from '../contexts/ArtistContext'
 
 class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProviderState> {
@@ -20,7 +20,7 @@ class ArtistProvider extends React.Component<ArtistProviderProps, ArtistProvider
   }
 
   async componentDidMount() {
-    const accessToken = SpotifyTokenCache.get('token');
+    const accessToken = SpotifyCache.get('token');
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${this.state.artistId}?token=${accessToken}`,
       method: 'get',

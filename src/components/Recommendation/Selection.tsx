@@ -82,7 +82,7 @@ export default function RecommendationSelection({ user }) {
               show={showPlaylistBuilder}
               onHide={() => toggleShowPlaylistBuilder(false)}
             >
-              <Offcanvas.Header closeButton>
+              <Offcanvas.Header closeButton closeVariant="white">
                 <Offcanvas.Title>Playlist Builder</Offcanvas.Title>
                 {selectedTracks.length > 0 ? (
                   <Button onClick={handleOpenModal} variant="success">

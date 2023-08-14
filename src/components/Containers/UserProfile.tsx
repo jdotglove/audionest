@@ -8,7 +8,7 @@ import TrackContext from "../../contexts/TrackContext";
 import SpotifyContext from "../../contexts/SpotifyContext";
 import styles from "../../../styles/StatisticsSection.module.css";
 
-export default function UserDetails() {
+export default function UserProfile() {
   return (
     <SpotifyContext.Consumer>
       {({ topTracks, topArtists }) => (
@@ -21,6 +21,7 @@ export default function UserDetails() {
                   <Card
                     className="overflow-scroll top-tracks-card"
                     bg="light"
+                    style={{ height: "24rem", width: "32rem" }}
                   >
                     <Card.Header
                       className={styles["playlist-track-container-header"]}
@@ -70,7 +71,7 @@ export default function UserDetails() {
                 <div>
                   <h3>Here are your current top artists</h3>
                   <Card
-                    className="overflow-scroll top-tracks-card"
+                    className="overflow-scroll top-artists-card"
                     bg="light"
                     style={{ height: "24rem", width: "32rem" }}
                   >

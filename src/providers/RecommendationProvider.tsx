@@ -5,7 +5,7 @@ import {
   RecommendationProviderState,
   RecommendationProviderProps,
 } from "../../types";
-import { SpotifyTokenCache } from "../cache";
+import { SpotifyCache } from "../cache";
 import RecommendationContext from "../contexts/RecommendationContext";
 
 const recommendationsConfigConstants = {
@@ -57,12 +57,13 @@ class RecommendationProvider extends React.Component<
       selectedSeedArtists: [],
       selectedSeedGenres: [],
       selectedSeedTracks: [],
+      showSeedSearch: false,
     };
   }
 
   generateRecommendations = async () => {
     try {
-      const accessToken = SpotifyTokenCache.get("token");
+      const accessToken = SpotifyCache.get("token");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/recommendations?token=${accessToken}`,
         method: "post",
@@ -88,7 +89,7 @@ class RecommendationProvider extends React.Component<
   };
   getListOfSeedGenres = async () => {
     try {
-      const accessToken = SpotifyTokenCache.get("token");
+      const accessToken = SpotifyCache.get("token");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/recommendations/seed-genres?token=${accessToken}`,
         method: "get",
@@ -176,7 +177,7 @@ class RecommendationProvider extends React.Component<
 
   addToQueue = async (userSpotifyId: string, track: any) => {
     try {
-      const accessToken = SpotifyTokenCache.get("token");
+      const accessToken = SpotifyCache.get("token");
       await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/queue?token=${accessToken}`,
         method: "post",
@@ -207,9 +208,11 @@ class RecommendationProvider extends React.Component<
     });
   }
 
-  // componentDidMount = async () => {
-  //   this.getListOfSeedGenres();
-  // };
+  toggleShowSeedSearch = (newDisplayValue: boolean) => {
+    this.setState({
+      showSeedSearch: newDisplayValue,
+    });
+  };
   render() {
     return (
       <RecommendationContext.Provider
@@ -228,9 +231,12 @@ class RecommendationProvider extends React.Component<
           queueAddResult: this.state.queueAddResult,
           recommendedTrackList: this.state.recommendedTrackList,
           showQueueAlert: this.state.showQueueAlert,
+          showSeedSearch: this.state.showSeedSearch,
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,
+          toggleShowSeedSearch: (newDisplayValue: boolean) => this.toggleShowSeedSearch(newDisplayValue),
+
         }}
       >
         {/* @ts-ignore */}

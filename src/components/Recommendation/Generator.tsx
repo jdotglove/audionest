@@ -1,178 +1,133 @@
 import NextImage from "next/image";
 import React, { Fragment, useRef, useContext } from "react";
-import { Image, Button, Card, ListGroup, Row, Col } from "react-bootstrap";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
+import { Alert, Button, Card, Container, Row, Col } from "react-bootstrap";
 
-import placeholderImg from "../../../public/placeholder.png";
-import SpotifyContext from "../../contexts/SpotifyContext";
+import RecommendationSeedSearch from "./SeedSearch";
+import RecommendationSelection from "./Selection";
+import RecommendationDisplay from "./Display";
+import RecommendationProvider from "../../providers/RecommendationProvider";
 import RecommendationContext from "../../contexts/RecommendationContext";
+import PlaylistContext from "../../contexts/PlaylistContext";
+import SpotifyContext from "../../contexts/SpotifyContext";
 
 export default function RecommendationGenerator() {
-  const spotifyContext = useContext(SpotifyContext);
-  const searchArtistInput = useRef(null);
-  const searchTrackInput = useRef(null);
-
-  const handleSearchArtists = () => {
-    const searchValue = searchArtistInput.current.value;
-    if (searchValue !== "") {
-      spotifyContext.searchItems("artist", searchValue);
-    }
-  };
-  const handleSearchTracks = () => {
-    const searchValue = searchTrackInput.current.value;
-    if (searchValue !== "") {
-      spotifyContext.searchItems("track", searchValue);
-    }
-  };
-
   return (
     <Fragment>
-      <RecommendationContext.Consumer>
-        {({ addSeedArtist, addSeedTrack }) => (
-          <Fragment>
-            <Card
-              className="text-bg-light"
-              style={{ width: "24rem", height: "20rem" }}
-            >
-              <Card.Title>
-                <h2 className="px-3 text-black">Seed Artists</h2>
-                <div className="px-3 input-group mb-3">
-                  <span
-                    className="text-black input-group-text"
-                    id="search-artists"
-                  >
-                    <SearchIcon />
-                  </span>
-                  <input
-                    type="text"
-                    ref={searchArtistInput}
-                    aria-label="Search Artists"
-                    aria-describedby="search-artists"
-                  />
-                  <Button
-                    type="button"
-                    className="btn btn-primary px-1 mx-1"
-                    onClick={handleSearchArtists}
-                  >
-                    Search
-                  </Button>
-                </div>
-                <div className="px-3">
-                  <h5>Search Results: (Top 3 Matches)</h5>
-                </div>
-              </Card.Title>
-              <Card.Body className="overflow-scroll">
-                <SpotifyContext.Consumer>
-                  {({ artistSearchResults }) => (
-                    <ListGroup variant="flush">
-                      {artistSearchResults.map((artist) => (
-                        <div
-                          key={artist.id}
-                          onClick={() => addSeedArtist(artist)}
-                        >
-                          <ListGroup.Item
-                            action
-                            variant="light"
-                            className="d-flex justify-content-between align-items-center"
-                          >
-                            {artist.images[0] ? (
-                              <Image
-                                src={artist.images[0]?.url}
-                                height={55}
-                                width={55}
-                                roundedCircle
-                                alt="Artist Profile Picture"
-                              />
-                            ) : (
-                              <NextImage
-                                src={placeholderImg}
-                                height={55}
-                                width={55}
-                                alt="Default Artist Profile Picture"
-                              />
-                            )}
-                            {artist.name}
-                            <AddIcon />
-                          </ListGroup.Item>
+      <SpotifyContext.Consumer>
+        {({ isLoggedIn, user }) =>
+          !isLoggedIn ? (
+            <Container>
+              <Row>
+                <Col className="pt-3"></Col>
+              </Row>
+            </Container>
+          ) : (
+            <RecommendationProvider>
+              <Row>
+                <RecommendationContext.Consumer>
+                  {({
+                    dismissAddToQueueAlert,
+                    selectedSeedArtists,
+                    selectedSeedTracks,
+                    clearSelectedSeeds,
+                    showQueueAlert,
+                    queueAddResult,
+                    toggleShowSeedSearch,
+                  }) => (
+                    <Card
+                      className="my-2"
+                      text="dark"
+                      bg="light"
+                      key="seed-alert"
+                    >
+                      <Card.Header>
+                        <h5>Selected Seeds (Max 5 in total)</h5>
+                      </Card.Header>
+                      <Card.Body>
+                        <div>
+                          Tracks:{" "}
+                          {selectedSeedTracks.map((trackObj, idx) => (
+                            <Fragment key={trackObj.id}>
+                              {trackObj.name}
+                              {selectedSeedTracks[idx + 1] ? (
+                                <Fragment>, </Fragment>
+                              ) : (
+                                <Fragment></Fragment>
+                              )}
+                            </Fragment>
+                          ))}
                         </div>
-                      ))}
-                    </ListGroup>
-                  )}
-                </SpotifyContext.Consumer>
-              </Card.Body>
-            </Card>
-            <Card
-              className="text-bg-light"
-              style={{ width: "24rem", height: "20rem" }}
-            >
-              <Card.Title>
-                <h2 className="px-3 text-black">Seed Tracks</h2>
-                <div className="px-3 input-group mb-3">
-                  <span
-                    className="text-black input-group-text"
-                    id="search-tracks"
-                  >
-                    <SearchIcon />
-                  </span>
-                  <input
-                    type="text"
-                    ref={searchTrackInput}
-                    aria-label="Search Tracks"
-                    aria-describedby="search-tracks"
-                  />
-                  <Button
-                    type="button"
-                    className="btn btn-primary px-1 mx-1"
-                    onClick={handleSearchTracks}
-                  >
-                    Search
-                  </Button>
-                </div>
-                <div className="px-3">
-                  <h5>Search Results: (Top 3 Matches)</h5>
-                </div>
-              </Card.Title>
-              <Card.Body className="overflow-scroll">
-                <SpotifyContext.Consumer>
-                  {({ trackSearchResults }) => (
-                    <ListGroup variant="flush">
-                      {trackSearchResults.map((track) => (
-                        <div key={track.id} onClick={() => addSeedTrack(track)}>
-                          <ListGroup.Item
-                            action
-                            variant="light"
-                            className="d-flex justify-content-between align-items-center"
-                          >
-                            {track.album.images[0] ? (
-                              <Image
-                                src={track.album.images[0]?.url}
-                                height={55}
-                                width={55}
-                                roundedCircle
-                                alt="Track Album Picture"
-                              />
+                        Artists:{" "}
+                        {selectedSeedArtists.map((artistObj, idx) => (
+                          <Fragment key={artistObj.id}>
+                            {artistObj.name}
+                            {selectedSeedArtists[idx + 1] ? (
+                              <Fragment>, </Fragment>
                             ) : (
-                              <NextImage
-                                src={placeholderImg}
-                                height={55}
-                                width={55}
-                                alt="Default Album Profile Picture"
-                              />
+                              <Fragment></Fragment>
                             )}
-                            {track.name} - {track.artists[0].name}
-                            <AddIcon />
-                          </ListGroup.Item>
-                        </div>
-                      ))}
-                    </ListGroup>
+                          </Fragment>
+                        ))}
+                      </Card.Body>
+                      <Card.Footer>
+                        <Row>
+                          <Col md={4}>
+                            <Button
+                              variant="primary"
+                              onClick={() => toggleShowSeedSearch(true)}
+                            >
+                              Add Seeds
+                            </Button>{" "}
+                            <Button
+                              variant="danger"
+                              onClick={clearSelectedSeeds}
+                            >
+                              Clear Seeds
+                            </Button>
+                          </Col>
+                          <PlaylistContext.Consumer>
+                            {({ toggleShowPlaylistBuilder }) => (
+                              <Col md={{ span: 2, offset: 6 }}>
+                                <Button
+                                  variant="dark"
+                                  onClick={() =>
+                                    toggleShowPlaylistBuilder(true)
+                                  }
+                                >
+                                  View Playlist
+                                </Button>
+                              </Col>
+                            )}
+                          </PlaylistContext.Consumer>
+                        </Row>
+                      </Card.Footer>
+                      <Alert
+                        show={showQueueAlert}
+                        variant={queueAddResult}
+                        onClose={() => dismissAddToQueueAlert()}
+                        dismissible
+                      >
+                        {queueAddResult === "success" ? (
+                          <div>Added To Queue!</div>
+                        ) : (
+                          <div>Error Adding To Queue</div>
+                        )}
+                      </Alert>
+                    </Card>
                   )}
-                </SpotifyContext.Consumer>
-              </Card.Body>
-            </Card>
-          </Fragment>
-        )}
-      </RecommendationContext.Consumer>
+                </RecommendationContext.Consumer>
+              </Row>
+              <RecommendationSeedSearch />
+              <Row>
+                <Col>
+                  <RecommendationDisplay user={user} />
+                </Col>
+              </Row>
+              <RecommendationSelection user={user} />
+            </RecommendationProvider>
+          )
+        }
+      </SpotifyContext.Consumer>
     </Fragment>
   );
 }

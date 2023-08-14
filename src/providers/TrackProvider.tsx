@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import axios from '../plugins/axios';
 import { TrackProviderState, TrackProviderProps } from '../../types';
-import { SpotifyTokenCache } from '../cache';
+import { SpotifyCache } from '../cache';
 import TrackContext from '../contexts/TrackContext'
 
 class TrackProvider extends React.Component<TrackProviderProps, TrackProviderState> {
@@ -40,7 +40,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
 
   async componentDidMount() {
     // @ts-ignore
-    const accessToken = SpotifyTokenCache.get('token');
+    const accessToken = SpotifyCache.get('token');
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${this.state.trackId}?token=${accessToken}`,
       method: 'get',
@@ -54,7 +54,7 @@ class TrackProvider extends React.Component<TrackProviderProps, TrackProviderSta
   
   getTrackArtist = async (artistId: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${artistId}?token=${accessToken}`,
         method: 'get',
