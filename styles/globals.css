@@ -5,14 +5,17 @@
   }
   .top-tracks-card {
     max-height: 24rem;
-    max-width: 20rem;
+    max-width: 32rem;
   }
   .top-artists-card {
     max-height: 24rem;
-    max-width: 20rem;
+    max-width: 32rem;
   }
 }
 
+.nav-tabs .nav-link.active {
+  color: white !important;
+}
 /* Large devices (laptops/desktops, 992px and up) */
 @media screen and (min-width: 992px) {
 }
@@ -20,6 +23,10 @@
 /* X-Large devices (large desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
   .top-tracks-card {
+    max-height: 24rem;
+    max-width: 32rem;
+  }
+  .top-artists-card {
     max-height: 24rem;
     max-width: 32rem;
   }

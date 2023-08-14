@@ -16,6 +16,8 @@ const RecommendationContext = createContext({
   selectedSeedArtists: [] as Array<any>,
   selectedSeedGenres: [] as Array<string>,
   selectedSeedTracks: [] as Array<any>,
+  showSeedSearch: undefined,
+  toggleShowSeedSearch: undefined,
 });
 
 export default RecommendationContext;

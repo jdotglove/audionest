@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import axios from "../plugins/axios";
 import { PlaylistProviderState, PlaylistProviderProps } from "../../types";
-import { SpotifyTokenCache } from "../cache";
+import { SpotifyCache } from "../cache";
 import PlaylistContext from "../contexts/PlaylistContext";
 
 class PlaylistProvider extends React.Component<
@@ -37,7 +37,7 @@ class PlaylistProvider extends React.Component<
 
   getPlaylistTracks = async (playlistSpotifyId: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get("token");
+      const accessToken = SpotifyCache.get("token");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistSpotifyId}/tracks?token=${accessToken}`,
         method: "get",
@@ -61,7 +61,7 @@ class PlaylistProvider extends React.Component<
     playlistDescription: string
   ) => {
     try {
-      const accessToken = SpotifyTokenCache.get("token");
+      const accessToken = SpotifyCache.get("token");
       await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playlist?token=${accessToken}`,
         method: "post",

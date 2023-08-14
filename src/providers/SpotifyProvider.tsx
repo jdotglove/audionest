@@ -5,7 +5,7 @@ import { getURLHash } from '../utils/spotify';
 import { SpotifyProviderProps, SpotifyProviderState } from '../../types';
 import SpotifyContext from '../contexts/SpotifyContext';
 import { authenticateSpotify } from '../middleware/spotify';
-import { SpotifyTokenCache } from '../cache';
+import { SpotifyCache } from '../cache';
 // credentials are optional
 
 class SpotifyProvider extends React.Component<
@@ -22,6 +22,7 @@ SpotifyProviderState
       isLoggedIn: false,
       playlists: [],
       user: null,
+      seenInfoModal: false,
       token: '',
       topTracks: [],
       topArtists: [],
@@ -33,7 +34,7 @@ SpotifyProviderState
     // @ts-ignore
     let accessToken = (await getURLHash()).access_token;
     if (!accessToken) {
-      accessToken = SpotifyTokenCache.get('token');
+      accessToken = SpotifyCache.get('token');
     }
     if (accessToken && !this.state.isLoggedIn) {
       await this.login(accessToken);
@@ -41,7 +42,7 @@ SpotifyProviderState
   }
 
   login = async (accessToken: string) => {
-    SpotifyTokenCache.set('token', accessToken);
+    SpotifyCache.set('token', accessToken);
     try {
       const fetchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/login?token=${accessToken}`;
       const response = await axios({
@@ -67,7 +68,7 @@ SpotifyProviderState
 
   loadUserTopArtists = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-artists?token=${accessToken}`,
         method: 'get',
@@ -84,7 +85,7 @@ SpotifyProviderState
 
   loadUserTopTracks = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-tracks?token=${accessToken}`,
         method: 'get',
@@ -101,7 +102,7 @@ SpotifyProviderState
 
   loadUserPlaylists = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playlists?token=${accessToken}`,
         method: 'get',
@@ -118,7 +119,7 @@ SpotifyProviderState
 
   searchItems = async (searchType: string, searchValue: string) => {
     try {
-      const accessToken = SpotifyTokenCache.get('token');
+      const accessToken = SpotifyCache.get('token');
       let searchUrl = '';
       if (searchType === 'artist') {
         searchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/search?token=${accessToken}`;
@@ -152,7 +153,7 @@ SpotifyProviderState
   };
 
   setSelectedTracks = async (trackIdArray: Array<any>) => {
-    const accessToken = SpotifyTokenCache.get('token');
+    const accessToken = SpotifyCache.get('token');
     const response = await axios({
       url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track?token=${accessToken}&ids=${trackIdArray.join(',')}`,
       method: 'get',
@@ -165,8 +166,22 @@ SpotifyProviderState
       currentSelectedTracks: response.data,
     });
   };
+  checkIfSeenInfoModal = () => {
+    const infoModalSeen = sessionStorage.getItem("seenInfoModal");
+    if (infoModalSeen === 'true') {
+      return true;
+    }
+    return this.state.seenInfoModal;
+  }
 
-  authenticateSpotifyUser = async (newUser: boolean) => {
+  acknowledgeInfoModal = () => {
+    sessionStorage.setItem("seenInfoModal", "true");
+    this.setState({
+      seenInfoModal: true,
+    });
+  }
+  
+  authenticateSpotifyUser = async () => {
     const token = await authenticateSpotify() ;
     this.setState({
       token: token,
@@ -178,6 +193,8 @@ SpotifyProviderState
         value={{
           artistSearchResults: this.state.artistSearchResults,
           authenticateSpotifyUser: this.authenticateSpotifyUser,
+          acknowledgeInfoModal: () => this.acknowledgeInfoModal(),
+          checkIfSeenInfoModal: () => this.checkIfSeenInfoModal(),
           currentSelectedPlaylist: this.state.currentSelectedPlaylist,
           currentSelectedTracks: this.state.currentSelectedTracks,
           isLoggedIn: this.state.isLoggedIn,

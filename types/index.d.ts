@@ -28,6 +28,7 @@ export interface SpotifyProviderState {
   isLoggedIn: boolean;
   playlists: Array<any>;
   user: Audionest.User;
+  seenInfoModal: boolean;
   token: any;
   topArtists: Array<any>;
   topTracks: Array<any>;
@@ -47,6 +48,7 @@ export type RecommendationProviderState = {
   selectedSeedArtists: Array<any>;
   selectedSeedGenres: Array<string>;
   selectedSeedTracks: Array<any>;
+  showSeedSearch: boolean;
 };
 
 export type RecommendationProviderState = {
