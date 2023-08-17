@@ -7,6 +7,7 @@ import {
 } from "../../types";
 import { SpotifyCache } from "../cache";
 import RecommendationContext from "../contexts/RecommendationContext";
+import { authenticateSpotify } from "../middleware/spotify";
 
 const recommendationsConfigConstants = {
   limit: 10,
@@ -50,20 +51,45 @@ class RecommendationProvider extends React.Component<
   ) {
     super(props);
     this.state = {
+      currentTrackBreakdown: undefined,
       listOfSeedGenres: [],
       recommendedTrackList: [],
       showQueueAlert: false,
+      showSeedAlert: false,
       queueAddResult: undefined,
+      seedAddResult: undefined,
       selectedSeedArtists: [],
       selectedSeedGenres: [],
       selectedSeedTracks: [],
       showSeedSearch: false,
+      targetAudioFeaturesMap: undefined,
+      authorizationError: false,
+      noVibesAlert: false,
     };
   }
 
   generateRecommendations = async () => {
     try {
       const accessToken = SpotifyCache.get("token");
+      let targetFeaturePayload = {};
+      if (this.state.targetAudioFeaturesMap) {
+        Object.keys(this.state.targetAudioFeaturesMap).forEach(
+          (featureLabel) => {
+            targetFeaturePayload[`target_${featureLabel}`] =
+              this.state.targetAudioFeaturesMap[featureLabel];
+          }
+        );
+      }
+      const recommendationPayload = {
+        ...recommendationsConfigConstants,
+        seed_artists: this.state.selectedSeedArtists.map(
+          (artistObj) => artistObj.id
+        ),
+        seed_genres: this.state.selectedSeedGenres,
+        seed_tracks: this.state.selectedSeedTracks.map(
+          (trackObj) => trackObj.id
+        ),
+      };
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/recommendations?token=${accessToken}`,
         method: "post",
@@ -71,20 +97,21 @@ class RecommendationProvider extends React.Component<
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           "Content-Type": "application/json",
         },
-        data: JSON.stringify({
-          ...recommendationsConfigConstants,
-          seed_artists: this.state.selectedSeedArtists.map(
-            (artistObj) => artistObj.id
-          ),
-          seed_genres: this.state.selectedSeedGenres,
-          seed_tracks: this.state.selectedSeedTracks.map(
-            (trackObj) => trackObj.id
-          ),
-        }),
+        data: JSON.stringify(recommendationPayload),
       });
       this.setState({ recommendedTrackList: [...response.data] });
     } catch (error: any) {
-      console.error("ERROR: Could not retrieve recommendation", error.message);
+      if (error.response?.status === 401) {
+        // this.setState({
+        //   authorizationError: true,
+        // });
+        await authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve recommendation",
+          error.response?.statusText || error.message
+        );
+      }
     }
   };
   getListOfSeedGenres = async () => {
@@ -100,7 +127,17 @@ class RecommendationProvider extends React.Component<
       });
       this.setState({ listOfSeedGenres: [...(response?.data || [])] });
     } catch (error: any) {
-      console.error("ERROR: Could not retrieve recommendation", error.message);
+      if (error.response?.status === 401) {
+        // this.setState({
+        //   authorizationError: true,
+        // });
+        await authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve recommendation",
+          error.response?.statusText || error.message
+        );
+      }
     }
   };
 
@@ -124,15 +161,26 @@ class RecommendationProvider extends React.Component<
   };
 
   addSeedArtist = (artistPayload: any) => {
-    if (this.maxSeedCapacityReached()) {
-      return;
-    }
-    if (!this.state.selectedSeedArtists.includes(artistPayload.id)) {
+    if (
+      !this.maxSeedCapacityReached() &&
+      !this.state.selectedSeedArtists.find(
+        (selectedArtist) => selectedArtist.id === artistPayload.id
+      )
+    ) {
       this.setState({
         selectedSeedArtists: [
           ...this.state.selectedSeedArtists,
           { id: artistPayload.id, name: artistPayload.name },
         ],
+      });
+      this.setState({
+        showSeedAlert: true,
+        seedAddResult: "success",
+      });
+    } else {
+      this.setState({
+        showSeedAlert: true,
+        seedAddResult: "danger",
       });
     }
   };
@@ -157,6 +205,10 @@ class RecommendationProvider extends React.Component<
           { id: trackPayload.id, name: trackPayload.name },
         ],
       });
+      this.setState({
+        showSeedAlert: true,
+        seedAddResult: "success",
+      });
     }
   };
 
@@ -175,6 +227,66 @@ class RecommendationProvider extends React.Component<
     });
   };
 
+  retrieveCurrentTrackBreakdown = async (userSpotifyId: string) => {
+    try {
+      const accessToken = SpotifyCache.get("token");
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playback-state?token=${accessToken}`,
+        method: "get",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+      });
+      this.setState({
+        currentTrackBreakdown: { ...response.data },
+        noVibesAlert: false,
+      });
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        // this.setState({
+        //   authorizationError: true,
+        // });
+        await authenticateSpotify();
+      } else if (error.response?.status === 404) {
+        this.setState({
+          noVibesAlert: true,
+        });
+      } else {
+        console.error(
+          "ERROR: Could not retrieve playback state",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  };
+
+  generateSimilarVibes = async (currentTrack: any, chartData: any) => {
+    try {
+      this.addSeedTrack(currentTrack);
+      let audioFeatureMap = {};
+      chartData.labels.forEach((label, idx) => {
+        audioFeatureMap[label] = chartData.datasets[0].data[idx];
+      });
+      this.setState({
+        targetAudioFeaturesMap: { ...audioFeatureMap },
+      });
+      await this.generateRecommendations();
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        // this.setState({
+        //   authorizationError: true,
+        // });
+        await authenticateSpotify();
+      } else {
+        console.error(
+          "Error generating similar vibes: ",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  };
+
   addToQueue = async (userSpotifyId: string, track: any) => {
     try {
       const accessToken = SpotifyCache.get("token");
@@ -191,22 +303,38 @@ class RecommendationProvider extends React.Component<
       });
       this.setState({
         showQueueAlert: true,
-        queueAddResult: 'success',
+        queueAddResult: "success",
       });
     } catch (error: any) {
-      console.error("ERROR: Could not add track to queue", error.message);
-      this.setState({
-        showQueueAlert: true,
-        queueAddResult: 'error',
-      })
+      if (error.response?.status === 401) {
+        // this.setState({
+        //   authorizationError: true,
+        // });
+        await authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not add track to queue",
+          error.response?.statusText || error.message
+        );
+        this.setState({
+          showQueueAlert: true,
+          queueAddResult: "danger",
+        });
+      }
     }
-  }
+  };
 
   dismissAddToQueueAlert = () => {
     this.setState({
       showQueueAlert: false,
     });
-  }
+  };
+
+  dismissAddSeedAlert = () => {
+    this.setState({
+      showSeedAlert: false,
+    });
+  };
 
   toggleShowSeedSearch = (newDisplayValue: boolean) => {
     this.setState({
@@ -217,26 +345,37 @@ class RecommendationProvider extends React.Component<
     return (
       <RecommendationContext.Provider
         value={{
-          addToQueue: (userSpotifyId: string, track: any) => this.addToQueue(userSpotifyId, track),
+          addToQueue: (userSpotifyId: string, track: any) =>
+            this.addToQueue(userSpotifyId, track),
           addSeedArtist: (artistPayload: any) =>
             this.addSeedArtist(artistPayload),
           addSeedTrack: (trackPayload: any) => this.addSeedTrack(trackPayload),
           atLeastOneSeedSelected: () => this.atLeastOneSeedSelected(),
           dismissAddToQueueAlert: () => this.dismissAddToQueueAlert(),
+          dismissAddSeedAlert: () => this.dismissAddSeedAlert(),
           clearSelectedSeeds: () => this.clearSelectedSeeds(),
+          currentTrackBreakdown: this.state.currentTrackBreakdown,
           generateRecommendations: () => this.generateRecommendations(),
+          generateSimilarVibes: (currentTrack: any, chartData: any) =>
+            this.generateSimilarVibes(currentTrack, chartData),
           handleGenreInputChange: (genre: string, checkboxObj: any) =>
             this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
           queueAddResult: this.state.queueAddResult,
+          seedAddResult: this.state.seedAddResult,
           recommendedTrackList: this.state.recommendedTrackList,
+          retrieveCurrentTrackBreakdown: (userSpotifyId: string) =>
+            this.retrieveCurrentTrackBreakdown(userSpotifyId),
           showQueueAlert: this.state.showQueueAlert,
+          showSeedAlert: this.state.showSeedAlert,
           showSeedSearch: this.state.showSeedSearch,
           selectedSeedArtists: this.state.selectedSeedArtists,
           selectedSeedGenres: this.state.selectedSeedGenres,
           selectedSeedTracks: this.state.selectedSeedTracks,
-          toggleShowSeedSearch: (newDisplayValue: boolean) => this.toggleShowSeedSearch(newDisplayValue),
-
+          targetAudioFeaturesMap: this.state.targetAudioFeaturesMap,
+          toggleShowSeedSearch: (newDisplayValue: boolean) =>
+            this.toggleShowSeedSearch(newDisplayValue),
+          noVibesAlert: this.state.noVibesAlert,
         }}
       >
         {/* @ts-ignore */}

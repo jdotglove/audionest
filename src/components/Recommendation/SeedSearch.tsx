@@ -1,5 +1,6 @@
 import { Fragment, useState, useRef, useContext, useEffect } from "react";
 import {
+  Alert,
   Button,
   Offcanvas,
   ListGroup,
@@ -12,6 +13,7 @@ import NextImage from "next/image";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 
+import SpotifySearchForm from "../Containers/SpotifySearchForm";
 import { parseUriForId } from "../../utils/spotify";
 import placeholderImg from "../../../public/placeholder.png";
 import RecommendationContext from "../../contexts/RecommendationContext";
@@ -24,13 +26,14 @@ export default function RecommendationSeedSearch() {
   const spotifyContext = useContext(SpotifyContext);
   const searchArtistInput = useRef(null);
   const searchTrackInput = useRef(null);
-  useEffect(() => {
-    console.log("Artist Selected: ", artistSearchSelected.current?.value);
-    console.log("Track Selected: ", trackSearchSelected.current?.value);
-  }, [trackSearchSelected, artistSearchSelected]);
 
   const onOptionChange = (e) => {
     setSeedTarget(e.target.value);
+    if (searchTarget === "Artists") {
+      searchArtistInput.current.value = ""
+    } else {
+      searchTrackInput.current.value = ""
+    }
   };
 
   const handleSearchArtists = () => {
@@ -51,8 +54,6 @@ export default function RecommendationSeedSearch() {
         {({
           toggleShowSeedSearch,
           showSeedSearch,
-          addSeedArtist,
-          addSeedTrack,
         }) => (
           <Fragment>
             <Offcanvas
@@ -68,7 +69,7 @@ export default function RecommendationSeedSearch() {
                   <Col md={3}>
                     <input
                       type="radio"
-                      id="artists-search"
+                      id="artist-search"
                       name="seed_search_selection"
                       checked={searchTarget === "Artists"}
                       value="Artists"
@@ -93,145 +94,17 @@ export default function RecommendationSeedSearch() {
                 <ListGroup className="pt-3" variant="flush">
                   <Fragment>
                     {searchTarget === "Artists" ? (
-                      <Card style={{ width: "24rem", height: "35rem" }}>
-                        <Card.Title>
-                          <h2 className="px-3 text-white">Seed Artists</h2>
-                          <div className="px-3 input-group mb-3">
-                            <span
-                              className="text-black input-group-text"
-                              id="search-artists"
-                            >
-                              <SearchIcon />
-                            </span>
-                            <input
-                              type="text"
-                              ref={searchArtistInput}
-                              aria-label="Search Artists"
-                              aria-describedby="search-artists"
-                            />
-                            <Button
-                              type="button"
-                              className="btn btn-primary px-1 mx-1"
-                              onClick={handleSearchArtists}
-                            >
-                              Search
-                            </Button>
-                          </div>
-                          <div className="px-3">
-                            <h5>Search Results:</h5>
-                          </div>
-                        </Card.Title>
-                        <Card.Body className="overflow-scroll">
-                          <SpotifyContext.Consumer>
-                            {({ artistSearchResults }) => (
-                              <ListGroup variant="flush">
-                                {artistSearchResults.map((artist) => (
-                                  <div
-                                    key={artist.id}
-                                    onClick={() => addSeedArtist(artist)}
-                                  >
-                                    <ListGroup.Item
-                                      action
-                                      variant="light"
-                                      className="d-flex justify-content-between align-items-center"
-                                    >
-                                      {artist.images[0] ? (
-                                        <Image
-                                          src={artist.images[0]?.url}
-                                          height={55}
-                                          width={55}
-                                          roundedCircle
-                                          alt="Artist Profile Picture"
-                                        />
-                                      ) : (
-                                        <NextImage
-                                          src={placeholderImg}
-                                          height={55}
-                                          width={55}
-                                          alt="Default Artist Profile Picture"
-                                        />
-                                      )}
-                                      {artist.name}
-                                      <AddIcon />
-                                    </ListGroup.Item>
-                                  </div>
-                                ))}
-                              </ListGroup>
-                            )}
-                          </SpotifyContext.Consumer>
-                        </Card.Body>
-                      </Card>
+                      <SpotifySearchForm
+                        handleSearch={handleSearchArtists}
+                        searchType="Artists"
+                        searchInputRef={searchArtistInput}
+                      />
                     ) : (
-                      <Card
-                        style={{ width: "24rem", height: "35rem" }}
-                      >
-                        <Card.Title>
-                          <h2 className="px-3 text-white">Seed Tracks</h2>
-                          <div className="px-3 input-group mb-3">
-                            <span
-                              className="text-black input-group-text"
-                              id="search-tracks"
-                            >
-                              <SearchIcon />
-                            </span>
-                            <input
-                              type="text"
-                              ref={searchTrackInput}
-                              aria-label="Search Tracks"
-                              aria-describedby="search-tracks"
-                            />
-                            <Button
-                              type="button"
-                              className="btn btn-primary px-1 mx-1"
-                              onClick={handleSearchTracks}
-                            >
-                              Search
-                            </Button>
-                          </div>
-                          <div className="px-3">
-                            <h5>Search Results:</h5>
-                          </div>
-                        </Card.Title>
-                        <Card.Body className="overflow-scroll">
-                          <SpotifyContext.Consumer>
-                            {({ trackSearchResults }) => (
-                              <ListGroup variant="flush">
-                                {trackSearchResults.map((track) => (
-                                  <div
-                                    key={track.id}
-                                    onClick={() => addSeedTrack(track)}
-                                  >
-                                    <ListGroup.Item
-                                      action
-                                      variant="light"
-                                      className="d-flex justify-content-between align-items-center"
-                                    >
-                                      {track.album.images[0] ? (
-                                        <Image
-                                          src={track.album.images[0]?.url}
-                                          height={55}
-                                          width={55}
-                                          roundedCircle
-                                          alt="Track Album Picture"
-                                        />
-                                      ) : (
-                                        <NextImage
-                                          src={placeholderImg}
-                                          height={55}
-                                          width={55}
-                                          alt="Default Album Profile Picture"
-                                        />
-                                      )}
-                                      {track.name} - {track.artists[0].name}
-                                      <AddIcon />
-                                    </ListGroup.Item>
-                                  </div>
-                                ))}
-                              </ListGroup>
-                            )}
-                          </SpotifyContext.Consumer>
-                        </Card.Body>
-                      </Card>
+                      <SpotifySearchForm
+                        handleSearch={handleSearchTracks}
+                        searchType="Tracks"
+                        searchInputRef={searchTrackInput}
+                      />
                     )}
                   </Fragment>
                 </ListGroup>

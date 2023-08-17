@@ -1,5 +1,9 @@
 /// <reference types="spotify-api" />
 
+interface BaseSpotifyState {
+  authorizationError: boolean;
+}
+
 export interface SpotifyProviderProps { }
 
 export interface PlaylistProviderProps { }
@@ -16,7 +20,7 @@ export interface ArtistProviderProps {
 
 export type SelectedTrackRecord = Pick<SpotifyApi.TrackObjectFull, 'id'> & Pick<SpotifyApi.TrackObjectFull, 'name'>;
 
-export interface SpotifyProviderState {
+export interface SpotifyProviderState extends BaseSpotifyState {
   artistSearchResults: Array<any>
   currentSelectedPlaylist: {
     id: string;
@@ -35,31 +39,29 @@ export interface SpotifyProviderState {
   trackSearchResults: Array<any>;
 }
 
-export type PlaylistProviderState = {
+export interface PlaylistProviderState extends BaseSpotifyState {
   selectedTracks: any;
   showPlaylistBuilder: boolean;
 };
 
-export type RecommendationProviderState = {
+export interface RecommendationProviderState extends BaseSpotifyState {
+  currentTrackBreakdown: any;
   listOfSeedGenres: Array<Audionest.Track['genre']>;
   recommendedTrackList: Array<any>;
   queueAddResult: string;
+  seedAddResult: string;
   showQueueAlert: boolean;
+  showSeedAlert: boolean;
   selectedSeedArtists: Array<any>;
   selectedSeedGenres: Array<string>;
   selectedSeedTracks: Array<any>;
   showSeedSearch: boolean;
+  targetAudioFeaturesMap: Record<string, number>;
+  noVibesAlert: boolean;
 };
 
-export type RecommendationProviderState = {
-  listOfSeedGenres: Array<Audionest.Track['genre']>;
-  recommendedTrackList: Array<any>;
-  selectedSeedArtists: Array<any>;
-  selectedSeedGenres: Array<string>;
-  selectedSeedTracks: Array<any>;
-};
-
-export type TrackProviderState = {
+export interface TrackProviderState extends BaseSpotifyState
+ {
   album: any,
   artists: Array<any>;
   audioFeatures: {
@@ -88,7 +90,7 @@ export type TrackProviderState = {
   trackId: any;
 };
 
-export type ArtistProviderState = {
+export interface ArtistProviderState extends BaseSpotifyState {
   albums: Array<any>;
   artistId: any;
   genres: Array<string>;
@@ -96,25 +98,8 @@ export type ArtistProviderState = {
   popularity: number;
   uri: string;
   tracks: Array<any>;
-  // TODO: come back to average audio features
-  // averageAudioFeatures: {
-  //   acousticness: number;
-  //   analysisUrl: string;
-  //   danceability: number;
-  //   energy: number;
-  //   instrumentalness: number;
-  //   key: number;
-  //   liveness: number;
-  //   loudness: number;
-  //   mode: number;
-  //   speechiness: number;
-  //   uri: string;
-  //   tempo: number;
-  //   timeSignature: number;
-  //   valence: number;
-  // },
 };
 
-export type ChartProviderState = {
+export interface ChartProviderState extends BaseSpotifyState {
   chartData: any;
 };

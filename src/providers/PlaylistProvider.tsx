@@ -4,6 +4,7 @@ import axios from "../plugins/axios";
 import { PlaylistProviderState, PlaylistProviderProps } from "../../types";
 import { SpotifyCache } from "../cache";
 import PlaylistContext from "../contexts/PlaylistContext";
+import { authenticateSpotify } from "../middleware/spotify";
 
 class PlaylistProvider extends React.Component<
   PlaylistProviderProps,
@@ -14,6 +15,7 @@ class PlaylistProvider extends React.Component<
     this.state = {
       selectedTracks: [],
       showPlaylistBuilder: false,
+      authorizationError: false,
     };
   }
   addToPlaylistBuilder = (track: any) => {
@@ -47,10 +49,15 @@ class PlaylistProvider extends React.Component<
         },
       });
       return response.data;
-    } catch (err: any) {
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        this.setState({
+          authorizationError: true,
+        });
+      }
       console.error(
         "ERROR: Could not retrieve playlist's tracks.",
-        err.message
+        error.response?.statusText || error.message
       );
     }
   };
@@ -73,13 +80,20 @@ class PlaylistProvider extends React.Component<
           playlistName: playlistTitle,
           playlistDescription,
           publicPlaylist: false,
-          tracks: this.state.selectedTracks.map(
-            (trackObj) => trackObj.uri
-          ),
+          tracks: this.state.selectedTracks.map((trackObj) => trackObj.uri),
         }),
       });
     } catch (error: any) {
-      console.error("ERROR: Could not save playlist", error);
+      if (error.response?.status === 401) {
+        this.setState({
+          authorizationError: true,
+        });
+      } else {
+        console.error(
+          "ERROR: Could not save playlist",
+          error.response?.statusText || error.message
+        );
+      }
     }
   };
 
@@ -87,7 +101,7 @@ class PlaylistProvider extends React.Component<
     this.setState({
       selectedTracks: [],
     });
-  }
+  };
   render() {
     return (
       <PlaylistContext.Provider

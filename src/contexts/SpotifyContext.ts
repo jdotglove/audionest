@@ -3,13 +3,11 @@ import { createContext } from 'react';
 const SpotifyContext = createContext({
   acknowledgeInfoModal: undefined,
   artistSearchResults: undefined as Array<any>,
-  authenticateSpotifyUser: undefined,
   checkIfSeenInfoModal: undefined,
   currentSelectedPlaylist: undefined,
   currentSelectedTracks: undefined,
   isLoggedIn: undefined,
   login: undefined,
-  recommendations: undefined,
   playlists: undefined,
   searchItems: undefined,
   setSelectedPlaylist: undefined,
