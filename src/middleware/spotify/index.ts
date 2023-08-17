@@ -15,7 +15,12 @@ async function redirectToAuthCodeFlow(clientId: string) {
   params.append('client_id', clientId);
   params.append('response_type', 'token');
   params.append('redirect_uri', process.env.NEXT_PUBLIC_REDIRECT_URL);
-  params.append('scope', 'user-read-private user-read-email user-top-read playlist-modify-private playlist-modify-public user-modify-playback-state');
+  params.append('scope', (
+    `user-read-private user-read-email \n
+    user-top-read playlist-modify-private \n
+    playlist-modify-public user-modify-playback-state \n
+    user-read-currently-playing`
+  ));
   params.append('code_challenge_method', 'S256');
   params.append('code_challenge', challenge);
 

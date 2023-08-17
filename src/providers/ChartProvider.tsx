@@ -1,20 +1,18 @@
-import React, { Fragment } from 'react';
-import {
-  ChartProviderState,
-  SpotifyProviderProps,
-} from '../../types';
-import ChartContext from '../contexts/ChartContext';
-import { SpotifyCache, TrackStatisticsCache } from '../cache';
-import axios from '../plugins/axios';
+import React, { Fragment } from "react";
+import { ChartProviderState, SpotifyProviderProps } from "../../types";
+import ChartContext from "../contexts/ChartContext";
+import { SpotifyCache, TrackStatisticsCache } from "../cache";
+import axios from "../plugins/axios";
 
 class ChartProvider extends React.Component<
-SpotifyProviderProps,
-ChartProviderState
+  SpotifyProviderProps,
+  ChartProviderState
 > {
   constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
     super(props);
     this.state = {
       chartData: null,
+      authorizationError: false,
     };
   }
 
@@ -24,19 +22,28 @@ ChartProviderState
       return cacheValue;
     }
     try {
-      const accessToken = SpotifyCache.get('token');
+      const accessToken = SpotifyCache.get("token");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackSpotifyId}/audio-features?token=${accessToken}`,
-        method: 'get',
+        method: "get",
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
       TrackStatisticsCache.set(trackSpotifyId, response.data);
       return response.data;
-    } catch (err) {
-      console.error('ERROR: Could not retrieve audio features.', err);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        this.setState({
+          authorizationError: true,
+        });
+      } else {
+        console.error(
+          "ERROR: Could not retrieve audio features.",
+          error.response?.statusText || error.message
+        );
+      }
     }
   };
 
@@ -58,14 +65,12 @@ ChartProviderState
 
   formatAsChartData = (tracksData: any[]) => ({
     labels: Object.keys(tracksData[0]),
-    datasets: tracksData.map((trackData) => (
-      {
-        data: Object.values(trackData).map((datum: number) => datum * 100),
-        backgroundColor: 'rgba(13, 202, 240, 0.2)',
-        borderColor: '#0dcaf0',
-        borderWidth: 2,
-      }
-    )),
+    datasets: tracksData.map((trackData) => ({
+      data: Object.values(trackData).map((datum: number) => datum * 100),
+      backgroundColor: "rgba(13, 202, 240, 0.2)",
+      borderColor: "#0dcaf0",
+      borderWidth: 2,
+    })),
   });
 
   setChartData = async (trackIdsArray: Array<any>) => {
@@ -75,26 +80,39 @@ ChartProviderState
         trackIdsArray.map(async (trackId) => {
           return this.cleanTrackFeaturesData(
             await this.getTrackAudioFeatures(trackId)
-          )
-        }),
+          );
+        })
       );
-      const averages = data.reduce((acc, datum) => {
-        Object.keys(datum).forEach((key) => {
-          acc[key] += datum[key] / data.length;
-        });
-        return acc;
-      }, {
-        danceability: 0,
-        energy: 0,
-        speechiness: 0,
-        acousticness: 0,
-        liveness: 0,
-        valence: 0,
-      });
+      const averages = data.reduce(
+        (acc, datum) => {
+          Object.keys(datum).forEach((key) => {
+            acc[key] += datum[key] / data.length;
+          });
+          return acc;
+        },
+        {
+          danceability: 0,
+          energy: 0,
+          speechiness: 0,
+          acousticness: 0,
+          liveness: 0,
+          valence: 0,
+        }
+      );
       this.setState({
-        chartData: this.formatAsChartData([averages]) });
-    } catch (err) {
-      console.error('ERROR: Could not set chart data.', err);
+        chartData: this.formatAsChartData([averages]),
+      });
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        this.setState({
+          authorizationError: true,
+        });
+      } else {
+        console.error(
+          "ERROR: Could not set chart data.",
+          error.response?.statusText || error.message
+        );
+      }
     }
   };
 
