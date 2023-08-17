@@ -82,6 +82,7 @@ class RecommendationProvider extends React.Component<
       }
       const recommendationPayload = {
         ...recommendationsConfigConstants,
+        ...targetFeaturePayload,
         seed_artists: this.state.selectedSeedArtists.map(
           (artistObj) => artistObj.id
         ),
@@ -195,10 +196,12 @@ class RecommendationProvider extends React.Component<
   };
 
   addSeedTrack = (trackPayload: any) => {
-    if (this.maxSeedCapacityReached()) {
-      return;
-    }
-    if (!this.state.selectedSeedArtists.includes(trackPayload.id)) {
+    if (
+      !this.maxSeedCapacityReached() &&
+      !this.state.selectedSeedTracks.find(
+        (selectedTrack) => selectedTrack.id === trackPayload.id
+      )
+    ) {
       this.setState({
         selectedSeedTracks: [
           ...this.state.selectedSeedTracks,
@@ -208,6 +211,11 @@ class RecommendationProvider extends React.Component<
       this.setState({
         showSeedAlert: true,
         seedAddResult: "success",
+      });
+    } else {
+      this.setState({
+        showSeedAlert: true,
+        seedAddResult: "danger",
       });
     }
   };
@@ -261,7 +269,7 @@ class RecommendationProvider extends React.Component<
     }
   };
 
-  generateSimilarVibes = async (currentTrack: any, chartData: any) => {
+  seedCurrentVibes = async (currentTrack: any, chartData: any) => {
     try {
       this.addSeedTrack(currentTrack);
       let audioFeatureMap = {};
@@ -271,7 +279,6 @@ class RecommendationProvider extends React.Component<
       this.setState({
         targetAudioFeaturesMap: { ...audioFeatureMap },
       });
-      await this.generateRecommendations();
     } catch (error: any) {
       if (error.response.status === 401) {
         // this.setState({
@@ -356,8 +363,8 @@ class RecommendationProvider extends React.Component<
           clearSelectedSeeds: () => this.clearSelectedSeeds(),
           currentTrackBreakdown: this.state.currentTrackBreakdown,
           generateRecommendations: () => this.generateRecommendations(),
-          generateSimilarVibes: (currentTrack: any, chartData: any) =>
-            this.generateSimilarVibes(currentTrack, chartData),
+          seedCurrentVibes: (currentTrack: any, chartData: any) =>
+            this.seedCurrentVibes(currentTrack, chartData),
           handleGenreInputChange: (genre: string, checkboxObj: any) =>
             this.handleGenreInputChange(genre, checkboxObj),
           listOfSeedGenres: this.state.listOfSeedGenres,
