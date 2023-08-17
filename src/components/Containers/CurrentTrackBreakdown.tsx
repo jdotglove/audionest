@@ -27,7 +27,7 @@ export default function CurrentTrackBreakdown() {
             <Alert
               variant="info"
             >
-              Play a track to checkout your current vibes
+              Play a track to check out your current vibes
             </Alert>
           ) : (<Fragment></Fragment>)}
         </Fragment>
