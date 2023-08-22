@@ -1,20 +1,30 @@
 /// <reference types="spotify-api" />
 
+import { Component, ReactNode } from "react";
+
 interface BaseSpotifyState {
   authorizationError: boolean;
 }
 
-export interface SpotifyProviderProps { }
+interface BaseProviderProps {
+  children?: ReactNode
+}
 
-export interface PlaylistProviderProps { }
+export interface SpotifyProviderProps extends BaseProviderProps { }
 
-export interface RecommendationProviderProps { }
+export interface DiscoveryProviderProps extends BaseProviderProps { }
 
-export interface TrackProviderProps {
+export interface ChartProviderProps extends BaseProviderProps { }
+
+export interface PlaylistProviderProps extends BaseProviderProps { }
+
+export interface RecommendationProviderProps extends BaseProviderProps { }
+
+export interface TrackProviderProps extends BaseProviderProps {
   trackId: string;
 }
 
-export interface ArtistProviderProps {
+export interface ArtistProviderProps extends BaseProviderProps {
   artistId: string;
 }
 
@@ -38,6 +48,10 @@ export interface SpotifyProviderState extends BaseSpotifyState {
   topTracks: Array<any>;
   trackSearchResults: Array<any>;
 }
+
+export interface DiscoveryProviderState extends BaseSpotifyState {
+  newReleases: Array<string, any>;
+};
 
 export interface PlaylistProviderState extends BaseSpotifyState {
   selectedTracks: any;

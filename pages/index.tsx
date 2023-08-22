@@ -1,10 +1,6 @@
-
-import Image from 'next/image';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import jarodGloverPic from '../public/jarodgloverpic.png';
 import MainNavbar from '../src/components/Navbars/MainNavbar';
-import textStyles from '../styles/Text.module.css';
 export default function Home() {
 
   return (

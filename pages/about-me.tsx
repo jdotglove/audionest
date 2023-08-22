@@ -2,7 +2,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Image from 'next/image';
 
 import jarodGloverPic from '../public/jarodgloverpic.png';
-
 import MainNavbar from '../src/components/Navbars/MainNavbar';
 import textStyles from '../styles/Text.module.css';
 

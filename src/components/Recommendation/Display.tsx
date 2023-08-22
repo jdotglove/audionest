@@ -18,6 +18,7 @@ export default function RecommendationDisplay({ user }) {
         {({
           addToQueue,
           atLeastOneSeedSelected,
+          clearSelectedSeeds,
           generateRecommendations,
           recommendedTrackList,
           retrieveCurrentTrackBreakdown,
@@ -48,8 +49,9 @@ export default function RecommendationDisplay({ user }) {
                   <Button
                     className="mt-1"
                     onClick={async () => {
-                      await seedCurrentVibes(currentTrackBreakdown.item, chartData)
-                      await generateRecommendations()
+                      await clearSelectedSeeds();
+                      await seedCurrentVibes(currentTrackBreakdown.item, chartData);
+                      await generateRecommendations();
                     }}
                     variant={"light"}
                   >

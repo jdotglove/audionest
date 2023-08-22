@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
-import { ChartProviderState, SpotifyProviderProps } from "../../types";
+import { ChartProviderState, ChartProviderProps } from "../../types";
 import ChartContext from "../contexts/ChartContext";
 import { SpotifyCache, TrackStatisticsCache } from "../cache";
 import axios from "../plugins/axios";
 
-class ChartProvider extends React.Component<
-  SpotifyProviderProps,
+class ChartProvider extends React.PureComponent<
+  ChartProviderProps,
   ChartProviderState
 > {
-  constructor(props: SpotifyProviderProps | Readonly<SpotifyProviderProps>) {
+  constructor(props: ChartProviderProps | Readonly<ChartProviderProps>) {
     super(props);
     this.state = {
       chartData: null,
@@ -125,7 +125,6 @@ class ChartProvider extends React.Component<
           chartData: this.state.chartData,
         }}
       >
-        {/* @ts-ignore */}
         <Fragment>{this.props.children}</Fragment>
       </ChartContext.Provider>
     );

@@ -42,7 +42,7 @@ const recommendationsConfigConstants = {
   max_valence: 1,
 };
 
-class RecommendationProvider extends React.Component<
+class RecommendationProvider extends React.PureComponent<
   RecommendationProviderProps,
   RecommendationProviderState
 > {
@@ -232,6 +232,7 @@ class RecommendationProvider extends React.Component<
     this.setState({
       selectedSeedArtists: [],
       selectedSeedTracks: [],
+      targetAudioFeaturesMap: {},
     });
   };
 
@@ -385,7 +386,6 @@ class RecommendationProvider extends React.Component<
           noVibesAlert: this.state.noVibesAlert,
         }}
       >
-        {/* @ts-ignore */}
         <Fragment>{this.props.children}</Fragment>
       </RecommendationContext.Provider>
     );

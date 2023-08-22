@@ -1,14 +1,13 @@
 import Head from "next/head";
 import { Provider } from "react-redux";
 
-import "../styles/globals.css";
 import store from "../store";
-import SpotifyProvider from "../src/providers/SpotifyProvider";
 import ThemeColors from "../src/ThemeColors";
-import "../styles/scss/index.scss";
 import ChartProvider from "../src/providers/ChartProvider";
 import FontProvider from "../src/providers/FontProvider";
-import PlaylistProvider from "../src/providers/PlaylistProvider";
+
+import "../styles/globals.css";
+import "../styles/scss/index.scss";
 
 export default function AudioNestApp({
   Component,

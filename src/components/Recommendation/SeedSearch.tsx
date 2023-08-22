@@ -1,21 +1,12 @@
-import { Fragment, useState, useRef, useContext, useEffect } from "react";
+import { Fragment, useState, useRef, useContext } from "react";
 import {
-  Alert,
-  Button,
   Offcanvas,
   ListGroup,
-  Image,
-  Card,
   Row,
   Col,
 } from "react-bootstrap";
-import NextImage from "next/image";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 
 import SpotifySearchForm from "../Containers/SpotifySearchForm";
-import { parseUriForId } from "../../utils/spotify";
-import placeholderImg from "../../../public/placeholder.png";
 import RecommendationContext from "../../contexts/RecommendationContext";
 import SpotifyContext from "../../contexts/SpotifyContext";
 

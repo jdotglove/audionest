@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 
 import RecommendationContext from "../../contexts/RecommendationContext";
 import ChartContext from "../../contexts/ChartContext";
@@ -19,7 +19,9 @@ export default function CurrentTrackBreakdown() {
         <Fragment>
           Current Item: {currentTrackBreakdown.item.name} -{" "}
           {currentTrackBreakdown.item.artists[0].name}
-          <TrackStatistics />
+          <Container>
+            <TrackStatistics style={{ height: "15rem"}} />
+          </Container>
         </Fragment>
       ) : (
         <Fragment>
