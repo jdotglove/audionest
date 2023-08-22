@@ -1,40 +1,34 @@
 import React, { Fragment } from "react";
 
 import axios from "../plugins/axios";
-import { ArtistProviderState, ArtistProviderProps } from "../../types";
+import { DiscoveryProviderState, DiscoveryProviderProps } from "../../types";
 import { SpotifyCache } from "../cache";
-import ArtistContext from "../contexts/ArtistContext";
+import DiscoveryContext from "../contexts/DiscoveryContext";
 
-class ArtistProvider extends React.PureComponent<
-  ArtistProviderProps,
-  ArtistProviderState
+class DiscoveryProvider extends React.PureComponent<
+  DiscoveryProviderProps,
+  DiscoveryProviderState
 > {
-  constructor(props: ArtistProviderProps | Readonly<ArtistProviderProps>) {
+  constructor(props: DiscoveryProviderProps | Readonly<DiscoveryProviderProps>) {
     super(props);
     this.state = {
-      artistId: props.artistId,
-      albums: undefined,
-      name: "",
-      genres: [],
-      popularity: 0,
-      uri: "",
-      tracks: [],
+      newReleases: [],
       authorizationError: false,
     };
   }
-
-  async componentDidMount() {
+  fetchNewReleases = async (page?: number) => {
     try {
       const accessToken = SpotifyCache.get("token");
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${this.state.artistId}?token=${accessToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/new-releases/?token=${accessToken}&page=${page}`,
         method: "get",
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           "Content-Type": "application/json",
         },
       });
-      this.setState({ ...response.data });
+      return response.data;
+      //this.setState({ newReleases: [...response.data] });
     } catch (error: any) {
       if (error.response?.status === 401) {
         this.setState({
@@ -51,15 +45,16 @@ class ArtistProvider extends React.PureComponent<
 
   render() {
     return (
-      <ArtistContext.Provider
+      <DiscoveryContext.Provider
         value={{
-          ...this.state,
+          newReleases: this.state.newReleases,
+          fetchNewReleases: (page: number) => this.fetchNewReleases(page),
         }}
       >
         <Fragment>{this.props.children}</Fragment>
-      </ArtistContext.Provider>
+      </DiscoveryContext.Provider>
     );
   }
 }
 
-export default ArtistProvider;
+export default DiscoveryProvider;

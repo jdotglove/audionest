@@ -10,7 +10,7 @@ const RecommendationContext = createContext({
   clearSelectedSeeds: undefined,
   currentTrackBreakdown: undefined,
   generateRecommendations: undefined,
-  generateSimilarVibes: undefined,
+  seedCurrentVibes: undefined,
   handleGenreInputChange: undefined,
   listOfSeedGenres: [] as Array<string>,
   recommendedTrackList: [] as Array<any>, // TODO: come back to typing

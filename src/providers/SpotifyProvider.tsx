@@ -8,7 +8,7 @@ import { authenticateSpotify } from "../middleware/spotify";
 import { SpotifyCache } from "../cache";
 // credentials are optional
 
-class SpotifyProvider extends React.Component<
+class SpotifyProvider extends React.PureComponent<
   SpotifyProviderProps,
   SpotifyProviderState
 > {
@@ -174,14 +174,8 @@ class SpotifyProvider extends React.Component<
   searchItems = async (searchType: string, searchValue: string) => {
     try {
       const accessToken = SpotifyCache.get("token");
-      let searchUrl = "";
-      if (searchType === "artist") {
-        searchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/search?token=${accessToken}`;
-      } else if (searchType === "track") {
-        searchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/search?token=${accessToken}`;
-      }
       const response = await axios({
-        url: searchUrl,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${searchType}/search?token=${accessToken}`,
         method: "post",
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
@@ -286,7 +280,6 @@ class SpotifyProvider extends React.Component<
           user: this.state.user,
         }}
       >
-        {/* @ts-ignore */}
         <Fragment>{this.props.children}</Fragment>
       </SpotifyContext.Provider>
     );

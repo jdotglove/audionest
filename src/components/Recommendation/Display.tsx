@@ -18,11 +18,12 @@ export default function RecommendationDisplay({ user }) {
         {({
           addToQueue,
           atLeastOneSeedSelected,
+          clearSelectedSeeds,
           generateRecommendations,
           recommendedTrackList,
           retrieveCurrentTrackBreakdown,
           currentTrackBreakdown,
-          generateSimilarVibes,
+          seedCurrentVibes,
         }) => (
           <Fragment>
             <Row className="mx-2 pb-2">
@@ -48,8 +49,9 @@ export default function RecommendationDisplay({ user }) {
                   <Button
                     className="mt-1"
                     onClick={async () => {
-                      await generateSimilarVibes(currentTrackBreakdown.item, chartData)
-                      await generateRecommendations()
+                      await clearSelectedSeeds();
+                      await seedCurrentVibes(currentTrackBreakdown.item, chartData);
+                      await generateRecommendations();
                     }}
                     variant={"light"}
                   >

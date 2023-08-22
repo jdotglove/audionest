@@ -4,9 +4,8 @@ import axios from "../plugins/axios";
 import { PlaylistProviderState, PlaylistProviderProps } from "../../types";
 import { SpotifyCache } from "../cache";
 import PlaylistContext from "../contexts/PlaylistContext";
-import { authenticateSpotify } from "../middleware/spotify";
 
-class PlaylistProvider extends React.Component<
+class PlaylistProvider extends React.PureComponent<
   PlaylistProviderProps,
   PlaylistProviderState
 > {
@@ -128,7 +127,6 @@ class PlaylistProvider extends React.Component<
             this.toggleShowPlaylistBuilder(newDisplayValue),
         }}
       >
-        {/* @ts-ignore */}
         <Fragment>{this.props.children}</Fragment>
       </PlaylistContext.Provider>
     );
