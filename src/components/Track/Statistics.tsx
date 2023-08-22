@@ -20,9 +20,9 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export default function TrackStatistics() {
+export default function TrackStatistics({ style }: { style?: Record<string, string | number> }) {
   return (
-    <Container>
+    <Container style={style}>
       <ChartContext.Consumer>
         {({ chartData }) =>
           chartData ? (
