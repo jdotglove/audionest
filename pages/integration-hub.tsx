@@ -1,3 +1,5 @@
+import { useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button, Container, Row, Col } from "react-bootstrap";
 
 import MainNavbar from "../src/components/Navbars/MainNavbar";
@@ -5,10 +7,17 @@ import SpotifyContext from "../src/contexts/SpotifyContext";
 import styles from "../styles/IntegrationHub.module.css";
 import { authenticateSpotify } from "../src/middleware/spotify";
 
+
 export default function IntegrationHub() {
+  const { isLoggedIn } = useContext(SpotifyContext);
+  const { push } = useRouter();
   const authenticateSpotifyUser = async () => {
     await authenticateSpotify();
   };
+  if (isLoggedIn) {
+    push('/spotify/recommendation-generator');
+  }
+  
 
   return (
     <div className={styles.container}>
@@ -38,25 +47,6 @@ export default function IntegrationHub() {
                   </div>
                 </Col>
               </Row>
-              {/* <Row className="py-2">
-                <Col>
-                  <h1>
-                    <span style={{ color: "#98611F" }}>Sound</span>scape
-                  </h1>
-                </Col>
-              </Row>
-              <Row className="py-2" md={3}>
-                <Col>
-                  <div className="d-grid gap-2">
-                    <Button
-                      size="lg"
-                      href="dashboards/soundscape"
-                    >
-                      Enter
-                    </Button>
-                  </div>
-                </Col>
-              </Row> */}
             </Container>
           ) : (
             <Container>

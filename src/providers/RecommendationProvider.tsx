@@ -70,7 +70,7 @@ class RecommendationProvider extends React.PureComponent<
 
   generateRecommendations = async () => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       let targetFeaturePayload = {};
       if (this.state.targetAudioFeaturesMap) {
         Object.keys(this.state.targetAudioFeaturesMap).forEach(
@@ -117,7 +117,7 @@ class RecommendationProvider extends React.PureComponent<
   };
   getListOfSeedGenres = async () => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/recommendations/seed-genres?token=${accessToken}`,
         method: "get",
@@ -238,7 +238,7 @@ class RecommendationProvider extends React.PureComponent<
 
   retrieveCurrentTrackBreakdown = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playback-state?token=${accessToken}`,
         method: "get",
@@ -297,7 +297,7 @@ class RecommendationProvider extends React.PureComponent<
 
   addToQueue = async (userSpotifyId: string, track: any) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/queue?token=${accessToken}`,
         method: "post",

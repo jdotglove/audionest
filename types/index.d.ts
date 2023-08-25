@@ -43,7 +43,7 @@ export interface SpotifyProviderState extends BaseSpotifyState {
   playlists: Array<any>;
   user: Audionest.User;
   seenInfoModal: boolean;
-  token: any;
+  token: string;
   topArtists: Array<any>;
   topTracks: Array<any>;
   trackSearchResults: Array<any>;
@@ -51,6 +51,7 @@ export interface SpotifyProviderState extends BaseSpotifyState {
 
 export interface DiscoveryProviderState extends BaseSpotifyState {
   newReleases: Array<string, any>;
+  browsingCategories: Record<string, any>;
 };
 
 export interface PlaylistProviderState extends BaseSpotifyState {

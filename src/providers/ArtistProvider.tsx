@@ -25,7 +25,7 @@ class ArtistProvider extends React.PureComponent<
 
   async componentDidMount() {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${this.state.artistId}?token=${accessToken}`,
         method: "get",
