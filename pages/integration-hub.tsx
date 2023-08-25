@@ -14,10 +14,6 @@ export default function IntegrationHub() {
   const authenticateSpotifyUser = async () => {
     await authenticateSpotify();
   };
-  if (isLoggedIn) {
-    push('/spotify/recommendation-generator');
-  }
-  
 
   return (
     <div className={styles.container}>

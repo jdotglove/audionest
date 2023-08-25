@@ -18,23 +18,21 @@ export default function AudioNestApp({
   pageProps: any;
 }) {
   return (
-    <SpotifyProvider>
-      <Provider store={store}>
-        <ChartProvider>
-          <ThemeColors>
-            <FontProvider>
-              <Head>
-                <title>AudioNest</title>
-                <meta
-                  name="description"
-                  content="The nest you never want to leave"
-                />
-              </Head>
-              <Component props={pageProps} />
-            </FontProvider>
-          </ThemeColors>
-        </ChartProvider>
-      </Provider>
-    </SpotifyProvider>
+    <Provider store={store}>
+      <ChartProvider>
+        <ThemeColors>
+          <FontProvider>
+            <Head>
+              <title>AudioNest</title>
+              <meta
+                name="description"
+                content="The nest you never want to leave"
+              />
+            </Head>
+            <Component props={pageProps} />
+          </FontProvider>
+        </ThemeColors>
+      </ChartProvider>
+    </Provider>
   );
 }
