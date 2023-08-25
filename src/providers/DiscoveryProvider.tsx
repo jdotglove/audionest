@@ -4,6 +4,7 @@ import axios from "../plugins/axios";
 import { DiscoveryProviderState, DiscoveryProviderProps } from "../../types";
 import { SpotifyCache } from "../cache";
 import DiscoveryContext from "../contexts/DiscoveryContext";
+import { authenticateSpotify } from "../middleware/spotify";
 
 class DiscoveryProvider extends React.PureComponent<
   DiscoveryProviderProps,
@@ -14,33 +15,96 @@ class DiscoveryProvider extends React.PureComponent<
     this.state = {
       newReleases: [],
       authorizationError: false,
+      browsingCategories: {},
     };
   }
   fetchNewReleases = async (page?: number) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/new-releases/?token=${accessToken}&page=${page}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/new-releases?token=${accessToken}&page=${page}`,
         method: "get",
         headers: {
           authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
           "Content-Type": "application/json",
         },
       });
+      this.setState({ newReleases: [...this.state.newReleases, ...response.data] });
       return response.data;
-      //this.setState({ newReleases: [...response.data] });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        this.setState({
-          authorizationError: true,
-        });
+        authenticateSpotify();
       } else {
         console.error(
-          "ERROR: Could not retrieve artist data.",
+          "ERROR: Could not retrieve new releases.",
           error.response?.statusText || error.message
         );
       }
     }
+  }
+
+  fetchCategoryPlaylists = async (page: number, category: string) => {
+    try {
+      console.log("Fetching")
+      const accessToken = sessionStorage.getItem("accessToken");
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/${category}/playlists?token=${accessToken}&page=${page}`,
+        method: "get",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+      //this.setState({ newReleases: [...this.state.newReleases, ...response.data] });
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        // authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve category playlists.",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  }
+
+  fetchBrowsingCategories = async() => {
+    try {
+      const accessToken = sessionStorage.getItem("accessToken");
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/categories?token=${accessToken}`,
+        method: "get",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+      });
+      const discoveryMap = {
+        "New Releases": (page: number) => this.fetchNewReleases(page),
+      }
+      await Promise.all(response.data.map((category: any) => {
+        discoveryMap[category.name] = (page: number) => this.fetchCategoryPlaylists(page, category.id)
+      }))
+      this.setState({
+        browsingCategories: {...discoveryMap},
+      });
+      console.log(this.state.browsingCategories)
+    } catch(error: any) {
+      if (error.response?.status === 401) {
+        authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve browsing categories.",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  }
+
+  componentDidMount = async() => {
+    await this.fetchBrowsingCategories();
   }
 
   render() {
@@ -49,6 +113,7 @@ class DiscoveryProvider extends React.PureComponent<
         value={{
           newReleases: this.state.newReleases,
           fetchNewReleases: (page: number) => this.fetchNewReleases(page),
+          browsingCategories: this.state.browsingCategories,
         }}
       >
         <Fragment>{this.props.children}</Fragment>

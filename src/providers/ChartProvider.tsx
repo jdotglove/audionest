@@ -22,7 +22,7 @@ class ChartProvider extends React.PureComponent<
       return cacheValue;
     }
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${trackSpotifyId}/audio-features?token=${accessToken}`,
         method: "get",

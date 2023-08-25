@@ -14,10 +14,11 @@ const mainTheme = createTheme({
   },
 });
 
-class ThemeColors extends React.Component {
+class ThemeColors extends React.PureComponent<{
+  children: React.ReactNode
+}> {
   render() {
     return (
-      // @ts-ignore
       <ThemeProvider theme={mainTheme}>{this.props.children}</ThemeProvider>
     );
   }

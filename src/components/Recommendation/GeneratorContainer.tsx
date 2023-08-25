@@ -11,7 +11,7 @@ import PlaylistProvider from "../../providers/PlaylistProvider";
 import PlaylistContext from "../../contexts/PlaylistContext";
 import SpotifyContext from "../../contexts/SpotifyContext";
 
-export default function RecommendationGenerator() {
+export default function RecommendationGeneratorContainer() {
   return (
     <Fragment>
       <SpotifyContext.Consumer>

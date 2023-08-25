@@ -8,7 +8,7 @@ import TrackContext from "../../contexts/TrackContext";
 import SpotifyContext from "../../contexts/SpotifyContext";
 import styles from "../../../styles/StatisticsSection.module.css";
 
-export default function UserProfile() {
+export default function UserProfileContainer() {
   return (
     <SpotifyContext.Consumer>
       {({ topTracks, topArtists }) => (
@@ -27,7 +27,6 @@ export default function UserProfile() {
                       className={styles["playlist-track-container-header"]}
                     >
                       {topTracks.map((trackId, index) => (
-                        // @ts-ignore
                         <TrackProvider
                           key={`track-${trackId}`}
                           trackId={trackId}
@@ -37,7 +36,6 @@ export default function UserProfile() {
                               <div>
                                 {index + 1}. {name} -{" "}
                                 {artists.map((artist, idx) => (
-                                  // @ts-ignore
                                   <ArtistProvider
                                     key={`track-artist-${artist.id}`}
                                     artistId={artist.id}
@@ -79,7 +77,6 @@ export default function UserProfile() {
                       className={styles["playlist-track-container-header"]}
                     >
                       {topArtists.map((artistId, index) => (
-                        // @ts-ignore
                         <ArtistProvider
                           key={`artist-${artistId}`}
                           artistId={artistId}

@@ -45,8 +45,7 @@ class TrackProvider extends React.Component<
 
   async componentDidMount() {
     try {
-      // @ts-ignore
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/track/${this.state.trackId}?token=${accessToken}`,
         method: "get",
@@ -72,7 +71,7 @@ class TrackProvider extends React.Component<
 
   getTrackArtist = async (artistId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/artist/${artistId}?token=${accessToken}`,
         method: "get",
@@ -107,7 +106,6 @@ class TrackProvider extends React.Component<
           getTrackArtist: (artistId: string) => this.getTrackArtist(artistId),
         }}
       >
-        {/* @ts-ignore */}
         <Fragment>{this.props.children}</Fragment>
       </TrackContext.Provider>
     );

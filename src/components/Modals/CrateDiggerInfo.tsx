@@ -1,12 +1,15 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 import SpotifyContext from "../../contexts/SpotifyContext";
 
 export default function CrateDiggerInfo() {
-  const { acknowledgeInfoModal, checkIfSeenInfoModal } =
-    useContext(SpotifyContext);
-  const [showInfoModal, setShowInfoModal] = useState(!checkIfSeenInfoModal());
+  const { acknowledgeInfoModal, checkIfSeenInfoModal } = useContext(SpotifyContext);
+  
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  useEffect(() => {
+    setShowInfoModal(!checkIfSeenInfoModal())
+  }, [])
 
   const handleCloseInfoModal = () => {
     acknowledgeInfoModal();

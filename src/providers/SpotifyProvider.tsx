@@ -32,18 +32,18 @@ class SpotifyProvider extends React.PureComponent<
   }
 
   async componentDidMount() {
-    // @ts-ignore
-    let accessToken = (await getURLHash()).access_token;
+    let accessToken = (await getURLHash() as { access_token: string }).access_token;
     if (!accessToken) {
-      accessToken = SpotifyCache.get("token");
+      accessToken = sessionStorage.getItem("accessToken");
     }
     if (accessToken && !this.state.isLoggedIn) {
       await this.login(accessToken);
     }
+    window.location.hash = ""
+    sessionStorage.setItem("accessToken", accessToken);
   }
 
   login = async (accessToken: string) => {
-    SpotifyCache.set("token", accessToken);
     try {
       const fetchUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/login?token=${accessToken}`;
       const response = await axios({
@@ -83,7 +83,7 @@ class SpotifyProvider extends React.PureComponent<
 
   loadUserTopArtists = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-artists?token=${accessToken}`,
         method: "get",
@@ -115,7 +115,7 @@ class SpotifyProvider extends React.PureComponent<
 
   loadUserTopTracks = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/top-tracks?token=${accessToken}`,
         method: "get",
@@ -146,7 +146,7 @@ class SpotifyProvider extends React.PureComponent<
 
   loadUserPlaylists = async (userSpotifyId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playlists?token=${accessToken}`,
         method: "get",
@@ -173,7 +173,7 @@ class SpotifyProvider extends React.PureComponent<
 
   searchItems = async (searchType: string, searchValue: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${searchType}/search?token=${accessToken}`,
         method: "post",
@@ -216,7 +216,8 @@ class SpotifyProvider extends React.PureComponent<
 
   setSelectedTracks = async (trackIdArray: Array<any>) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${
           process.env.NEXT_PUBLIC_BASE_API_URL

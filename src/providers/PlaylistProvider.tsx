@@ -38,7 +38,7 @@ class PlaylistProvider extends React.PureComponent<
 
   getPlaylistTracks = async (playlistSpotifyId: string) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/playlist/${playlistSpotifyId}/tracks?token=${accessToken}`,
         method: "get",
@@ -67,7 +67,7 @@ class PlaylistProvider extends React.PureComponent<
     playlistDescription: string
   ) => {
     try {
-      const accessToken = SpotifyCache.get("token");
+      const accessToken = sessionStorage.getItem("accessToken");
       await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/user/${userSpotifyId}/playlist?token=${accessToken}`,
         method: "post",

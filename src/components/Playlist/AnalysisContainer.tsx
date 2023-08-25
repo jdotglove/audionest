@@ -5,7 +5,7 @@ import PlaylistDisplay from "./Display";
 import PlaylistDetails from "./Details";
 import TrackStatistics from "../Track/Statistics";
 
-export default function PlaylistAnalysis() {
+export default function PlaylistAnalysisContainer() {
   return (
     <Container>
       <Row>
