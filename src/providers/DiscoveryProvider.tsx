@@ -45,7 +45,6 @@ class DiscoveryProvider extends React.PureComponent<
 
   fetchCategoryPlaylists = async (page: number, category: string) => {
     try {
-      console.log("Fetching")
       const accessToken = sessionStorage.getItem("accessToken");
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/discovery/${category}/playlists?token=${accessToken}&page=${page}`,
@@ -55,7 +54,6 @@ class DiscoveryProvider extends React.PureComponent<
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
       //this.setState({ newReleases: [...this.state.newReleases, ...response.data] });
       return response.data;
     } catch (error: any) {

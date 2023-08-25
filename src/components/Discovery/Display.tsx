@@ -23,13 +23,11 @@ export default function DiscoveryDisplay() {
     if (browsingCategories[itemsCategory]) {
       setIsLoading(true);
       const currentPage = refresh ? 0 : page;
-      console.log(currentPage);
       let currentHasMore = refresh ? true : hasMore;
       setTimeout(async () => {
         await browsingCategories[itemsCategory](currentPage).then(
           (newReleasePage: Array<any>) => {
             const filteredArray = newReleasePage.filter((item) => item);
-            console.log("Filtered: ", filteredArray);
             if (
               filteredArray &&
               (filteredArray.length === 0 || filteredArray.length < 16)
