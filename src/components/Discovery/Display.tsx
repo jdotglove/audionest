@@ -158,12 +158,7 @@ export default function DiscoveryDisplay() {
                                       height={categoryItem.images[0]?.height}
                                     />
                                     <div className="album-name">
-                                      {categoryItem.name} -{" "}
-                                      {categoryItem.artists ? (
-                                        categoryItem.artists[0].name
-                                      ) : (
-                                        <Fragment></Fragment>
-                                      )}
+                                      {categoryItem.name}
                                     </div>
                                     <div className="more-info">
                                       Click for More Info
