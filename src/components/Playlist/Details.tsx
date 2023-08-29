@@ -4,11 +4,12 @@ import SpotifyContext from "../../contexts/SpotifyContext";
 import styles from "../../../styles/StatisticsSection.module.css";
 import TrackSelector from "../Buttons/TrackSelector";
 import ChartContext from "../../contexts/ChartContext";
+import ChartProvider from "../../providers/ChartProvider";
 
 export default function PlaylistDetails() {
   return (
     <SpotifyContext.Consumer>
-      {({ currentSelectedPlaylist, setSelectedTracks }) => (
+      {({ currentSelectedPlaylist }) => (
         <Container>
           {currentSelectedPlaylist &&
             currentSelectedPlaylist.tracks &&
@@ -29,7 +30,7 @@ export default function PlaylistDetails() {
                                 currentSelectedPlaylist.tracks.map(
                                   ({ id }) => id
                                 );
-                              setSelectedTracks(trackIdArray);
+                              // setSelectedTracks(trackIdArray);
                               await setChartData(trackIdArray);
                             }}
                           >
@@ -44,7 +45,7 @@ export default function PlaylistDetails() {
                           <TrackSelector
                             key={track.id}
                             track={track}
-                            setSelectedTracks={setSelectedTracks}
+                            // setSelectedTracks={setSelectedTracks}
                           />
                         ))}
                       </ListGroup>

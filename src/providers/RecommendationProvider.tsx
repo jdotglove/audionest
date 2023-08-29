@@ -103,9 +103,7 @@ class RecommendationProvider extends React.PureComponent<
       this.setState({ recommendedTrackList: [...response.data] });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -129,9 +127,7 @@ class RecommendationProvider extends React.PureComponent<
       this.setState({ listOfSeedGenres: [...(response?.data || [])] });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -253,9 +249,7 @@ class RecommendationProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else if (error.response?.status === 404) {
         this.setState({
@@ -282,9 +276,7 @@ class RecommendationProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -315,9 +307,7 @@ class RecommendationProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(

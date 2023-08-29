@@ -12,6 +12,7 @@ export default function IntegrationHub() {
   const { isLoggedIn } = useContext(SpotifyContext);
   const { push } = useRouter();
   const authenticateSpotifyUser = async () => {
+    sessionStorage.clear();
     await authenticateSpotify();
   };
 

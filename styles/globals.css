@@ -50,6 +50,11 @@ div.album-name {
   text-align: center;
 }
 
+div.more-info {
+  padding-bottom: 10px;
+  text-align: center;
+}
+
 * {
   box-sizing: border-box;
 }

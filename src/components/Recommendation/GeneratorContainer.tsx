@@ -8,6 +8,7 @@ import RecommendationDisplay from "./Display";
 import RecommendationProvider from "../../providers/RecommendationProvider";
 import RecommendationContext from "../../contexts/RecommendationContext";
 import PlaylistProvider from "../../providers/PlaylistProvider";
+import ChartProvider from "../../providers/ChartProvider";
 import PlaylistContext from "../../contexts/PlaylistContext";
 import SpotifyContext from "../../contexts/SpotifyContext";
 
@@ -80,8 +81,12 @@ export default function RecommendationGeneratorContainer() {
                                 (audioFeatureLabel, idx) => (
                                   <Fragment key={audioFeatureLabel}>
                                     {audioFeatureLabel}:{" "}
-                                    {Number.parseFloat(targetAudioFeaturesMap[audioFeatureLabel]).toFixed(2)}
-                                    {Object.keys(targetAudioFeaturesMap)[idx + 1] ? (
+                                    {Number.parseFloat(
+                                      targetAudioFeaturesMap[audioFeatureLabel]
+                                    ).toFixed(2)}
+                                    {Object.keys(targetAudioFeaturesMap)[
+                                      idx + 1
+                                    ] ? (
                                       <Fragment>, </Fragment>
                                     ) : (
                                       <Fragment></Fragment>

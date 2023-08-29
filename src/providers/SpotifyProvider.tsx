@@ -68,9 +68,7 @@ class SpotifyProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -100,9 +98,7 @@ class SpotifyProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -131,9 +127,7 @@ class SpotifyProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -158,9 +152,7 @@ class SpotifyProvider extends React.PureComponent<
       this.setState({ playlists: [...(response?.data || [])] });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -197,9 +189,7 @@ class SpotifyProvider extends React.PureComponent<
       }
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -233,9 +223,7 @@ class SpotifyProvider extends React.PureComponent<
       });
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // this.setState({
-        //   authorizationError: true,
-        // });
+        sessionStorage.removeItem("accessToken");
         await authenticateSpotify();
       } else {
         console.error(
@@ -274,7 +262,7 @@ class SpotifyProvider extends React.PureComponent<
           playlists: this.state.playlists,
           searchItems: this.searchItems,
           setSelectedPlaylist: this.setSelectedPlaylist,
-          setSelectedTracks: this.setSelectedTracks,
+          // setSelectedTracks: this.setSelectedTracks,
           trackSearchResults: this.state.trackSearchResults,
           topArtists: this.state.topArtists,
           topTracks: this.state.topTracks,

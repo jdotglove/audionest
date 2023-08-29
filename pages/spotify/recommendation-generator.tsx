@@ -5,6 +5,7 @@ import CrateDiggerInfo from "../../src/components/Modals/CrateDiggerInfo";
 import RecommendationGeneratorContainer from "../../src/components/Recommendation/GeneratorContainer";
 import SpotifyNavbar from "../../src/components/Navbars/SpotifyNavbar";
 import SpotifyProvider from "../../src/providers/SpotifyProvider";
+import ChartProvider from "../../src/providers/ChartProvider";
 
 export default function RecommendationGeneratorPage() {
   return (
@@ -14,7 +15,9 @@ export default function RecommendationGeneratorPage() {
         <Fragment>
           <CrateDiggerInfo />
           <Container className="py-3">
-            <RecommendationGeneratorContainer />
+            <ChartProvider>
+              <RecommendationGeneratorContainer />
+            </ChartProvider>
           </Container>
         </Fragment>
       </SpotifyProvider>

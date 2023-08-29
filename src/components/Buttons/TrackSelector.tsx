@@ -3,10 +3,10 @@ import { ListGroup } from "react-bootstrap";
 import ChartContext from "../../contexts/ChartContext";
 
 export default function TrackSelector({
-  setSelectedTracks,
+  // setSelectedTracks,
   track,
 }: {
-  setSelectedTracks: Function;
+  // setSelectedTracks: Function;
   track: Audionest.Track;
 }) {
   return (
@@ -17,7 +17,7 @@ export default function TrackSelector({
           variant="dark"
           eventKey={`${track.id}`}
           onClick={async () => {
-            setSelectedTracks([track.id]);
+            // setSelectedTracks([track.id]);
             await setChartData([track.id]);
           }}
         >

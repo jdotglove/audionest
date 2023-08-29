@@ -1,17 +1,21 @@
 import NextImage from "next/image";
-import React, { Fragment, useEffect, useState, useContext } from "react";
-import { Card, Container, Nav, Tab, Col, Row } from "react-bootstrap";
+import React, { Fragment, useEffect, useState, useContext, useRef } from "react";
+import { Card, Overlay, Popover, Nav, Tab, Col, Row } from "react-bootstrap";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 import DiscoveryContext from "../../contexts/DiscoveryContext";
+import MoreCategoryItemInfo from "../Modals/MoreCategoryItemInfo";
 
 export default function DiscoveryDisplay() {
-  const { browsingCategories } = useContext(DiscoveryContext);
-  const [newReleaseItems, setNewReleaseItems] = useState([]);
+  const { browsingCategories, fetchCategoryItem } = useContext(DiscoveryContext);
+  const [categoryItems, setCategoryItems] = useState([]);
+  const [selectedCategoryItem, setSelectedCategoryItem] = useState(undefined);
   const [currentCategory, setCurrentCategory] = useState("New Releases");
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const containerRef = useRef(null);
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
 
   const fetchData = async (
     itemsArray: Array<any>,
@@ -36,9 +40,9 @@ export default function DiscoveryDisplay() {
               setIsLoading(false);
             }
             if (refresh) {
-              setNewReleaseItems([...filteredArray]);
+              setCategoryItems([...filteredArray]);
             } else {
-              setNewReleaseItems(itemsArray.concat(filteredArray));
+              setCategoryItems(itemsArray.concat(filteredArray));
             }
             setHasMore(currentHasMore);
             setPage(currentPage + 1);
@@ -50,17 +54,34 @@ export default function DiscoveryDisplay() {
 
   const handleNewCategory = async (category: string) => {
     setCurrentCategory(category);
-    await fetchData(newReleaseItems, category, true);
+    await fetchData(categoryItems, category, true);
   };
+
+  const handleMoreInfo = async (categoryItem: any) => {
+    const item = await fetchCategoryItem(categoryItem.id, categoryItem.type);
+    setSelectedCategoryItem(item);
+    // fetchCategoryItemTracks()
+    setShowMoreInfo(!showMoreInfo);
+  }
 
   useEffect(() => {
     if (hasMore) {
-      fetchData(newReleaseItems, currentCategory);
+      fetchData(categoryItems, currentCategory);
     }
   });
 
   return (
     <Fragment>
+      {selectedCategoryItem ? (
+        <MoreCategoryItemInfo
+          showMoreInfo={showMoreInfo}
+          setShowMoreInfo={setShowMoreInfo}
+          categoryItem={selectedCategoryItem}
+        />
+      ) : (
+        <Fragment></Fragment>
+      )}
+
       <Tab.Container defaultActiveKey="New Releases">
         <Row>
           <Col
@@ -102,12 +123,16 @@ export default function DiscoveryDisplay() {
                   style={{ height: "55rem", width: "100%" }}
                 >
                   <Card.Header as="h2" style={{ textAlign: "center" }}>
-                    New Releases
+                    {currentCategory === "New Releases" ? (
+                      <Fragment>{currentCategory}</Fragment>
+                    ) : (
+                      <Fragment>{currentCategory} Playlists</Fragment>
+                    )}
                   </Card.Header>
                   <Card.Body className="overflow-scroll">
                     <InfiniteScroll
-                      dataLength={newReleaseItems.length * 2} //This is important field to render the next data
-                      next={() => fetchData(newReleaseItems, currentCategory)}
+                      dataLength={categoryItems.length * 2} //This is important field to render the next data
+                      next={() => fetchData(categoryItems, currentCategory)}
                       hasMore={hasMore}
                       loader={<h4>Loading...</h4>}
                       endMessage={
@@ -116,26 +141,32 @@ export default function DiscoveryDisplay() {
                         </p>
                       }
                     >
-                      {newReleaseItems.length > 0 &&
-                        newReleaseItems.map((albumRelease, idx) => (
-                          <Fragment key={`${albumRelease?.id}-${idx}`}>
-                            {albumRelease ? (
+                      {categoryItems.length > 0 &&
+                        categoryItems.map((categoryItem, idx) => (
+                          <Fragment key={`${categoryItem?.id}-${idx}`}>
+                            {categoryItem ? (
                               <div className="responsive py-4">
-                                <div className="gallery">
+                                <div className="gallery" ref={containerRef}>
                                   <a
-                                    target="_blank"
-                                    href={albumRelease.external_urls.spotify}
+                                    onClick={() => handleMoreInfo(categoryItem)}
+                                    href={`#more-info-${categoryItem.id}`}
                                   >
                                     <img
-                                      src={albumRelease.images[0]?.url}
-                                      alt={`${albumRelease.name}-image`}
-                                      width={albumRelease.images[0]?.width}
-                                      height={albumRelease.images[0]?.height}
+                                      src={categoryItem.images[0]?.url}
+                                      alt={`${categoryItem.name}-image`}
+                                      width={categoryItem.images[0]?.width}
+                                      height={categoryItem.images[0]?.height}
                                     />
                                     <div className="album-name">
-                                      {albumRelease.artists
-                                        ? albumRelease.artists[0].name
-                                        : albumRelease.name}
+                                      {categoryItem.name} -{" "}
+                                      {categoryItem.artists ? (
+                                        categoryItem.artists[0].name
+                                      ) : (
+                                        <Fragment></Fragment>
+                                      )}
+                                    </div>
+                                    <div className="more-info">
+                                      Click for More Info
                                     </div>
                                   </a>
                                 </div>

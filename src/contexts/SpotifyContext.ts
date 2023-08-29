@@ -11,7 +11,7 @@ const SpotifyContext = createContext({
   playlists: undefined,
   searchItems: undefined,
   setSelectedPlaylist: undefined,
-  setSelectedTracks: undefined,
+  // setSelectedTracks: undefined,
   trackSearchResults: undefined as Array<any>,
   topArtists: undefined as Array<any>,
   topTracks: undefined as Array<any>,
