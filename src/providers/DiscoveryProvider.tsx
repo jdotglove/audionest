@@ -33,6 +33,7 @@ class DiscoveryProvider extends React.PureComponent<
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
+        sessionStorage.removeItem("accessToken");
         authenticateSpotify();
       } else {
         console.error(
@@ -58,10 +59,62 @@ class DiscoveryProvider extends React.PureComponent<
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
-        // authenticateSpotify();
+        sessionStorage.removeItem("accessToken");
+        authenticateSpotify();
       } else {
         console.error(
           "ERROR: Could not retrieve category playlists.",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  }
+
+  fetchCategoryItem = async(categoryItemId: string, itemType: string) => {
+    try {
+      const accessToken = sessionStorage.getItem("accessToken");
+      console.log("Type: ", itemType);
+      console.log("Id: ", categoryItemId);
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${itemType}/${categoryItemId}?token=${accessToken}`,
+        method: "get",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        sessionStorage.removeItem("accessToken");
+        authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve category item.",
+          error.response?.statusText || error.message
+        );
+      }
+    }
+  }
+
+  fetchCategoryItemTracks = async(categoryItemId: string, itemType: string) => {
+    try {
+      const accessToken = sessionStorage.getItem("accessToken");
+      const response = await axios({
+        url: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${itemType}/${categoryItemId}/tracks?token=${accessToken}`,
+        method: "get",
+        headers: {
+          authorization: process.env.NEXT_PUBLIC_SERVER_API_KEY,
+          "Content-Type": "application/json",
+        },
+      })
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        sessionStorage.removeItem("accessToken");
+        authenticateSpotify();
+      } else {
+        console.error(
+          "ERROR: Could not retrieve category item tracks.",
           error.response?.statusText || error.message
         );
       }
@@ -88,9 +141,9 @@ class DiscoveryProvider extends React.PureComponent<
       this.setState({
         browsingCategories: {...discoveryMap},
       });
-      console.log(this.state.browsingCategories)
     } catch(error: any) {
       if (error.response?.status === 401) {
+        sessionStorage.removeItem("accessToken");
         authenticateSpotify();
       } else {
         console.error(
@@ -111,6 +164,10 @@ class DiscoveryProvider extends React.PureComponent<
         value={{
           newReleases: this.state.newReleases,
           fetchNewReleases: (page: number) => this.fetchNewReleases(page),
+          fetchCategoryItem: (categoryItemId: string, itemType: string) =>
+            this.fetchCategoryItem(categoryItemId, itemType),
+          fetchCategoryItemTracks: (categoryItemId: string, itemType: string) =>
+            this.fetchCategoryItemTracks(categoryItemId, itemType),
           browsingCategories: this.state.browsingCategories,
         }}
       >
